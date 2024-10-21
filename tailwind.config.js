@@ -27,7 +27,8 @@ module.exports = {
         wrapper: 'wrapper 5s ease-in-out infinite alternate',
       },
       gridTemplateColumns: {
-        customized: 'repeat(auto-fill , minmax(190px,200px))',
+        customized: 'repeat(auto-fill , minmax(280px,295px))',
+        customizedAudience: 'repeat(auto-fill , minmax(310px,320px))',
       },
     },
     clipPath: {
