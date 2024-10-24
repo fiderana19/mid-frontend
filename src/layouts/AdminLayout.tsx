@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { Outlet } from "react-router-dom";
 import MidLogo from '../assets/image/mid-logo.jpg';
-import AdminNavigation from "../components/AdminNavigation";
+import AdminNavigation from "../components/Navigation/AdminNavigation";
 
 const AdminLayout: FunctionComponent = () => {
     return(

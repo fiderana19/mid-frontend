@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { Link, Outlet } from "react-router-dom";
 import MidLogo from '../assets/image/mid-logo.jpg';
-import UserNavigation from "../components/UserNavigation";
+import UserNavigation from "../components/Navigation/UserNavigation";
 
 const UserLayout: FunctionComponent = () => {
     return(

@@ -1,6 +1,8 @@
 import { HomeOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import MidProfile from "../MidProfile";
+import MidCopyright from "../Midopyright";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -71,17 +73,20 @@ function AdminNavigation() {
                     </Link>,
             icon: <HomeOutlined />,
           },
-       
       ];
 
     return(
-        <div className="text-left">
-            <Menu
-                mode="inline"
-                items={items}
-                className="w-full bg-transparent"
-            />
-        </div>
+        <>
+            <MidProfile/>
+            <div className="text-left">
+                <Menu
+                    mode="inline"
+                    items={items}
+                    className="w-full bg-transparent"
+                />
+            </div>
+            <MidCopyright />
+        </>
     )
 }
 

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { DownOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
+  const { logout } = useAuth();
     
 const items: MenuProps['items'] = [
     {
@@ -13,7 +15,7 @@ const items: MenuProps['items'] = [
       type: 'divider',
     },
     {
-      label: <div><LogoutOutlined /> Se deconnecter</div>,
+      label: <div onClick={logout}><LogoutOutlined /> Se deconnecter</div>,
       key: '3',
     },
   ];
