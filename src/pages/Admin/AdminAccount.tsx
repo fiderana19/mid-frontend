@@ -6,7 +6,7 @@ import { getAllUser } from "../../api/users";
 import { MenuOutlined } from "@ant-design/icons";
 
 function AdminAccount() {
-    const [accounts, setAccounts] = useState<[]>([]);
+    const [accounts, setAccounts] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetchAccount () {

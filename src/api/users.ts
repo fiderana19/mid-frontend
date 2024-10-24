@@ -1,6 +1,8 @@
 import axios from "axios";
+import { useState } from "react";
 
 const UserAPIUrl = "http://localhost:3002/auth";
+
 
 export const userLogin = async (email:string, password: string) => {
   try {
@@ -43,3 +45,23 @@ export const getAllUser = async () => {
   }
 }
 
+export const getUserById = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if(token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      console.log("tonga eto", decodedToken.id)
+        
+      const response = await axios({
+        method: 'get',
+        url: `${UserAPIUrl}/get/${decodedToken.id}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Erreur get all user.", error)
+  }
+}

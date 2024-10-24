@@ -1,8 +1,25 @@
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import MidLogo from '../../assets/image/mid-logo.jpg';
+import { useEffect, useState } from "react";
+import { getUserById } from "../../api/users";
 
 function AdminInfo() {
+    const [user, setUser] = useState();
+    const [id, setId] = useState('')
+
+
+    useEffect(() => {
+        // console.log("ito le id", id)
+        async function fetchUser() {
+            const response = await getUserById();
+
+            console.log(response)
+            setUser(response)
+        }
+        fetchUser()
+    }, [])
+
     return(
         <>
              <div className="w-full flex">
@@ -15,24 +32,11 @@ function AdminInfo() {
                         info admin
                         <div className="text-center">
                             <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
+                            <div className="font-bold">EDEN Hazard</div>
                             <div className="">
-                                <div className="m-2 border border-b-black flex justify-between w-96 mx-auto h-max">
-                                    <div className="font-bold text-gray-600">Nom</div>
-                                    <div>eden hazard</div>
-                                </div>
-                                <div className="m-2 border border-b-black flex justify-between w-96 mx-auto h-max">
-                                    <div className="font-bold text-gray-600">Nom</div>
-                                    <div>eden hazard</div>
-                                </div>
-
-                                <div className="m-2 border border-b-black flex justify-between w-96 mx-auto h-max">
-                                    <div className="font-bold text-gray-600">Nom</div>
-                                    <div>eden hazard</div>
-                                </div>
-
-                                <div className="m-2 border border-b-black flex justify-between w-96 mx-auto h-max">
-                                    <div className="font-bold text-gray-600">Nom</div>
-                                    <div>eden hazard</div>
+                                <div className="m-2 w-96 mx-auto h-max">
+                                    <div className="text-left font-bold text-gray-600">Nom et prenom(s)</div>
+                                    <div className="text-right border-b-2 border-gray-500 hover:border-gray-400">eden hazard</div>
                                 </div>
 
                             </div>
