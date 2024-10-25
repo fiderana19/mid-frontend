@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../api/users";
-import { MenuOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, MenuOutlined } from "@ant-design/icons";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -55,7 +55,17 @@ function AdminAccount() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.cni } </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.email }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.createdAt }  </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.validation }  </td>
+                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
+                                                { account.validation ? 
+                                                <div className="flex gap-2 text-green-500">
+                                                    <CheckCircleFilled /><div>Validé</div>
+                                                </div> 
+                                                : 
+                                                <div className="flex gap-2 text-red-500">
+                                                    <CloseCircleFilled /><div>Non Validé</div>
+                                                </div>
+                                                }  
+                                            </td>
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                 <div className='flex justify-center'>
                                                     <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
