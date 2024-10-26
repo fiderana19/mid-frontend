@@ -2,17 +2,15 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useEffect, useState } from "react";
-import { getUserById } from "../../api/users";
+import { getConnectedUser } from "../../api/users";
 
 function AdminInfo() {
     const [user, setUser] = useState();
-    const [id, setId] = useState('')
 
-
-    useEffect(() => {
+    useEffect(() => { 
         // console.log("ito le id", id)
         async function fetchUser() {
-            const response = await getUserById();
+            const response = await getConnectedUser();
 
             console.log(response)
             setUser(response)
