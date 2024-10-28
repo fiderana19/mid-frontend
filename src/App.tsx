@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom"
 import Signup from "./pages/Signup"
 import UserHome from "./pages/User/UserHome"
 import AdminHome from "./pages/Admin/AdminHome"
-import UserLayout from "./layouts/UserLayout"
 import UserDemande from "./pages/User/UserDemande"
 import UserAudience from "./pages/User/UserAudience"
 import UserInfo from "./pages/User/UserInfo"
@@ -16,6 +15,8 @@ import AdminAccount from "./pages/Admin/AdminAccount"
 import RoleBasedRoute from "./routes/RoleBasedRoute"
 import LoginPage from "./pages/LoginPage"
 import Unauthoriezd from "./pages/Unauthorized"
+import AdminAccountView from "./pages/Admin/Account/AdminAccountView"
+import AdminAccountEdit from "./pages/Admin/Account/AdminAccountEdit"
 
 function App() {
   return (
@@ -39,8 +40,10 @@ function App() {
             <Route path="audience" element={<AdminAudience />} />
             <Route path="availability" element={<AdminAvailability />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="account/edit/:id" element={<AdminAccountEdit />} />
             <Route path="account" element={<AdminAccount />} />
             <Route path="info" element={<AdminInfo />} />
+            <Route path="view/:id" element={<AdminAccountView />} />
           </Route>
       </Routes>
   )

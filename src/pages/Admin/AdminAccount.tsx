@@ -3,7 +3,8 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../api/users";
-import { CheckCircleFilled, CloseCircleFilled, MenuOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, DeleteOutlined, EditOutlined, MenuOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -54,7 +55,7 @@ function AdminAccount() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.nom } { account.prenom }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.cni } </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.email }  </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.createdAt }  </td>
+                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.usser_creation }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                 { account.validation ? 
                                                 <div className="flex gap-2 text-green-500">
@@ -67,8 +68,14 @@ function AdminAccount() {
                                                 }  
                                             </td>
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                                                <div className='flex justify-center'>
-                                                    <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                                                <div className='flex justify-center gap-1'>
+                                                    <Link to={`/admin/view/${account._id}`} >
+                                                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                                                    </Link>
+                                                    <Link to={`/admin/account/edit/${account._id}`} >
+                                                        <EditOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                                                    </Link>
+                                                    <DeleteOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
                                                 </div>
                                             </td>
                                         </tr>

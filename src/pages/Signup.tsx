@@ -2,8 +2,19 @@ import { Link } from "react-router-dom";
 import { DatePicker } from 'antd';
 import MidLogo from '../assets/image/mid-logo.jpg'
 import { UserOutlined, LockOutlined, EyeOutlined, MailOutlined, PhoneOutlined, CreditCardOutlined, ContactsOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { useState } from 'react';
+import { SignupInterface } from '../interfaces/User';
+import dayjs from "dayjs";
+import { userSignup } from "../api/users";
 
 function Signup() {
+    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', password: ''});
+
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.target;
+        setSignupCredentials((prevSignup) => ({...prevSignup, [name]: value}));
+    }
+
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const charCode = e.which || e.keyCode;
 
@@ -11,6 +22,33 @@ function Signup() {
             e.preventDefault();
         }
     }
+
+    const handleDateNaissanceChange = (date: dayjs.Dayjs | null) => {
+        if (date) {
+        const isoDate = date.toISOString();
+        setSignupCredentials({
+            ...signupCredentials,
+            date_naissance: isoDate,
+        });
+        }
+    };
+
+    const handleDateCNIChange = (date: dayjs.Dayjs | null) => {
+        if (date) {
+        const isoDate = date.toISOString();
+        setSignupCredentials({
+            ...signupCredentials,
+            date_cni: isoDate,
+        });
+        }
+    };
+
+
+    const handleSignupUser = async () => {
+        console.log(signupCredentials);
+        await userSignup(signupCredentials);
+    }
+
     return(
         <div className='bg-red-300 h-screen flex flex-col justify-center'>
             <div className='flex justify-between '>
@@ -23,7 +61,7 @@ function Signup() {
                     <div className='text-2xl font-lato font-bold my-4'>Inscription</div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="nom"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -34,7 +72,7 @@ function Signup() {
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="prenom"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -45,7 +83,7 @@ function Signup() {
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="email"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -55,11 +93,11 @@ function Signup() {
                         </div>
                     </div>
                     <div className='w-60 my-4 mx-auto'>
-                        <DatePicker className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de naissance..."  />
+                        <DatePicker onChange={handleDateNaissanceChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de naissance..." />
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="lieu_naissance"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -70,7 +108,7 @@ function Signup() {
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} onKeyPress={handleKeyPress} name="telephone"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -81,7 +119,7 @@ function Signup() {
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input onKeyPress={handleKeyPress}
+                            <input onKeyPress={handleKeyPress} name="cni" onChange={handleChange}
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -91,11 +129,11 @@ function Signup() {
                         </div>
                     </div>
                     <div className='w-60 my-4 mx-auto'>
-                        <DatePicker className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date CNI..."  />
+                        <DatePicker onChange={handleDateCNIChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date CNI..."  />
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="lieu_cni"
                             className="peer w-full bg-transparent focus:bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -106,7 +144,7 @@ function Signup() {
                     </div>
                     <div className='w-60 my-4 mx-auto'>
                         <div className="relative">
-                            <input
+                            <input onChange={handleChange} name="password"
                             className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
@@ -116,7 +154,7 @@ function Signup() {
                             <EyeOutlined className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
                         </div>
                     </div>
-                    <button className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>S'INSCRIRE</button>
+                    <button onClick={handleSignupUser} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>S'INSCRIRE</button>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous n'avez pas encore un compte ?</div>
                         <Link to="/">
