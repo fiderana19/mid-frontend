@@ -13,7 +13,7 @@ function AdminInfo() {
   
           if(token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(decodedToken.id);
+            const response = await getUserById(token,decodedToken.id);
   
             setUser(response)
           }
@@ -41,7 +41,6 @@ function AdminInfo() {
                                     <div className="text-left font-bold text-gray-600">Nom et prenom(s)</div>
                                     <div className="text-right border-b-2 border-gray-500 hover:border-gray-400">eden hazard</div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

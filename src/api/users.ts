@@ -2,7 +2,6 @@ import axios from "axios";
 import { SignupInterface } from "../interfaces/User";
 
 const UserAPIUrl = "http://localhost:3002/auth";
-const token = localStorage.getItem("token");
 
 export const userLogin = async (email:string, password: string) => {
   try {
@@ -34,12 +33,15 @@ export const userSignup = async (signinCredentials: SignupInterface) => {
   }
 }
 
-export const validateUser = async (id: string) => {
+export const validateUser = async (token: string, id: string) => {
   try {
     const response = await axios({
       method: 'patch',
       url: `${UserAPIUrl}/validate/${id}`,
       data: {validation: true},
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     console.log(response.data)
 
@@ -49,12 +51,15 @@ export const validateUser = async (id: string) => {
   }
 }
 
-export const editUser = async (id: string, editData: any) => {
+export const editUser = async (token: string, id: string, editData: any) => {
   try {
     const response = await axios({
       method: 'patch',
       url: `${UserAPIUrl}/update/${id}`, 
       data: editData,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     console.log(response)
 
@@ -64,11 +69,14 @@ export const editUser = async (id: string, editData: any) => {
   }
 }
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (token: string, id: string) => {
   try {
     const response = await axios({
       method: 'delete',
       url: `${UserAPIUrl}/delete/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     console.log(response.data)
 
@@ -91,11 +99,14 @@ export const checkEmailExistisAPI = async (email: string) => {
   }
 }
 
-export const getAllUser = async () => {
+export const getAllUser = async (token: string) => {
   try {
     const response = await axios({
       method: 'get',
       url: `${UserAPIUrl}/all`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     return response;
   } catch (error) {
@@ -103,7 +114,7 @@ export const getAllUser = async () => {
   }
 }
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (token: string, id: string) => {
   try {
     if(token) {        
       const response = await axios({

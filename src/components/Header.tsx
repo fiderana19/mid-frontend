@@ -15,7 +15,7 @@ function Header() {
 
         if(token) {
           const decodedToken = JSON.parse(atob(token.split('.')[1]));
-          const response = await getUserById(decodedToken.id);
+          const response = await getUserById(token,decodedToken.id);
 
           setUser(response)
         }

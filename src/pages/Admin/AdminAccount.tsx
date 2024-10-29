@@ -8,10 +8,15 @@ import { Link } from "react-router-dom";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
+    const [access_token, setAccessToken] = useState<string>('')
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token) {
+            setAccessToken(token)
+        }
         async function fetchAccount () {
-            const response = await getAllUser();
+            const response = await getAllUser(access_token);
 
             console.log(response)
             if(response) {
