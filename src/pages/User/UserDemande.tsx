@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import UserNavigation from "../../components/Navigation/UserNavigation";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { getAllRequestByUser } from "../../api/request";
 
@@ -59,7 +59,10 @@ function UserDemande() {
                                     <div className="flex justify-end">
                                         {
                                             request.status_request[0] === "En attente" ? 
-                                            <div className="rounded bg-yellow-500 px-2"> { request.status_request } </div>
+                                            <div className="rounded bg-yellow-500 px-2 flex gap-2">
+                                                <WarningOutlined />
+                                                <div>{ request.status_request }</div>  
+                                            </div>
                                             : (
                                                 request.status_request[0] === "Accepté" ?
                                                 <div className="rounded bg-green-300 px-2"> { request.status_request } </div> 

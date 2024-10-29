@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { Dropdown, Input, MenuProps } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
     const [access_token, setAccessToken] = useState<string>('')
+    const [selectedAcount, setSelectedAccount] = useState<string>()
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -25,6 +26,36 @@ function AdminAccount() {
         }
         fetchAccount()
     }, [])
+
+   
+    
+    const items: MenuProps['items'] = [
+        {
+          label:  <Link to={`/admin/account/view/${selectedAcount}`} >
+                    <div className="flex gap-2">
+                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                        <div>Voir</div>
+                    </div>
+                </Link>,
+          key: '0',
+        },
+        {
+          label:  <Link to={`/admin/account/edit/${selectedAcount}`} >
+                    <div className="flex gap-2">
+                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                        <div>Modifier</div>
+                    </div>
+                </Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: '3rd menu item',
+          key: '3',
+        },
+      ];      
     
     return(
         <>
@@ -73,7 +104,7 @@ function AdminAccount() {
                                                 }  
                                             </td>
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                                                <div className='flex justify-center gap-1'>
+                                                {/* <div className='flex justify-center gap-1'>
                                                     <Link to={`/admin/view/${account._id}`} >
                                                         <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
                                                     </Link>
@@ -81,7 +112,12 @@ function AdminAccount() {
                                                         <EditOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
                                                     </Link>
                                                     <DeleteOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
-                                                </div>
+                                                </div> */}
+                                                <Dropdown menu={{ items }} trigger={['click']}>
+                                                    <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account._id)}}>
+                                                        <MenuOutlined />
+                                                    </a>
+                                                </Dropdown>
                                             </td>
                                         </tr>
                                     )

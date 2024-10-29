@@ -1,11 +1,41 @@
 import UserNavigation from "../../components/Navigation/UserNavigation";
+import MidLogo from '../../assets/image/mid-logo.jpg';
+import { useState, useEffect } from "react";
+import { getUserById } from "../../api/users";
 
 function UserInfo() {
+    const [user, setUser] = useState();
+
+    useEffect(() => { 
+        async function fetchUser() {
+          const token = localStorage.getItem("token");
+  
+          if(token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const response = await getUserById(token,decodedToken.id);
+  
+            setUser(response)
+          }
+        }
+        fetchUser()
+    }, [])
+
+
     return(
         <div className="w-full">
             <UserNavigation />
-            <div className="pt-16">
-                <div>eto ny information an'ny user</div>
+            <div className="px-5 py-16">
+                info admin
+                <div className="text-center">
+                    <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
+                    <div className="font-bold">EDEN Hazard</div>
+                    <div className="">
+                        <div className="m-2 w-96 mx-auto h-max">
+                            <div className="text-left font-bold text-gray-600">Nom et prenom(s)</div>
+                            <div className="text-right border-b-2 border-gray-500 hover:border-gray-400">eden hazard</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -18,6 +18,7 @@ import Unauthoriezd from "./pages/Unauthorized"
 import AdminAccountView from "./pages/Admin/Account/AdminAccountView"
 import AdminAccountEdit from "./pages/Admin/Account/AdminAccountEdit"
 import UserAddDemande from "./pages/User/Demande/AddDemande"
+import AdminRequestView from "./pages/Admin/Request/AdminRequestView"
 
 function App() {
   return (
@@ -38,14 +39,15 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin" element={<RoleBasedRoute allowedRoles={["admin"]} />}>
             <Route path="home" element={<AdminHome />} />
+            <Route path="demande/view/:id" element={<AdminRequestView />} />
             <Route path="demande" element={<AdminDemande />} />
             <Route path="audience" element={<AdminAudience />} />
             <Route path="availability" element={<AdminAvailability />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="account/edit/:id" element={<AdminAccountEdit />} />
+            <Route path="account/view/:id" element={<AdminAccountView />} />
             <Route path="account" element={<AdminAccount />} />
             <Route path="info" element={<AdminInfo />} />
-            <Route path="view/:id" element={<AdminAccountView />} />
           </Route>
       </Routes>
   )

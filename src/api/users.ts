@@ -33,7 +33,7 @@ export const userSignup = async (signinCredentials: SignupInterface) => {
   }
 }
 
-export const validateUser = async (token: string, id: string) => {
+export const validateUser = async (token: string | null, id: string) => {
   try {
     const response = await axios({
       method: 'patch',
@@ -51,7 +51,7 @@ export const validateUser = async (token: string, id: string) => {
   }
 }
 
-export const editUser = async (token: string, id: string, editData: any) => {
+export const editUser = async (token: string | null, id: string, editData: any) => {
   try {
     const response = await axios({
       method: 'patch',
@@ -69,7 +69,7 @@ export const editUser = async (token: string, id: string, editData: any) => {
   }
 }
 
-export const deleteUser = async (token: string, id: string) => {
+export const deleteUser = async (token: string | null, id: string) => {
   try {
     const response = await axios({
       method: 'delete',
@@ -99,7 +99,7 @@ export const checkEmailExistisAPI = async (email: string) => {
   }
 }
 
-export const getAllUser = async (token: string) => {
+export const getAllUser = async (token: string | null) => {
   try {
     const response = await axios({
       method: 'get',
@@ -114,7 +114,7 @@ export const getAllUser = async (token: string) => {
   }
 }
 
-export const getUserById = async (token: string, id: string) => {
+export const getUserById = async (token: string | null, id: string) => {
   try {
     if(token) {        
       const response = await axios({

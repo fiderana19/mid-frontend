@@ -1,26 +1,95 @@
 import { useState, useEffect } from "react";
-import { getAllRequest } from "../../api/request";
+import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
+import { CheckOutlined, CloseOutlined, DownOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { MenuProps, Dropdown, Modal } from "antd";
+import { Link } from "react-router-dom";
 
 function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string>('')
+    const [selectedRequest, setSelectedRequest] = useState<string>();
+    const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
+    const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const [access_token, setAccessToken] = useState<string | null>(
+        localStorage.getItem('token')
+    );
 
     useEffect(() => {
-        async function fetchUserRequest () {
-            const token = localStorage.getItem('token');
-            if(token) {
-                setAccessToken(token)
-                const response = await getAllRequest(token);
-                if(response) {
-                    console.log("reto lty ar", response)
-                    setRequests(response);
-                }
-            }
+        const token = localStorage.getItem('token');
+
+        if(token) {
+            setAccessToken(token);
         }
         fetchUserRequest()
     }, [])
+
+    async function fetchUserRequest () {
+        const token = localStorage.getItem('token');
+        if(token) {
+            const response = await getAllRequest(token);
+            if(response) {
+                console.log("reto lty ar", response)
+                setRequests(response);
+            }
+        }
+    }
+
+
+    const items: MenuProps['items'] = [
+        {
+            label:  <Link to={`/admin/demande/view/${selectedRequest}`} >
+                      <div className="flex gap-2">
+                          <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                          <div>Voir</div>
+                      </div>
+                  </Link>,
+            key: '0',
+          },
+        {
+          type: 'divider',
+        },
+        {
+          label: <div onClick={() => setIsValidateModalVisible(true)}>Valider</div>
+          ,
+          key: '3',
+        },
+        {
+            label: <div onClick={() => setIsDenyModalVisible(true)}>Refuser</div>
+            ,
+            key: '4',
+          },
+  
+      ];
+
+      const handleDenyConfirm = async () => {
+        if(selectedRequest) {
+            const response = await denyRequest(access_token,selectedRequest);
+            console.log(response)
+            setIsDenyModalVisible(false)
+            fetchUserRequest()    
+        }
+    }
+    //handling delete cancel
+    const handleDenyCancel = async () => {
+        setIsDenyModalVisible(false)
+    }
+    const showDenyConfirmation = async () => {
+        setIsDenyModalVisible(true);
+    }   
+    
+    const handleValidateConfirm = async () => {
+        if(selectedRequest) {
+            const response = await validateRequest(access_token,selectedRequest);
+            fetchUserRequest();
+            setIsValidateModalVisible(false)
+            console.log(response)    
+        }
+    }
+    //handling delete cancel
+    const handleValidateCancel = async () => {
+        setIsValidateModalVisible(false)
+    }
     
     return(
         <>
@@ -60,9 +129,34 @@ function AdminDemande() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.object }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.request_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.date_wanted_debut }  </td>
-                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.status_request }  </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
+                                                {
+                                                    request.status_request[0] === "En attente" ? 
+                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
+                                                        <WarningOutlined />
+                                                        <div>{ request.status_request }</div>  
+                                                    </div>
+                                                    : (
+                                                        request.status_request[0] === "Accepté" ?
+                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
+                                                        <CheckOutlined />
+                                                        <div>{ request.status_request }</div>  
+                                                    </div>                                                        
+                                                    :
+                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
+                                                        <CloseOutlined />
+                                                        <div>{ request.status_request }</div>  
+                                                    </div>                                                    
+                                                    )
+                                                }    
+                                                </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                 <div className='flex justify-center'>
+                                                <Dropdown menu={{ items }} trigger={['click']}>
+                                                    <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request._id)}}>
+                                                        <MenuOutlined />
+                                                    </a>
+                                                </Dropdown>
                                                 </div>
                                                 </td>
                                             </tr>
@@ -73,6 +167,30 @@ function AdminDemande() {
                         </table>
                     </div>
                 </div>
+                <Modal title="Refus" 
+                    open={isDenyModalVisible}
+                    onOk={handleDenyConfirm}
+                    onCancel={handleDenyCancel}
+                    okText="Refuser"
+                    cancelText="Annuler"
+                >
+                    <div className='text-red-900'>
+                    <WarningOutlined className='mr-2' />  
+                    Êtes-vous sûr de vouloir refuser ce demande d'audience ?
+                    </div>
+                </Modal>
+                <Modal title="Validation" 
+                    open={isValidateModalVisible}
+                    onOk={handleValidateConfirm}
+                    onCancel={handleValidateCancel}
+                    okText="Valider"
+                    cancelText="Annuler"
+                >
+                    <div className=''>
+                    <WarningOutlined className='mr-2' />  
+                    Êtes-vous sûr de vouloir valider ce demande d'audience ?
+                    </div>
+                </Modal>
             </div>
         </>
     )

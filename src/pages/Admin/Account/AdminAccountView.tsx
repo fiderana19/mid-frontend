@@ -11,18 +11,27 @@ const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const [access_token, setAccessToken] = useState<string | null>(
+        localStorage.getItem('token')
+    );
     let req = useParams();
     const navigate = useNavigate();
     let userId = req.id;
 
     useEffect(() => { 
+        const token = localStorage.getItem('token');
+        if(token) {
+            setAccessToken(token);
+        }
         fetchUser()
     }, [])
     async function fetchUser() {
-        if(userId) {
+        const token = localStorage.getItem('token');
+
+        if(userId && token) {
             console.log("ito le id", userId)
 
-            const response = await getUserById(userId);
+            const response = await getUserById(token,userId);
 
             console.log(response)
             setUser(response)    
@@ -30,7 +39,7 @@ const AdminAccountView: React.FC = () => {
     }
 
     const handleDeleteConfirm = async () => {
-        const response = await deleteUser(user._id);
+        const response = await deleteUser(access_token,user._id);
         console.log(response)
         navigate("/admin/account");
     }
@@ -43,7 +52,7 @@ const AdminAccountView: React.FC = () => {
     }   
     
     const handleValidateConfirm = async () => {
-        const response = await validateUser(user._id);
+        const response = await validateUser(access_token,user._id);
         fetchUser();
         setIsValidateModalVisible(false)
         console.log(response)
