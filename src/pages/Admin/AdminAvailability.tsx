@@ -6,13 +6,15 @@ function AdminAvailability() {
     return(
         <>
             <div className="w-full flex">
-                <div className="p-4 w-1/6 flex flex-col justify-between h-screen bg-green-900 text-center">
+                <div className="w-1/6">
                     <AdminNavigation />
                 </div>
                 <div className="w-5/6">
-                    <Header />
-                    <div className="p-4">
-                    disponibilite admin
+                    <div className="z-50 fixed top-0 right-0 w-5/6">
+                        <Header />
+                    </div>
+                    <div className="px-5 py-16">
+                        disponibilite admin
                         <div className="h-80 w-full">
                             <Calendar className="" style={{ height: 800 }} />
                         </div>

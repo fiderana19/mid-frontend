@@ -11,10 +11,9 @@ export const userLogin = async (email:string, password: string) => {
       url: `${UserAPIUrl}/login`,
       data: { email, password },
     })
-    const token = response.data.token;
-    console.log(response.data.token)
+    const access_token = response.data.token;
 
-    return token;
+    return access_token;
   } catch (error) {
     console.error("Erreur lors de l'authentfiication :", error)
   }
@@ -54,7 +53,7 @@ export const editUser = async (id: string, editData: any) => {
   try {
     const response = await axios({
       method: 'patch',
-      url: `${UserAPIUrl}/update/${id}`,
+      url: `${UserAPIUrl}/update/${id}`, 
       data: editData,
     })
     console.log(response)
@@ -99,26 +98,6 @@ export const getAllUser = async () => {
       url: `${UserAPIUrl}/all`,
     })
     return response;
-  } catch (error) {
-    console.error("Erreur get all user.", error)
-  }
-}
-
-export const getConnectedUser = async () => {
-  try {
-    if(token) {
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      console.log("tonga eto", decodedToken.id)
-        
-      const response = await axios({
-        method: 'get',
-        url: `${UserAPIUrl}/get/${decodedToken.id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      return response.data;
-    }
   } catch (error) {
     console.error("Erreur get all user.", error)
   }

@@ -23,8 +23,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             const data = await userLogin(email, password)
 
-            console.log("tonga eto",data)
-
             if(data) {
                 setToken(data);
                 localStorage.setItem("token", data);

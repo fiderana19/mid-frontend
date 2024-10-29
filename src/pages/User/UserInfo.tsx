@@ -1,8 +1,13 @@
+import UserNavigation from "../../components/Navigation/UserNavigation";
+
 function UserInfo() {
     return(
-        <>
-            eto ny information an'ny user
-        </>
+        <div className="w-full">
+            <UserNavigation />
+            <div className="pt-16">
+                <div>eto ny information an'ny user</div>
+            </div>
+        </div>
     )
 }
 

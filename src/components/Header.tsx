@@ -2,9 +2,26 @@ import { Link } from "react-router-dom";
 import { DownOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { getUserById } from "../api/users";
 
 function Header() {
   const { logout } = useAuth();
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => { 
+      async function fetchUser() {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+          const decodedToken = JSON.parse(atob(token.split('.')[1]));
+          const response = await getUserById(decodedToken.id);
+
+          setUser(response)
+        }
+      }
+      fetchUser()
+  }, [])
     
 const items: MenuProps['items'] = [
     {
@@ -25,11 +42,14 @@ const items: MenuProps['items'] = [
             <Link to="/admin/info">
                 <Dropdown menu={{ items }} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()}>
-                    <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded'>
-                        <UserOutlined className="text-md mr-1"/>
-                        rakoto@gmail.com
-                        <DownOutlined className="text-xs ml-2" />
-                    </button>
+                      {
+                        user &&
+                          <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded items-center'>
+                              <UserOutlined className="text-md mr-1"/>
+                                { user.email }
+                              <DownOutlined className="text-xs ml-2" />
+                          </button>
+                    }
                     </a>
                 </Dropdown>
             </Link>

@@ -2,31 +2,36 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useEffect, useState } from "react";
-import { getConnectedUser } from "../../api/users";
+import { getUserById } from "../../api/users";
 
 function AdminInfo() {
     const [user, setUser] = useState();
 
     useEffect(() => { 
-        // console.log("ito le id", id)
         async function fetchUser() {
-            const response = await getConnectedUser();
-
-            console.log(response)
+          const token = localStorage.getItem("token");
+  
+          if(token) {
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const response = await getUserById(decodedToken.id);
+  
             setUser(response)
+          }
         }
         fetchUser()
     }, [])
 
     return(
         <>
-             <div className="w-full flex">
-                <div className="p-4 w-1/6 flex flex-col justify-between h-screen bg-green-900 text-center">
+            <div className="w-full flex">
+                <div className="w-1/6">
                     <AdminNavigation />
                 </div>
                 <div className="w-5/6">
-                    <Header />
-                    <div className="p-4">
+                    <div className="z-50 fixed top-0 right-0 w-5/6">
+                        <Header />
+                    </div>
+                    <div className="px-5 py-16">
                         info admin
                         <div className="text-center">
                             <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>

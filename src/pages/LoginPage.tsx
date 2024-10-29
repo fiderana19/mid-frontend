@@ -1,7 +1,7 @@
 import { EyeOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
 import { message } from 'antd';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +9,13 @@ import { useAuth } from '../context/AuthContext';
 function LoginPage() {
     const [loginCredentials, setLoginCredentials] = useState<LoginInterface>({ email: '', password: '' });
     const { login } = useAuth();
+
+    useEffect(() => {
+        const token = localStorage.removeItem("token");
+
+        console.log("ito le toekn", token)
+    }, [])
+    
 
     const handleLoginUser = async () => {
         await login(loginCredentials.email, loginCredentials.password);

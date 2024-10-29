@@ -1,8 +1,13 @@
+import { FunctionComponent } from "react";
+import UserNavigation from "../../components/Navigation/UserNavigation";
 
-function UserHome() {
+const UserHome: FunctionComponent = () => {
     return(
-        <div>
-            eto lah rah user tsotra
+        <div className="w-full">
+            <UserNavigation />
+            <div className="">
+                jibriojbtoi
+            </div>
         </div>
     )
 }
