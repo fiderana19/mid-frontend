@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { DatePicker } from 'antd';
+import { DatePicker, Modal } from 'antd';
 import MidLogo from '../assets/image/mid-logo.jpg'
-import { UserOutlined, LockOutlined, EyeOutlined, MailOutlined, PhoneOutlined, CreditCardOutlined, ContactsOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, EyeOutlined, MailOutlined, PhoneOutlined, CreditCardOutlined, ContactsOutlined, EnvironmentOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { useState } from 'react';
 import { SignupInterface } from '../interfaces/User';
 import dayjs from "dayjs";
@@ -9,6 +9,7 @@ import { userSignup } from "../api/users";
 
 function Signup() {
     const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', password: ''});
+    const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -43,10 +44,17 @@ function Signup() {
         }
     };
 
-
     const handleSignupUser = async () => {
         console.log(signupCredentials);
-        await userSignup(signupCredentials);
+        const response = await userSignup(signupCredentials);
+        console.log(response);
+        if(response?.status === 201) {
+            setIsRegisteredModalVisible(true);
+        }
+    }
+
+    const handleModalOk = async () => {
+        setIsRegisteredModalVisible(false);
     }
 
     return(
@@ -156,15 +164,26 @@ function Signup() {
                     </div>
                     <button onClick={handleSignupUser} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>S'INSCRIRE</button>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
-                        <div>Vous n'avez pas encore un compte ?</div>
+                        <div>Vous avez déjà un compte ?</div>
                         <Link to="/">
                             <div className='text-blue-400 underline'>
-                                S'inscrire
+                                Se connecter
                             </div>
                         </Link>
                     </div>
                 </div>
             </div>
+            <Modal title="Inscription réussie" 
+                open={isRegisteredModalVisible}
+                onOk={handleModalOk}
+                onCancel={handleModalOk}
+            >
+                <div className='text-red-900'>
+                    <CheckCircleFilled className='mr-2' />  
+                    Vos informations sont bien envoyés et en attente du validation de l'administrateur.
+                    Vous serez notifier par email quand votre compte sera validé !
+                </div>
+            </Modal>
         </div>
     )
 }

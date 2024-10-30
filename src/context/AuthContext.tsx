@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 type AuthContextProps = {
     token?: string | null;
     isAuthenticated?: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<any>;
     logout: () => Promise<void>;
 }
 
@@ -21,26 +21,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const data = await userLogin(email, password)
+            const response: any = await userLogin(email, password)
+            if(response?.status === 201) {
+                const data = response?.data.token
+                if(data) {
+                    setToken(data);
+                    localStorage.setItem("token", data);
 
-            if(data) {
-                setToken(data);
-                localStorage.setItem("token", data);
-
-                const decodedToken = JSON.parse(atob(data.split('.')[1]));
-                if(decodedToken.role[0] === "admin") {
-                    navigate("/admin/home");
-                } else if(decodedToken.role[0] === "user" && !decodedToken.id) {
-                    const user = await checkEmailExistisAPI(email);
-                    console.log(user);
-                    if(user) {
-                        navigate("/");
+                    const decodedToken = JSON.parse(atob(data.split('.')[1]));
+                    if(decodedToken.role[0] === "admin") {
+                        navigate("/admin/home");
+                    } else if(decodedToken.role[0] === "user" && !decodedToken.id) {
+                        const user = await checkEmailExistisAPI(email);
+                        console.log(user);
+                        if(user) {
+                            navigate("/");
+                        } else {
+                            console.error("User not found.", user);
+                        }
                     } else {
-                        console.error("User not found.", user);
+                        navigate("/user/home");
                     }
-                } else {
-                    navigate("/user/home");
                 }
+                return { status: 201 }
+            } else {
+                return { status: 401 }
             }
         } catch (error) {
             throw error;

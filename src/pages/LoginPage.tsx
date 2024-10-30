@@ -1,14 +1,15 @@
-import { EyeOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, EyeOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { useAuth } from '../context/AuthContext';
 
 function LoginPage() {
     const [loginCredentials, setLoginCredentials] = useState<LoginInterface>({ email: '', password: '' });
     const { login } = useAuth();
+    const [isNotValidModalVisible, setIsNotValidModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         const token = localStorage.removeItem("token");
@@ -18,14 +19,21 @@ function LoginPage() {
     
 
     const handleLoginUser = async () => {
-        await login(loginCredentials.email, loginCredentials.password);
-
+        const response = await login(loginCredentials.email, loginCredentials.password);
+        console.log("ito lty a", response)
+        if(response.status) {
+            setIsNotValidModalVisible(true);
+        }
         message.success(`eto eee ${loginCredentials.email} ${loginCredentials.password}`);
     }
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setLoginCredentials((prevLogin) => ({...prevLogin, [name]: value}));
+    }
+
+    const handleModalOk = async () => {
+        setIsNotValidModalVisible(false);
     }
 
     return (
@@ -76,6 +84,16 @@ function LoginPage() {
                     </div>
                 </div>
             </div>
+            <Modal title="En attente de validation" 
+                open={isNotValidModalVisible}
+                onOk={handleModalOk}
+                onCancel={handleModalOk}
+            >
+                <div className='text-red-900'>
+                    <CheckCircleFilled className='mr-2' /> 
+                    Votre compte n'est pas encore validé actuellement ! 
+                </div>
+            </Modal>
         </div>
     )
 }

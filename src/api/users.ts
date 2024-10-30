@@ -10,11 +10,10 @@ export const userLogin = async (email:string, password: string) => {
       url: `${UserAPIUrl}/login`,
       data: { email, password },
     })
-    const access_token = response.data.token;
 
-    return access_token;
-  } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    return response;
+  } catch (error: any) {
+    console.error("Erreur lors de l'authentfication :", error)
   }
 }
 
@@ -25,9 +24,8 @@ export const userSignup = async (signinCredentials: SignupInterface) => {
       url: `${UserAPIUrl}/signup`,
       data: signinCredentials,
     })
-    console.log(response.data)
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors de l'inscription :", error)
   }
