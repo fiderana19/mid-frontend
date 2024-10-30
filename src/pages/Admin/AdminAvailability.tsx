@@ -1,20 +1,43 @@
 import { Calendar, DatePicker, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
+import { createAvailability, getAllAvailability, getAvailabilityById } from "../../api/availability";
 
 function AdminAvailability() {
+    const [availabilities, setAvailabilities] = useState<any>([]);
     const [createAvailabilityCredentials, setCreateAvailabilityCredentials] = useState<CreateAvailabilityInterface>({date_availability: '', hour_debut: '', hour_end: ''});
     const [isAddAvailabilityModalVisible, setIsAddAvailabilityModalVisible] = useState<boolean>(false);
     const [day, setDay] = useState<any>()
+    const [access_token, setAccessToken] = useState<string | null>(
+        localStorage.getItem('token')
+    )
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token) {
+            setAccessToken(token)
+        }
+        fetchAvailability()
+
+    }, [])
+
+    const fetchAvailability = async () => {
+        const response = await getAllAvailability(access_token);
+        console.log(response)
+        if(response?.status === 200) {
+            setAvailabilities(response.data);
+        }
+    }
 
     const handleCloseAddAvailabilityModal = async () => {
         setIsAddAvailabilityModalVisible(false);
     }
+
 
     const handleDateChange = (date: dayjs.Dayjs | null) => {
         if (date) {
@@ -66,8 +89,10 @@ function AdminAvailability() {
 
     const handleAddAvailabilitySubmit = async () => {
         console.log("reto redential", createAvailabilityCredentials)
+        const response = await createAvailability(access_token,createAvailabilityCredentials);
+        console.log(response)
     }
- 
+
     return(
         <>
             <div className="w-full flex">
@@ -90,7 +115,24 @@ function AdminAvailability() {
                         </div>
                         disponibilite admin
                         <div className="h-80 w-full">
-                            <Calendar className="" style={{ height: 800 }} />
+                            <div className="gap-2">
+                                {
+                                    availabilities && availabilities.map((availability: any, index: any) => {
+                                        return <div key={index} className="border rounded p-2 w-64 bg-gray-500">
+                                            <div>Le { availability.date_availability }</div>
+                                            <div className="flex gap-2">
+                                                <div>De { availability.hour_debut } </div>
+                                                <div>à { availability.hour_end } </div>
+                                            </div>
+                                            <div className="flex gap-2 justify-end">
+                                                <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                    <DeleteFilled />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    })
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +157,7 @@ function AdminAvailability() {
                             <TimePicker name="hour_end" format="HH:mm" onChange={handleEndTimeChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Fin de la disponibilité..."  />
                         </div>                                  
                     </div>
-            </Modal>        
+            </Modal>    
         </>
     )
 }
