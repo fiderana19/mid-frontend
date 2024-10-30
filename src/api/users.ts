@@ -41,7 +41,6 @@ export const validateUser = async (token: string | null, id: string) => {
         Authorization: `Bearer ${token}`
       }
     })
-    console.log(response.data)
 
     return response.data;
   } catch (error) {
@@ -59,7 +58,6 @@ export const editUser = async (token: string | null, id: string, editData: any) 
         Authorization: `Bearer ${token}`
       }
     })
-    console.log(response)
 
     return response.data;
   } catch (error) {
@@ -76,7 +74,6 @@ export const deleteUser = async (token: string | null, id: string) => {
         Authorization: `Bearer ${token}`
       }
     })
-    console.log(response.data)
 
     return response.data;
   } catch (error) {
@@ -108,7 +105,7 @@ export const getAllUser = async (token: string | null) => {
     })
     return response;
   } catch (error) {
-    console.error("Erreur get all user.", error)
+    console.error("Erreur lors de la recuperation des utilisateurs.", error)
   }
 }
 
@@ -122,10 +119,9 @@ export const getUserById = async (token: string | null, id: string) => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log("dyecuhev", response)
       return response.data;
     }
   } catch (error) {
-    console.error("Erreur get all user.", error)
+    console.error("Erreur lors de la recuperation de l'utilisateur.", error)
   }
 }

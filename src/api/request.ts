@@ -11,8 +11,6 @@ export const getAllRequest = async (token: string | null) => {
           Authorization: `Bearer ${token}`
         }
       })
-
-      console.log('reto daoly', response)
   
       return response.data;
     } catch (error) {
@@ -45,8 +43,6 @@ export const getAllRequestByUser = async (token: string | null, id: string) => {
           Authorization: `Bearer ${token}`
         }
       })
-
-      console.log(response);
   
       return response.data;
     } catch (error) {

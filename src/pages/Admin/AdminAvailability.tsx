@@ -104,9 +104,6 @@ function AdminAvailability() {
                 okText="Ajouter"
                  >
                     <div>
-                        {/* <div className='w-60 my-4 mx-auto'>
-                            <DatePicker onChange={handleDateChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de la disponibilité..."  />
-                        </div> */}
                         <div className='w-60 my-4 mx-auto'>
                             <DatePicker name="date_availability" onChange={handleDateChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de la disponibilité..."  />
                         </div>                    
