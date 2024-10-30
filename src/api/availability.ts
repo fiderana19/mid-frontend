@@ -2,7 +2,7 @@ import axios from "axios";
 
 const availabilityAPIUrl = "http://localhost:3002/availability";
 
-export const getAllAvailability = async (token: string) => {
+export const getAllAvailability = async (token: string | null) => {
   try {
     const response = await axios({
       method: 'get',
@@ -18,7 +18,23 @@ export const getAllAvailability = async (token: string) => {
   }
 }
 
-export const createAvailability = async (token: string, data: any) => {
+export const getAvailabilityById = async (token: string | null, id: string) => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${availabilityAPIUrl}/get/${id}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la recuperation de la disponiblité :", error)
+    }
+}
+
+export const createAvailability = async (token: string | null, data: any) => {
     try {
       const response = await axios({
         method: 'post',
@@ -35,7 +51,7 @@ export const createAvailability = async (token: string, data: any) => {
     }
 }
 
-export const updateAvailability = async (token: string, id: string,data: any) => {
+export const updateAvailability = async (token: string | null, id: string,data: any) => {
     try {
       const response = await axios({
         method: 'patch',
@@ -52,7 +68,7 @@ export const updateAvailability = async (token: string, id: string,data: any) =>
     }
 }
 
-export const deleteAvailability = async (token: string, id: string) => {
+export const deleteAvailability = async (token: string | null, id: string) => {
     try {
       const response = await axios({
         method: 'delete',
