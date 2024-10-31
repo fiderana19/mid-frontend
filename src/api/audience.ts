@@ -11,3 +11,20 @@ export const getAllAudience = async () => {
         console.error(error)
     }
 }
+
+export const audienceCreate = async (token: string | null, audienceData: any) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${AudienceAPIUrl}/create`,
+        data: audienceData,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de l'authentfiication :", error)
+    }
+  }

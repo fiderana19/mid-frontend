@@ -4,13 +4,14 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { CheckOutlined, CloseOutlined, DownOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
     const [selectedRequest, setSelectedRequest] = useState<string>();
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const navigate = useNavigate();
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );

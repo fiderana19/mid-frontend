@@ -16,7 +16,7 @@ const AdminRequestView: React.FC = () => {
     );
     let req = useParams();
     const navigate = useNavigate();
-    let userId = req.id;
+    let reqestId = req.id;
 
     useEffect(() => { 
         const token = localStorage.getItem('token');
@@ -28,10 +28,10 @@ const AdminRequestView: React.FC = () => {
     async function fetchRequest() {
         const token = localStorage.getItem('token');
 
-        if(userId && token) {
-            console.log("ito le id", userId)
+        if(reqestId && token) {
+            console.log("ito le id", reqestId)
 
-            const response = await getRequestById(token,userId);
+            const response = await getRequestById(token,reqestId);
 
             console.log(response)
             setRequest(response)    
@@ -57,6 +57,7 @@ const AdminRequestView: React.FC = () => {
         fetchRequest();
         setIsValidateModalVisible(false)
         console.log(response)
+        navigate(`/admin/organize/audience/${reqestId}`)
     }
     //handling delete cancel
     const handleValidateCancel = async () => {

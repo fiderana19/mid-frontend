@@ -1,7 +1,38 @@
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
+import { getAllAudience } from '../../api/audience';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminAudience() {
+    const [requests, setRequests] = useState<any[]>([]);
+    const [selectedRequest, setSelectedRequest] = useState<string>();
+    const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
+    const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const navigate = useNavigate();
+    const [access_token, setAccessToken] = useState<string | null>(
+        localStorage.getItem('token')
+    );
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if(token) {
+            setAccessToken(token);
+        }
+        fetchUserRequest()
+    }, [])
+
+    async function fetchUserRequest () {
+        const token = localStorage.getItem('token');
+        if(token) {
+            const response = await getAllAudience();
+            if(response) {
+                console.log("reto lty ar", response)
+            }
+        }
+    }
+
     return(
         <>
             <div className="w-full flex">
