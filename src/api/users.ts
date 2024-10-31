@@ -65,6 +65,40 @@ export const editUser = async (token: string | null, id: string, editData: any) 
   }
 }
 
+export const initializePassword = async (token: string |null, id: string, data: any) => {
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${UserAPIUrl}/first/password/${id}`,
+      data:  data ,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error: any) {
+    console.error("Erreur lors de l'initialisation du mot de passe :", error)
+  }
+}
+
+export const updatePassword = async (token: string |null, id: string, password: string) => {
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${UserAPIUrl}/password/${id}`,
+      data:  password ,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error: any) {
+    console.error("Erreur lors de la modification du mot de passe :", error)
+  }
+}
+
 export const deleteUser = async (token: string | null, id: string) => {
   try {
     const response = await axios({

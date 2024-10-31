@@ -124,10 +124,14 @@ function AdminAvailability() {
                                                 <div>De { availability.hour_debut } </div>
                                                 <div>à { availability.hour_end } </div>
                                             </div>
+                                            <div>
+                                                { availability.status_availability }
+                                            </div>
                                             <div className="flex gap-2 justify-end">
                                                 <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
                                                     <DeleteFilled />
                                                 </button>
+                                                div
                                             </div>
                                         </div>
                                     })

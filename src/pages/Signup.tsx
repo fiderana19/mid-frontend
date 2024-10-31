@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { DatePicker, Modal } from 'antd';
 import MidLogo from '../assets/image/mid-logo.jpg'
-import { UserOutlined, LockOutlined, EyeOutlined, MailOutlined, PhoneOutlined, CreditCardOutlined, ContactsOutlined, EnvironmentOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { UserOutlined, MailOutlined, PhoneOutlined, ContactsOutlined, EnvironmentOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { useState } from 'react';
 import { SignupInterface } from '../interfaces/User';
 import dayjs from "dayjs";
 import { userSignup } from "../api/users";
 
 function Signup() {
-    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', password: ''});
+    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
-
+    const [initialPwd, setInitialPwd] = useState<any>()
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setSignupCredentials((prevSignup) => ({...prevSignup, [name]: value}));
@@ -45,9 +45,8 @@ function Signup() {
     };
 
     const handleSignupUser = async () => {
-        console.log(signupCredentials);
         const response = await userSignup(signupCredentials);
-        console.log(response);
+        setInitialPwd(response?.data.initialPwd);
         if(response?.status === 201) {
             setIsRegisteredModalVisible(true);
         }
@@ -150,18 +149,6 @@ function Signup() {
                             <EnvironmentOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                         </div>
                     </div>
-                    <div className='w-60 my-4 mx-auto'>
-                        <div className="relative">
-                            <input onChange={handleChange} name="password"
-                            className="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                            />
-                            <label className="absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
-                            Mot de passe...
-                            </label>
-                            <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
-                            <EyeOutlined className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
-                        </div>
-                    </div>
                     <button onClick={handleSignupUser} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>S'INSCRIRE</button>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous avez déjà un compte ?</div>
@@ -182,6 +169,9 @@ function Signup() {
                     <CheckCircleFilled className='mr-2' />  
                     Vos informations sont bien envoyés et en attente du validation de l'administrateur.
                     Vous serez notifier par email quand votre compte sera validé !
+                    <div>
+                        Votre mot de passe initial est : { initialPwd }
+                    </div>
                 </div>
             </Modal>
         </div>

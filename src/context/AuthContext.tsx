@@ -23,14 +23,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response: any = await userLogin(email, password)
             if(response?.status === 201) {
-                const data = response?.data.token
-                if(data) {
+                if(response) {
+                    const data = response?.data.token;
+                    const isNotFirstLogin = response?.data.is_not_first_login;
+
+                    console.log("g888", response.data)
+
                     setToken(data);
                     localStorage.setItem("token", data);
 
                     const decodedToken = JSON.parse(atob(data.split('.')[1]));
                     if(decodedToken.role[0] === "admin") {
-                        navigate("/admin/home");
+                        if(isNotFirstLogin === false) {
+                            navigate("/admin/password");
+                        } else {
+                            navigate("/admin/home");
+                        }
                     } else if(decodedToken.role[0] === "user" && !decodedToken.id) {
                         const user = await checkEmailExistisAPI(email);
                         console.log(user);
@@ -40,7 +48,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                             console.error("User not found.", user);
                         }
                     } else {
-                        navigate("/user/home");
+                        if(!isNotFirstLogin) {
+                            navigate("/user/password");
+                        } else {
+                            navigate("/user/home");
+                        }
                     }
                 }
                 return { status: 201 }

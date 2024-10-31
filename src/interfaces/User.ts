@@ -13,5 +13,8 @@ export interface SignupInterface {
     cni: string;
     date_cni: string;
     lieu_cni: string;
+}
+
+export interface UpdateUserPassword {
     password: string;
 }
