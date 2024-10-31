@@ -1,7 +1,7 @@
 import { Calendar, DatePicker, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, CloseOutlined, DeleteFilled, EditFilled, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
@@ -90,7 +90,9 @@ function AdminAvailability() {
     const handleAddAvailabilitySubmit = async () => {
         console.log("reto redential", createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
-        console.log(response)
+        console.log(response);
+        fetchAvailability();
+        setIsAddAvailabilityModalVisible(false);
     }
 
     return(
@@ -124,14 +126,31 @@ function AdminAvailability() {
                                                 <div>De { availability.hour_debut } </div>
                                                 <div>à { availability.hour_end } </div>
                                             </div>
-                                            <div>
-                                                { availability.status_availability }
+                                            <div className="">
+                                                {
+                                                    availability.status_availability[0] === "Occupé" ? 
+                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
+                                                        <WarningOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>
+                                                    : (
+                                                        availability.status_availability[0] === "Libre" ?
+                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
+                                                        <CheckOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>                                                        
+                                                    :
+                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
+                                                        <CloseOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>                                                    
+                                                    )
+                                                } 
                                             </div>
                                             <div className="flex gap-2 justify-end">
                                                 <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
-                                                    <DeleteFilled />
+                                                    <CloseCircleFilled /> Annuler 
                                                 </button>
-                                                div
                                             </div>
                                         </div>
                                     })

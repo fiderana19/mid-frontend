@@ -21,6 +21,7 @@ import UserAddDemande from "./pages/User/Demande/AddDemande"
 import AdminRequestView from "./pages/Admin/Request/AdminRequestView"
 import InitializePasswordUser from "./pages/User/InitializePasswordUser"
 import InitializePasswordAdmin from "./pages/Admin/InitializePasswordAdmin"
+import AdminOrganizeAudience from "./pages/Admin/Audience/AdminOrganizeAudience"
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="demande/view/:id" element={<AdminRequestView />} />
             <Route path="demande" element={<AdminDemande />} />
             <Route path="audience" element={<AdminAudience />} />
+            <Route path="organize/audience/:id" element={<AdminOrganizeAudience />} />
             <Route path="availability" element={<AdminAvailability />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="account/edit/:id" element={<AdminAccountEdit />} />

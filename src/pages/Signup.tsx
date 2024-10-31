@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import { DatePicker, Modal } from 'antd';
 import MidLogo from '../assets/image/mid-logo.jpg'
 import { UserOutlined, MailOutlined, PhoneOutlined, ContactsOutlined, EnvironmentOutlined, CheckCircleFilled } from "@ant-design/icons";
@@ -10,7 +10,8 @@ import { userSignup } from "../api/users";
 function Signup() {
     const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
-    const [initialPwd, setInitialPwd] = useState<any>()
+    const [initialPwd, setInitialPwd] = useState<any>();
+    const navigate = useNavigate();
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setSignupCredentials((prevSignup) => ({...prevSignup, [name]: value}));
@@ -54,6 +55,7 @@ function Signup() {
 
     const handleModalOk = async () => {
         setIsRegisteredModalVisible(false);
+        navigate("/");
     }
 
     return(
