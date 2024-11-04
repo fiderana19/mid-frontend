@@ -18,6 +18,22 @@ export const getAllAvailability = async (token: string | null) => {
   }
 }
 
+export const getAllFreeAvailability = async (token: string | null) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${availabilityAPIUrl}/all/free`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors du recuperation des disponibilités :", error)
+  }
+}
+
 export const getAvailabilityById = async (token: string | null, id: string) => {
     try {
       const response = await axios({

@@ -11,12 +11,19 @@ import { DatePicker } from "antd";
 
 const AdminAccountEdit: React.FC = () => {
     const [user, setUser] = useState<any>();
-    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', password: ''});
+    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: ''});
+    const [access_token, setAccessToken] = useState<string | null>(
+        localStorage.getItem('token')
+    );
     let req = useParams();
     const navigate = useNavigate();
     let userId = req.id;
 
     useEffect(() => { 
+        const token = localStorage.getItem('token');
+        if(token) {
+            setAccessToken(token);
+        }
         fetchUser()
     }, [])
 
@@ -24,7 +31,7 @@ const AdminAccountEdit: React.FC = () => {
         if(userId) {
             console.log("ito le id", userId)
 
-            const response = await getUserById(userId);
+            const response = await getUserById(access_token,userId);
 
             console.log(response)
             setUser(response)    
@@ -66,7 +73,7 @@ const AdminAccountEdit: React.FC = () => {
     };
 
     const handleUserEdit = async () => {
-        const response = await editUser(user._id, signupCredentials)
+        const response = await editUser(access_token,user._id, signupCredentials)
         console.log("le vita eto", signupCredentials , "de avy eo eto", response);
         fetchUser();
     }

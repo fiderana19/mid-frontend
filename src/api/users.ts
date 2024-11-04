@@ -36,7 +36,6 @@ export const validateUser = async (token: string | null, id: string) => {
     const response = await axios({
       method: 'patch',
       url: `${UserAPIUrl}/validate/${id}`,
-      data: {validation: true},
       headers: {
         Authorization: `Bearer ${token}`
       }

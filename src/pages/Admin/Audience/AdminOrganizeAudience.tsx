@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { getRequestById } from "../../../api/request";
-import { getAllAvailability } from '../../../api/availability';
+import { getAllFreeAvailability } from '../../../api/availability';
 import { audienceCreate } from "../../../api/audience";
 
 const { Option } = Select;
@@ -52,7 +52,7 @@ function AdminOrganizeAudience() {
         const token = localStorage.getItem('token');
 
         if(token) {
-            const response = await getAllAvailability(token);
+            const response = await getAllFreeAvailability(token);
 
             console.log("h777",response)
             if(response) {
