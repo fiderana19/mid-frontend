@@ -1,39 +1,41 @@
-import { Dropdown, Input, MenuProps } from "antd";
+import { Dropdown, Input, MenuProps, Modal } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../api/users";
-import { CheckCircleFilled, CloseCircleFilled, DeleteOutlined, EditOutlined, MenuOutlined } from "@ant-design/icons";
+import { getAllUser, validateUser } from "../../api/users";
+import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, EditOutlined, MenuOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string>('')
+    const [access_token, setAccessToken] = useState<string>('');
     const [selectedAcount, setSelectedAccount] = useState<string>()
+    const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if(token) {
             setAccessToken(token)
         }
-        async function fetchAccount () {
-            const response = await getAllUser(access_token);
-
-            console.log(response)
-            if(response) {
-                setAccounts(response.data)
-            }
-        }
+        
         fetchAccount()
     }, [])
 
+    async function fetchAccount () {
+        const response = await getAllUser(access_token);
+
+        console.log(response)
+        if(response) {
+            setAccounts(response.data)
+        }
+    }
    
     
     const items: MenuProps['items'] = [
         {
           label:  <Link to={`/admin/account/view/${selectedAcount}`} >
                     <div className="flex gap-2">
-                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                        <UserOutlined  />
                         <div>Voir</div>
                     </div>
                 </Link>,
@@ -42,7 +44,7 @@ function AdminAccount() {
         {
           label:  <Link to={`/admin/account/edit/${selectedAcount}`} >
                     <div className="flex gap-2">
-                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                        <EditOutlined />
                         <div>Modifier</div>
                     </div>
                 </Link>,
@@ -52,10 +54,28 @@ function AdminAccount() {
           type: 'divider',
         },
         {
-          label: '3rd menu item',
+          label: <div onClick={() => setIsValidateModalVisible(true)}>
+                <div className="flex gap-2">
+                    <CheckCircleOutlined />
+                    <div>Valider</div>
+                </div>
+            </div>,
           key: '3',
         },
-      ];      
+      ];
+      
+    const handleValidateConfirm = async () => {
+        if(selectedAcount) {
+            const response = await validateUser(access_token,selectedAcount);
+            setIsValidateModalVisible(false);
+            fetchAccount();
+            console.log(response)    
+        }
+    }
+    //handling delete cancel
+    const handleValidateCancel = async () => {
+        setIsValidateModalVisible(false)
+    }
     
     return(
         <>
@@ -104,16 +124,7 @@ function AdminAccount() {
                                                 }  
                                             </td>
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                                                {/* <div className='flex justify-center gap-1'>
-                                                    <Link to={`/admin/view/${account._id}`} >
-                                                        <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
-                                                    </Link>
-                                                    <Link to={`/admin/account/edit/${account._id}`} >
-                                                        <EditOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
-                                                    </Link>
-                                                    <DeleteOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
-                                                </div> */}
-                                                <Dropdown menu={{ items }} trigger={['click']}>
+                                                <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
                                                     <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account._id)}}>
                                                         <MenuOutlined />
                                                     </a>
@@ -129,6 +140,18 @@ function AdminAccount() {
                 </div>
                 </div>
             </div>
+            <Modal title="Validation" 
+                open={isValidateModalVisible}
+                onOk={handleValidateConfirm}
+                onCancel={handleValidateCancel}
+                okText="Valider"
+                cancelText="Annuler"
+            >
+                <div className=''>
+                    <WarningOutlined className='mr-2' />  
+                    Êtes-vous sûr de vouloir valider ce demande d'audience ?
+                </div>
+            </Modal>
         </>
 
     )

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckOutlined, CloseOutlined, DownOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -41,7 +41,7 @@ function AdminDemande() {
         {
             label:  <Link to={`/admin/demande/view/${selectedRequest}`} >
                       <div className="flex gap-2">
-                          <MenuOutlined className="p-1 border-gray-600 bg-gray-400 rounded" />
+                          <EyeOutlined  />
                           <div>Voir</div>
                       </div>
                   </Link>,
@@ -51,12 +51,22 @@ function AdminDemande() {
           type: 'divider',
         },
         {
-          label: <div onClick={() => setIsValidateModalVisible(true)}>Valider</div>
+          label: <div onClick={() => setIsValidateModalVisible(true)}>
+                    <div className="flex gap-2">
+                        <CheckCircleOutlined  />
+                        <div>Approuver</div>
+                    </div>
+                </div>
           ,
           key: '3',
         },
         {
-            label: <div onClick={() => setIsDenyModalVisible(true)}>Refuser</div>
+            label: <div onClick={() => setIsDenyModalVisible(true)}>
+                <div className="flex gap-2">
+                    <CloseCircleOutlined  />
+                    <div>Refuser</div>
+                </div>
+            </div>
             ,
             key: '4',
           },
@@ -153,7 +163,7 @@ function AdminDemande() {
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                 <div className='flex justify-center'>
-                                                <Dropdown menu={{ items }} trigger={['click']}>
+                                                <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
                                                     <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request._id)}}>
                                                         <MenuOutlined />
                                                     </a>
