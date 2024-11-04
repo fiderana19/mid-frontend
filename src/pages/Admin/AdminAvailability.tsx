@@ -6,12 +6,14 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
-import { createAvailability, getAllAvailability, getAvailabilityById } from "../../api/availability";
+import { cancelAvailability, createAvailability, getAllAvailability, getAvailabilityById } from "../../api/availability";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
     const [createAvailabilityCredentials, setCreateAvailabilityCredentials] = useState<CreateAvailabilityInterface>({date_availability: '', hour_debut: '', hour_end: ''});
     const [isAddAvailabilityModalVisible, setIsAddAvailabilityModalVisible] = useState<boolean>(false);
+    const [selectedAvailability, setSelectedAvailability] = useState<string>();
+    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [day, setDay] = useState<any>()
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
@@ -95,6 +97,21 @@ function AdminAvailability() {
         setIsAddAvailabilityModalVisible(false);
     }
 
+    const handleCancelClose = async () => {
+        setIsCancelModalVisible(false);
+    }
+
+    const handleCancelOk = async () => {
+        console.log(selectedAvailability);
+        if(selectedAvailability) {
+            const response = await cancelAvailability(access_token,selectedAvailability);
+            console.log(response);
+            fetchAvailability();
+            setIsCancelModalVisible(false);    
+        }
+    }
+
+
     return(
         <>
             <div className="w-full flex">
@@ -148,9 +165,16 @@ function AdminAvailability() {
                                                 } 
                                             </div>
                                             <div className="flex gap-2 justify-end">
-                                                <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
-                                                    <CloseCircleFilled /> Annuler 
-                                                </button>
+                                                {
+                                                    availability.status_availability[0] === "Annulé" ?
+                                                    <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <CloseCircleFilled /> Annuler 
+                                                    </button>
+                                                    :
+                                                    <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <CloseCircleFilled /> Annuler 
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                     })
@@ -181,6 +205,18 @@ function AdminAvailability() {
                         </div>                                  
                     </div>
             </Modal>    
+            <Modal title="Annuler un disponibilité" 
+                open={isCancelModalVisible}
+                onOk={handleCancelOk}
+                onCancel={handleCancelClose}
+                okText="Confirmer"
+                cancelText="Annuler"
+            >
+                <div className='text-red-900'>
+                <WarningOutlined className='mr-2' />  
+                Êtes-vous sûr de vouloir annuler disponibilité ?
+                </div>
+            </Modal>
         </>
     )
 }

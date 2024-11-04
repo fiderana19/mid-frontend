@@ -51,12 +51,12 @@ export const createAvailability = async (token: string | null, data: any) => {
     }
 }
 
-export const updateAvailability = async (token: string | null, id: string,data: any) => {
+export const cancelAvailability = async (token: string | null, id: string) => {
     try {
       const response = await axios({
         method: 'patch',
-        url: `${availabilityAPIUrl}/update/${id}`,
-        data: data,
+        url: `${availabilityAPIUrl}/status/${id}`,
+        data: {status_availability: "Annulé"},
         headers: {
           Authorization: `Bearer ${token}`
         }
