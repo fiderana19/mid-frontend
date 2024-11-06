@@ -4,14 +4,14 @@ import { FunctionComponent, useState } from 'react';
 
 interface StepsProp {
     handlePrev: () => void;
-    handleSignupUser: () => void;
+    handleNext: () => void;
     handleChange: (e: any) => void;
     handleKeyPress: (e: any) => void;
     handleDateCNIChange: (e: any) => void;
     formData: any;
 }
 
-const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKeyPress, formData, handlePrev, handleSignupUser, handleChange}) => {
+const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKeyPress, formData, handlePrev, handleChange, handleNext}) => {
     const [cniError, setCNIError] = useState<string>('');
     const [lieuCniError, setLieuCNIError] = useState<string>('');
 
@@ -27,7 +27,7 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
         }
 
         if(formData.cni.length === 12 && formData.lieu_cni !== "") {
-            handleSignupUser();
+            handleNext();
         }
     }
     

@@ -8,11 +8,12 @@ import dayjs from 'dayjs';
 import SignupBirth from './SignupBirth';
 import SignupCNI from './SignupCNI';
 import { CheckCircleFilled } from '@ant-design/icons';
+import SignupFile from './SignupFile';
 const {Step} = Steps
 
 const AddForms: FunctionComponent = () => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: ''});
+    const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', adresse: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', profile_photo: '', cni_photo : ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
     const [initialPwd, setInitialPwd] = useState<any>();
     const navigate = useNavigate();
@@ -20,6 +21,13 @@ const AddForms: FunctionComponent = () => {
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setSignupCredentials((prevSignup) => ({...prevSignup, [name]: value}));
+    }
+
+    const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { files, name } = e.target;
+        const selectedFiles = files as FileList;
+        const file = selectedFiles[0];
+        setSignupCredentials((prevSignup) => ({...prevSignup, [name]: file}));
     }
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -84,6 +92,7 @@ const AddForms: FunctionComponent = () => {
               <Step title="" status={currentStep > 0 ? 'finish' : 'process'} />
               <Step title="" status={currentStep > 1 ? 'finish' : currentStep === 1 ? 'process' : 'wait'} />
               <Step title="" status={currentStep > 2 ? 'finish' : currentStep === 2 ? 'process' : 'wait'} />
+              <Step title="" status={currentStep > 3 ? 'finish' : currentStep === 3 ? 'process' : 'wait'} />
             </Steps>
         </div>
           {currentStep === 0 && (
@@ -98,7 +107,12 @@ const AddForms: FunctionComponent = () => {
           )}
           {currentStep === 2 && (
             <div>
-                <SignupCNI formData={signupCredentials} handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleSignupUser={handleSignupUser} handlePrev={handlePreviousPage} />
+                <SignupCNI formData={signupCredentials} handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+            </div>
+          )}
+          {currentStep === 3 && (
+            <div>
+                <SignupFile formData={signupCredentials} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
                 <Modal title="Inscription réussie" 
                     open={isRegisteredModalVisible}
                     onOk={handleModalOk}

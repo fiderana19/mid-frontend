@@ -23,6 +23,9 @@ export const userSignup = async (signinCredentials: SignupInterface) => {
       method: 'post',
       url: `${UserAPIUrl}/signup`,
       data: signinCredentials,
+      headers: {
+        "Content-Type" : "multipart/form-data",
+      }
     })
 
     return response;
