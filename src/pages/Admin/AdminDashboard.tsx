@@ -1,20 +1,41 @@
+import AccountDashboard from "../../components/Dashboard/AccountDashboard";
+import AccountLast from "../../components/Dashboard/AccountLast";
+import AudienceChart from "../../components/Dashboard/AudienceChart";
+import RequestChart from "../../components/Dashboard/RequestChart";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 
 function AdminDashboard() {
+
+
     return(
         <>
             <div className="w-full flex">
                 <div className="w-1/6">
                     <AdminNavigation />
                 </div>
-                <div className="w-5/6">
+                <div className="w-5/6 h-screen">
                     <div className="z-50 fixed top-0 right-0 w-5/6">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
-                        <div className="p-4">
-                            admin dashboard
+                    <div className="pt-12 h-screen">
+                        <div className="flex h-full">
+                            <div className="w-3/4 bg-gray-300 p-10">
+                                <div className="text-xl font-bold">Dashboard</div>
+                                <div className="flex justify-between">
+                                    <div className="w-5/12">
+                                        <RequestChart />
+                                    </div>
+                                    <div className="w-5/12">
+                                        <AudienceChart />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="h-full w-1/4 p-5 bg-gray-400">
+                                <div className="text-lg font-bold">CITOYENS</div>
+                                <AccountDashboard />
+                                <AccountLast />
+                            </div>
                         </div>
                     </div>
                 </div>

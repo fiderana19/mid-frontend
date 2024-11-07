@@ -39,7 +39,6 @@ const items: MenuProps['items'] = [
   
     return(
         <div className="bg-red-500 px-4 py-2 flex justify-end">
-            <Link to="/admin/info">
                 <Dropdown menu={{ items }} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()}>
                       {
@@ -52,7 +51,6 @@ const items: MenuProps['items'] = [
                     }
                     </a>
                 </Dropdown>
-            </Link>
         </div>
     )
 }

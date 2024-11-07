@@ -79,7 +79,7 @@ const AdminAccountView: React.FC = () => {
                         {
                             user && 
                             <div className="text-center">
-                            <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
+                            <img src={`data:image/png;base64,${user.profile_photo}`}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
                             <div className="font-bold">{ user.nom }</div>
                             <div className="font-bold">{ user.prenom }</div>
                             <div className="font-bold">{ user.telephone }</div>
