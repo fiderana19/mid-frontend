@@ -16,7 +16,6 @@ import RoleBasedRoute from "./routes/RoleBasedRoute"
 import LoginPage from "./pages/LoginPage"
 import Unauthoriezd from "./pages/Unauthorized"
 import AdminAccountView from "./pages/Admin/Account/AdminAccountView"
-import AdminAccountEdit from "./pages/Admin/Account/AdminAccountEdit"
 import UserAddDemande from "./pages/User/Demande/AddDemande"
 import AdminRequestView from "./pages/Admin/Request/AdminRequestView"
 import InitializePasswordUser from "./pages/User/InitializePasswordUser"
@@ -49,7 +48,6 @@ function App() {
             <Route path="organize/audience/:id" element={<AdminOrganizeAudience />} />
             <Route path="availability" element={<AdminAvailability />} />
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="account/edit/:id" element={<AdminAccountEdit />} />
             <Route path="account/view/:id" element={<AdminAccountView />} />
             <Route path="account" element={<AdminAccount />} />
             <Route path="info" element={<AdminInfo />} />

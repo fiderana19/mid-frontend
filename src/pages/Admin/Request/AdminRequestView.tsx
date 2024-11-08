@@ -4,7 +4,7 @@ import MidLogo from '../../../assets/image/mid-logo.jpg';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "antd";
-import { CheckOutlined, CloseOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
 
 const AdminRequestView: React.FC = () => {
@@ -73,44 +73,109 @@ const AdminRequestView: React.FC = () => {
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
+                    <div className="pl-10 px-5 pt-16 pb-5 w-full">
+                        <div className="font-bold text-lg mb-6">Demande d'audience</div>
                         {
                             request && 
-                            <div className="text-center">
-                            <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
-                            <div className="font-bold">{ request.user_nom }</div>
-                            <div className="font-bold">{ request.user_prenom }</div>
-                            <div className="font-bold">{ request.user_cni }</div>
-                            <div className="font-bold">{ request.type_request }</div>
-                            <div className="font-bold">{ request.date_wanted_debut }</div>
-                            <div className="font-bold">{ request.date_wanted_end }</div>
-                            <div className="font-bold">{ request.object }</div>
-                            {
-                                                    request.status_request[0] === "En attente" ? 
-                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>
-                                                    : (
-                                                        request.status_request[0] === "Accepté" ?
-                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                        :
-                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                    
-                                                    )
-                                                }  
+                                <div>
+                                <div className="gap-2 flex justify-between">
+                                    <div className="w-1/4">
+                                        <div className=" border pt-6 rounded text-center">
+                                            <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
+                                            <div className="font-bold text-lg">{ request.user_nom } { request.user_prenom }</div>
+                                            <div className="flex justify-end px-8 py-2">
+                                            </div>
+                                            <div className="mx-auto w-full bg-gray-200 px-8 py-1">
+                                                <div className="flex gap-4 my-2">
+                                                    <EnvironmentOutlined />
+                                                    <div>cni </div>
+                                                </div>
+                                                <div className="flex gap-4 my-2">
+                                                    <EnvironmentOutlined />
+                                                    <div>user.adresse </div>
+                                                </div>
+                                                <div className="flex gap-4 my-2">
+                                                    <MailOutlined />
+                                                    <div> user.email </div>
+                                                </div>
+                                                <div className="flex gap-4 my-2">
+                                                    <PhoneOutlined />
+                                                    <div>+261 user.telephone </div>
+                                                </div>
+                                            </div>
 
-                            <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button>
-                            <button className='bg-red-500 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDenyConfirmation}>Refuser</button>
-                        </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-2/4" >
+                                        <div className="border rounded p-4">
+                                            <div className="mb-3 flex items-center gap-2">
+                                                <div className="text-md font-bold">
+                                                    { request.type_request }
+                                                </div>
+                                                <div >
+                                                    {
+                                                        request.status_request[0] === "En attente" ? 
+                                                        <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
+                                                            <WarningOutlined />
+                                                            <div>{ request.status_request }</div>  
+                                                        </div>
+                                                        : (
+                                                            request.status_request[0] === "Accepté" ?
+                                                        <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
+                                                            <CheckOutlined />
+                                                            <div>{ request.status_request }</div>  
+                                                        </div>
+                                                        :
+                                                        <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
+                                                            <CloseOutlined />
+                                                            <div>{ request.status_request }</div>  
+                                                        </div>                                                    
+                                                        )
+                                                    } 
+                                                </div>
+                                            </div>
+                                                <div className="text-sm text-gray-500">Motif: </div>
+                                                <div className=""> { request.object } </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div className="w-1/4">
+                                        <div className="border rounded p-5">
+                                            <div className="font-bold text-md mb-3">Soumission</div>
+                                                <div className="flex justify-between">
+                                                    <div className="text-sm text-gray-500">Date de soumission</div>
+                                                    <div className="font-semibold"> { request.request_creation } </div>
+                                                </div>
+                                        </div>
+                                        <div className="border rounded my-2 p-5">
+                                            <div className="font-bold text-md mb-3">Préférence</div>
+                                            <div className="text-sm text-gray-500">Une audience demandé pour la semaine de :</div>
+                                            <div className="flex justify-between">
+                                                <div className="font-semibold"> { request.date_wanted_debut } </div>
+                                                <div className="text-sm text-gray-500">à</div>
+                                                <div className="font-semibold"> { request.date_wanted_end } </div>
+                                            </div>
+                                        </div>
+                                        {
+                                            request.status_request[0] === "En attente" && <div className="border rounded p-5">
+                                            <div className="font-bold text-md mb-3">Actions</div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-sm text-gray-500">Approbation</div>
+                                                <button className='bg-green-500 hover:bg-green-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button>
+                                            </div>
+                                            <div className="flex justify-between items-center mt-2">
+                                                <div className="text-sm text-gray-500">Refus</div>
+                                                <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDenyConfirmation}>Refuser</button>
+                                            </div>
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         }
                     </div>
                 </div>

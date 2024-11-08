@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckOutlined, CloseOutlined, DownOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Select } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
@@ -82,70 +82,120 @@ function AdminOrganizeAudience() {
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
-                        <label htmlFor='idproduit'>Les disponibilité : </label><br />
-                        <Select
-                        value={selectedAvailabilityId}
-                        onChange={handleSelectChange}
-                        className='w-full my-1'
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={(input: any, option: any) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        >
-                            <Option value="">Sélectionnez un disponibilité</Option>
+                    <div className="">
+                        <div className="pl-10 px-5 pt-16 pb-5 w-full">
+                            <div className="font-bold text-lg mb-6">Organiser une audience</div>
                             {
-                            availabilities.map((ava: any, index) => {
-                                return(
-                                <Option key={index} value={ava._id}>
-                                { `${ava.date_availability} - ${ava.hour_debut} ${ava.hour_end}` }
-                                </Option>
-                                )
-                            })
-                            }
-                        </Select>
+                                request && 
+                                    <div>
+                                    <div className="gap-2 flex justify-between">
+                                        <div className="w-1/4">
+                                            <div className=" border pt-6 rounded text-center">
+                                                <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
+                                                <div className="font-bold text-lg">{ request.user_nom } { request.user_prenom }</div>
+                                                <div className="flex justify-end px-8 py-2">
+                                                </div>
+                                                <div className="mx-auto w-full bg-gray-200 px-8 py-1">
+                                                    <div className="flex gap-4 my-2">
+                                                        <EnvironmentOutlined />
+                                                        <div>cni </div>
+                                                    </div>
+                                                    <div className="flex gap-4 my-2">
+                                                        <EnvironmentOutlined />
+                                                        <div>user.adresse </div>
+                                                    </div>
+                                                    <div className="flex gap-4 my-2">
+                                                        <MailOutlined />
+                                                        <div> user.email </div>
+                                                    </div>
+                                                    <div className="flex gap-4 my-2">
+                                                        <PhoneOutlined />
+                                                        <div>+261 user.telephone </div>
+                                                    </div>
+                                                </div>
 
-                        <div className="">
-                            <div className="text-lg font-bold mb-4">ORGANISER UNE AUDIENCE</div>
-                            <div className="px-5 py-16">
-                                {
-                                    request && 
-                                    <div className="text-center">
-                                    <div className="font-bold">{ request.user_nom }</div>
-                                    <div className="font-bold">{ request.user_prenom }</div>
-                                    <div className="font-bold">{ request.user_cni }</div>
-                                    <div className="font-bold">{ request.type_request }</div>
-                                    <div className="font-bold">{ request.date_wanted_debut }</div>
-                                    <div className="font-bold">{ request.date_wanted_end }</div>
-                                    <div className="font-bold">{ request.object }</div>
-                                    {
-                                        request.status_request[0] === "En attente" ? 
-                                                            <div className="rounded text-yellow-500 flex gap-2 text-xs">
+                                            </div>
+                                        </div>
+                                        <div className="w-2/4" >
+                                            <div className="border rounded p-4">
+                                                <div className="mb-3 flex items-center gap-2">
+                                                    <div className="text-md font-bold">
+                                                        { request.type_request }
+                                                    </div>
+                                                    <div >
+                                                        {
+                                                            request.status_request[0] === "En attente" ? 
+                                                            <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
                                                                 <WarningOutlined />
                                                                 <div>{ request.status_request }</div>  
                                                             </div>
                                                             : (
                                                                 request.status_request[0] === "Accepté" ?
-                                                            <div className="rounded text-green-500 flex gap-2 text-xs">
+                                                            <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
                                                                 <CheckOutlined />
                                                                 <div>{ request.status_request }</div>  
-                                                            </div>                                                        :
-                                                            <div className="rounded text-yellow-500 flex gap-2 text-xs">
+                                                            </div>
+                                                            :
+                                                            <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
                                                                 <CloseOutlined />
                                                                 <div>{ request.status_request }</div>  
                                                             </div>                                                    
                                                             )
-                                                        }  
-
-                                    <button onClick={handleOrganizeSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' >Organiser</button>
+                                                        } 
+                                                    </div>
+                                                    <div>soumise le <span className="font-semibold"> {request.request_creation}</span></div>
+                                                </div>
+                                                    <div className="text-sm text-gray-500">Motif: </div>
+                                                    <div className=""> { request.object } </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="w-1/4">
+                                            <div className="border rounded p-5">
+                                                <div className="font-bold text-md mb-3">Préférence</div>
+                                                <div className="text-sm text-gray-500">Une audience demandé pour la semaine de :</div>
+                                                <div className="flex justify-between">
+                                                    <div className="font-semibold"> { request.date_wanted_debut } </div>
+                                                    <div className="text-sm text-gray-500">à</div>
+                                                    <div className="font-semibold"> { request.date_wanted_end } </div>
+                                                </div>
+                                            </div>
+                                            <div className="border rounded my-4 p-5">
+                                                <div className="font-bold text-md mb-3">Organisation</div>
+                                                <label htmlFor='idproduit' className="text-sm text-gray-500">Les disponibilités : </label><br />
+                                                <Select
+                                                    value={selectedAvailabilityId}
+                                                    onChange={handleSelectChange}
+                                                    className='w-full my-1'
+                                                    showSearch
+                                                    optionFilterProp="children"
+                                                    filterOption={(input: any, option: any) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                >
+                                                    <Option value="">Sélectionnez un disponibilité</Option>
+                                                    {
+                                                    availabilities.map((ava: any, index) => {
+                                                        return(
+                                                        <Option key={index} value={ava._id}>
+                                                        { `${ava.date_availability} - ${ava.hour_debut} ${ava.hour_end}` }
+                                                        </Option>
+                                                        )
+                                                    })
+                                                    }
+                                                </Select>
+                                                <div className="flex justify-end mt-2">
+                                                    <button onClick={handleOrganizeSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' >Organiser</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                }
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>

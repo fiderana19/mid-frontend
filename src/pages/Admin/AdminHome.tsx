@@ -31,19 +31,21 @@ function AdminHome() {
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
+                    <div className="pl-20 pr-10">
                     {
                         user && 
-                        <div className="px-10 flex items-center gap-10">
-                            <div className="1/4">
-                                <img src={`data:image/png;base64,${user.profile_photo}`} className="w-52 h-52 object-cover" />
-                            </div>
-                            <div className="w-3/4">
-                                <div className="text-5xl font-bold whitespace-normal">
-                                    <Typewriter text={`Bonjour, ${user.nom} ${user.prenom} hubhiubnibgjibn vnbujnbirbn i`} />
+                            <div className="flex items-center gap-10">
+                                <div className="1/4">
+                                    <img src={`data:image/png;base64,${user.profile_photo}`} className="w-52 h-52 object-cover border" />
+                                </div>
+                                <div className="w-3/4">
+                                    <div className="text-5xl font-bold whitespace-normal">
+                                        <Typewriter text={`Bonjour, ${user.nom} ${user.prenom}`} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     }
+                    </div>
                 </div>
             </div>  
         </>
