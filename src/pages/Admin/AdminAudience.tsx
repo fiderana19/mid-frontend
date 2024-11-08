@@ -38,11 +38,11 @@ function AdminAudience() {
     return(
         <>
             <div className="w-full flex">
-                <div className="w-1/6">
+                <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="w-5/6">
-                    <div className="z-50 fixed top-0 right-0 w-5/6">
+                <div className="flex flex-col h-screen justify-center">
+                    <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
                     <div className="px-5 py-16">

@@ -2,9 +2,11 @@ import { FunctionComponent } from "react";
 
 const MidCopyright: FunctionComponent = () => {
     return(
-            <div className="text-xs font-bold">
-                MID. @copyright 2024
+        <div>
+            <div className="text-xs font-bold md:block hidden">
+                MININTER. @copyright 2024
             </div>
+        </div>
     )
 }
 

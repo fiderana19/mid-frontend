@@ -13,20 +13,20 @@ function AdminNavigation() {
         {
             key: 'sub1',
             label: <Link to="/admin/home">
-                        <div className={location.pathname === "/admin/home" ? "" : "" } >
-                            Acceuil
+                        <div className={location.pathname === "/admin/home" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Acceuil</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
           },
           {
             key: 'sub2',
             label: <Link to="/admin/demande">
-                        <div className={location.pathname === "/admin/demande" ? "" : "" } >
-                            Demande
+                        <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Demande</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
             children: [
                 { key: '1', label: 'Voir les anomalies' },
               ],
@@ -34,20 +34,20 @@ function AdminNavigation() {
           {
             key: 'sub3',
             label:   <Link to="/admin/audience">
-                        <div className={location.pathname === "/admin/audience" ? "" : "" } >
-                            Audience
+                        <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Audience</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
           },
           {
             key: 'sub4',
             label:  <Link to="/admin/availability">
-                        <div className={location.pathname === "/admin/availability" ? "" : "" } >
-                            Disponibilite
+                        <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Disponibilite</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
             children: [
                 { key: '1', label: 'Vue calendrier' },
               ],
@@ -55,11 +55,11 @@ function AdminNavigation() {
           {
             key: 'sub5',
             label:  <Link to="/admin/account">
-                        <div className={location.pathname === "/admin/account" ? "" : "" } >
-                            Citoyen
+                        <div className={location.pathname === "/admin/account" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Citoyen</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
             children: [
                 { key: '1', label: 'Filtrer par validation' },
               ],
@@ -67,22 +67,22 @@ function AdminNavigation() {
           {
             key: 'sub6',
             label:  <Link to="/admin/dashboard">
-                        <div className="">
-                            Dashboard
+                        <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
+                            <HomeOutlined className="md:mr-0 mr-3" />
+                            <div className="md:block hidden">Dashboard</div>
                         </div>
                     </Link>,
-            icon: <HomeOutlined />,
           },
       ];
 
     return(
-        <div className="z-50 fixed top-0 left-0 w-1/6 p-4 flex flex-col justify-between h-screen bg-green-900 text-center">
+        <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-green-900 text-center">
             <MidProfile/>
-            <div className="text-left">
+            <div className="text-left w-full">
                 <Menu
                     mode="inline"
                     items={items}
-                    className="w-full bg-transparent"
+                    className="bg-transparent"
                 />
             </div>
             <MidCopyright />

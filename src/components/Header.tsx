@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { DownOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons'
+import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import { getUserById } from "../api/users";
+import MidLogo from '../assets/image/mid-logo.jpg';
 
 function Header() {
   const { logout } = useAuth();
@@ -23,7 +24,7 @@ function Header() {
       fetchUser()
   }, [])
     
-const items: MenuProps['items'] = [
+  const items: MenuProps['items'] = [
     {
       label: <Link to="/admin/info"><UserOutlined /> Mon profile</Link>,
       key: '0',
@@ -36,22 +37,117 @@ const items: MenuProps['items'] = [
       key: '3',
     },
   ];
+
+  const itemssm: MenuProps['items'] = [
+    {
+      label: <Link to="/admin/info"><UserOutlined /> Mon profile</Link>,
+      key: '0',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: '1',
+      label: <Link to="/admin/home">
+                  <div className={location.pathname === "/admin/home" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Acceuil</div>
+                  </div>
+              </Link>,
+    },
+    {
+      key: '2',
+      label: <Link to="/admin/demande">
+                  <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Demande</div>
+                  </div>
+              </Link>,
+      children: [
+          { key: '10', label: 'Voir les anomalies' },
+        ],
+    },
+    {
+      key: '3',
+      label:   <Link to="/admin/audience">
+                  <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Audience</div>
+                  </div>
+              </Link>,
+    },
+    {
+      key: '4',
+      label:  <Link to="/admin/availability">
+                  <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Disponibilite</div>
+                  </div>
+              </Link>,
+      children: [
+          { key: '11', label: 'Vue calendrier' },
+        ],
+    },
+    {
+      key: '5',
+      label:  <Link to="/admin/account">
+                  <div className={location.pathname === "/admin/account" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Citoyen</div>
+                  </div>
+              </Link>,
+      children: [
+          { key: '12', label: 'Filtrer par validation' },
+        ],
+    },
+    {
+      key: '6',
+      label:  <Link to="/admin/dashboard">
+                  <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                      <HomeOutlined className="" />
+                      <div className="">Dashboard</div>
+                  </div>
+              </Link>,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: <div onClick={logout}><LogoutOutlined /> Se deconnecter</div>,
+      key: '7',
+    },
+  ];
   
     return(
-        <div className="bg-red-500 px-4 py-2 flex justify-end">
-                <Dropdown menu={{ items }} trigger={['click']}>
-                    <a onClick={(e) => e.preventDefault()}>
-                      {
-                        user &&
-                          <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded items-center'>
-                              <UserOutlined className="text-md mr-1"/>
-                                { user.email }
-                              <DownOutlined className="text-xs ml-2" />
-                          </button>
-                    }
-                    </a>
-                </Dropdown>
+        <div className="bg-red-500 px-4 py-2 flex justify-normal sm:justify-end">
+          <div className="sm:flex hidden">
+            <Dropdown menu={{ items }} trigger={['click']}>
+              <a onClick={(e) => e.preventDefault()}>
+                {
+                  user &&
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center'>
+                      <UserOutlined className="text-md mr-1"/>
+                      <div className="sm:block hidden">{ user.email }</div>
+                      <DownOutlined className="text-xs ml-2" />
+                    </button>
+                }
+              </a>
+            </Dropdown>
+          </div>
+          <div className="sm:hidden flex justify-between items-center w-full">
+            <img src={MidLogo} alt="Mininter Logo" className="w-10 h-10 object-cover" />
+            <Dropdown menu={{ items: itemssm }} trigger={['click']}>
+              <a onClick={(e) => e.preventDefault()}>
+                {
+                  user &&
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded items-center'>
+                      <MenuOutlined className="text-md"/>
+                    </button>
+                }
+              </a>
+            </Dropdown>
         </div>
+      </div>
     )
 }
 
