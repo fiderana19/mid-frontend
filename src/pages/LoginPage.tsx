@@ -52,13 +52,13 @@ function LoginPage() {
                     <div className='flex flex-col justify-center h-screen bg-black bg-opacity-45'>
                         <div className='text-white px-20'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />
-                            <div className='text-4xl font-bold font-lato mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
+                            <div className='text-4xl font-bold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
                             <div>Demander une audience avec le ministre en ligne </div>
                         </div>
                     </div>
                 </div>
                 <div className='w-1/3 bg-second h-screen text-center py-5 px-10 flex flex-col justify-center'>
-                    <div className='text-2xl font-lato font-bold my-4'>Connexion à votre compte</div>
+                    <div className='text-2xl font-bold my-4'>Connexion à votre compte</div>
                     <div className='w-64 my-2 mx-auto'>
                         <div className="text-left text-xs font-bold">
                                 Adresse mail...
