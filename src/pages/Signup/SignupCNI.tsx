@@ -34,28 +34,40 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
     return(
         <div>
             <div className='w-60 my-4 mx-auto'>
+                <div className="text-left text-xs font-bold">
+                    Numero CIN
+                </div>
                 <div className="relative">
-                    <input value={formData.cni} onKeyPress={handleKeyPress} name="cni" onChange={handleChange}
+                    <input 
+                        value={formData.cni} 
+                        onKeyPress={handleKeyPress} 
+                        name="cni" 
+                        onChange={handleChange}
+                        placeholder="Saisir votre CIN..."
                         className={cniError ? "border-red-500 peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
                         />
-                    <label className={(formData.cni == '') ? 'absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-1.5 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400  peer-focus:scale-90' : `absolute cursor-text px-7 transition-all transform origin-left -top-1.5 left-2.5 text-xs text-slate-400 scale-90`}>
-                        CNI...
-                    </label>
                     <ContactsOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                 </div>
                 {cniError && <div className="text-left text-red-500 text-xs">{cniError}</div>}
             </div>
             <div className='w-60 my-4 mx-auto'>
+                <div className="text-left text-xs font-bold">
+                    Date du CIN
+                </div>
                 <DatePicker onChange={handleDateCNIChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date CNI..."  />
             </div>
             <div className='w-60 my-4 mx-auto'>
+                <div className="text-left text-xs font-bold">
+                    Lieu du CIN
+                </div>
                 <div className="relative">
-                    <input value={formData.lieu_cni} onChange={handleChange} name="lieu_cni"
+                    <input 
+                        value={formData.lieu_cni} 
+                        onChange={handleChange} 
+                        name="lieu_cni"
+                        placeholder="Saisir le lieu du CIN..."
                         className={lieuCniError ? "border-red-500 peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
                         />
-                    <label className={(formData.lieu_cni == '') ? 'absolute cursor-text px-7 left-3 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-1.5 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400  peer-focus:scale-90' : `absolute cursor-text px-7 transition-all transform origin-left -top-1.5 left-2.5 text-xs text-slate-400 scale-90`}>
-                        Lieu CNI...
-                    </label>
                     <EnvironmentOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                 </div>
                 {lieuCniError && <div className="text-left text-red-500 text-xs">{lieuCniError}</div>}

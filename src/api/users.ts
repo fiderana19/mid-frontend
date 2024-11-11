@@ -50,6 +50,22 @@ export const validateUser = async (token: string | null, id: string) => {
   }
 }
 
+export const getUserForChart = async (token: string | null) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${UserAPIUrl}/chart`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la validation :", error)
+  }
+}
+
 export const editUser = async (token: string | null, id: string, editData: any) => {
   try {
     const response = await axios({
