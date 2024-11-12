@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Select } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
@@ -7,6 +7,7 @@ import Header from "../../../components/Header";
 import { getRequestById } from "../../../api/request";
 import { getAllFreeAvailability } from '../../../api/availability';
 import { audienceCreate } from "../../../api/audience";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 
@@ -56,7 +57,13 @@ function AdminOrganizeAudience() {
 
             console.log("h777",response)
             if(response) {
-                setAvailabilities(response.data);    
+                const availability_pref = response.data.filter((item: any) => {
+                    return (
+                        dayjs(item.date_initial) >= dayjs(request.debut_initial) && 
+                        dayjs(item.date_initial) <= dayjs(request.end_initial)
+                    )
+                })  
+                setAvailabilities(availability_pref);
             }
         }
     }
@@ -74,6 +81,7 @@ function AdminOrganizeAudience() {
         console.log("crevyv", audienceCredentials);
         const response = await audienceCreate(access_token,audienceCredentials);
         console.log(response)
+        navigate("/admin/audience");
     }
     
     return(
@@ -180,11 +188,25 @@ function AdminOrganizeAudience() {
                                                     <Option value="">Sélectionnez un disponibilité</Option>
                                                     {
                                                     availabilities.map((ava: any, index) => {
-                                                        return(
-                                                        <Option key={index} value={ava._id}>
-                                                        { `${ava.date_availability} - ${ava.hour_debut} ${ava.hour_end}` }
-                                                        </Option>
-                                                        )
+                                                        if(availabilities.length < 1) {
+                                                            return(
+                                                                <Option key={index} value={ava._id}>
+                                                                    <div>
+                                                                        <CloseOutlined className="" />
+                                                                        Pas de disponibilité pour la semaine preféré
+                                                                    </div>
+                                                                </Option>
+                                                            )
+                                                        } else {
+                                                            return(
+                                                                <Option key={index} value={ava._id}>
+                                                                    <div className="flex gap-1">
+                                                                        <CheckCircleOutlined className="text-green-500" />
+                                                                        { `${ava.date_availability} de ${ava.hour_debut} à ${ava.hour_end}` }
+                                                                    </div>
+                                                                </Option>
+                                                            )
+                                                        }
                                                     })
                                                     }
                                                 </Select>

@@ -118,35 +118,42 @@ function AdminAvailability() {
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
+                    <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center">
-                            <div>
-                                DISPONIBILITE DU MINSTRE
-                            </div> 
-                            <div className="flex items-center gap-2 border px-2 py-1" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
-                                    <PlusOutlined />
-                                    <div>Nouvelle disponibilité</div>
-                            </div>
+                            <div className="text-lg font-bold mb-6">DISPONIBILITE DU MINISTRE</div>
+                            <button className="items-center flex gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 my-4 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
+                                <PlusOutlined />
+                                <span>Nouvelle disponibilité</span>
+                            </button>
                         </div>
-                        disponibilite admin
                         <div className="h-80 w-full">
                             <div className="gap-2">
-                                {
-                                    availabilities && availabilities.map((availability: any, index: any) => {
-                                        return <div key={index} className="border rounded p-2 w-64 bg-gray-500">
-                                            <div>Le { availability.date_availability }</div>
-                                            <div className="flex gap-2">
-                                                <div>De { availability.hour_debut } </div>
-                                                <div>à { availability.hour_end } </div>
-                                            </div>
-                                            <div className="">
+                                <table className='w-full divide-y divide-gray-200'>
+                                    <thead>
+                                        <tr>
+                                            <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Date</th>
+                                            <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Heure debut</th>
+                                            <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Heure fin</th>
+                                            <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Status</th>
+                                            <th className='px-1 py-3 max-w-max bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider text-center'>fibi</th>
+                                        </tr>
+                                    </thead> 
+                                <tbody className='bg-white divide-y divide-gray-200'>
+                                    {
+                                        availabilities && availabilities.map((availability: any, index: any) => {
+                                            return ( 
+                                                <tr key={index}>
+                                                <td className='md:px-6 pr-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { availability.date_availability } </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                 {
                                                     availability.status_availability[0] === "Occupé" ? 
-                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
+                                                    <div className="rounded text-blue-500 flex gap-2 text-xs">
                                                         <WarningOutlined />
                                                         <div>{ availability.status_availability }</div>  
                                                     </div>
@@ -162,23 +169,25 @@ function AdminAvailability() {
                                                         <div>{ availability.status_availability }</div>  
                                                     </div>                                                    
                                                     )
-                                                } 
-                                            </div>
-                                            <div className="flex gap-2 justify-end">
-                                                {
-                                                    availability.status_availability[0] === "Annulé" ?
-                                                    <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
-                                                        <CloseCircleFilled /> Annuler 
-                                                    </button>
-                                                    :
-                                                    <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
-                                                        <CloseCircleFilled /> Annuler 
-                                                    </button>
-                                                }
-                                            </div>
-                                        </div>
-                                    })
-                                }
+                                                }    
+                                                </td>
+                                                <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
+                                                    {
+                                                        availability.status_availability[0] === "Annulé" ?
+                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                            <CloseCircleFilled /> Annuler 
+                                                        </button>
+                                                        :
+                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                            <CloseCircleFilled /> Annuler 
+                                                        </button>
+                                                    }
+                                                </td>
+                                            </tr>)
+                                        })
+                                    }
+                                </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

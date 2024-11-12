@@ -2,12 +2,13 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined } from "@ant-design/icons";
+import { Dropdown, MenuProps } from "antd";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
-    const [selectedRequest, setSelectedRequest] = useState<string>();
+    const [selectedAudience, setSelectedAudience] = useState<string>();
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const navigate = useNavigate();
@@ -27,13 +28,49 @@ function AdminAudience() {
     async function fetchAllAudience () {
         const token = localStorage.getItem('token');
         if(token) {
-            const response = await getAllAudience();
+            const response = await getAllAudience(token);
             if(response) {
                 console.log("reto lty ar", response)
-                setAudiences(response);
+                setAudiences(response.data);
             }
         }
     }
+
+    const items: MenuProps['items'] = [
+        {
+            label:  <Link to={`/admin/audience/view/${selectedAudience}`} >
+                      <div className="flex gap-2">
+                          <EyeOutlined  />
+                          <div>Voir</div>
+                      </div>
+                  </Link>,
+            key: '0',
+          },
+        {
+          type: 'divider',
+        },
+        {
+          label: <div onClick={() => setIsValidateModalVisible(true)}>
+                    <div className="flex gap-2">
+                        <EditFilled  />
+                        <div>Reporter</div>
+                    </div>
+                </div>
+          ,
+          key: '3',
+        },
+        {
+            label: <div onClick={() => setIsDenyModalVisible(true)}>
+                <div className="flex gap-2">
+                    <CloseCircleOutlined  />
+                    <div>Annuler</div>
+                </div>
+            </div>
+            ,
+            key: '4',
+          },
+  
+    ];
 
     return(
         <>
@@ -41,21 +78,21 @@ function AdminAudience() {
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className="flex flex-col justify-center w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
+                    <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between">
-                            <div className="text-lg font-bold mb-4">LISTE DES AUDIENCES</div>
+                            <div className="text-lg font-bold mb-6">LISTE DES AUDIENCES</div>
                         </div>
                         <table className='min-w-full divide-y divide-gray-200'>
                             <thead>
                                 <tr>
+                                    <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom(s)</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CNI</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Type</th>
-                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Motif</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Date</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Status</th>
                                     <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
@@ -64,12 +101,15 @@ function AdminAudience() {
                             <tbody className='bg-white divide-y divide-gray-200'>
                                 {
                                     audiences && audiences.map((audience: any, index) => {
-                                        return <tr key={index}>
+                                        return (
+                                            <tr key={index}>
+                                                <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
+                                                    <img src={`data:image/png;base64,${audience.user_profile_photo}`} className="rounded-full border border-slate-400 w-9 h-9 object-cover" />
+                                                </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_cni }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_type }  </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_object }  </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } { audience.availability_hour_debut } { audience.availability_hour_end }  </td>
+                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
                                                 { audience.status_audience[0] === "Fixé" ? 
                                                     <div className="flex gap-2 text-green-500">
@@ -88,10 +128,16 @@ function AdminAudience() {
                                                 }     
                                             </td>
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
-                                            <div className='flex justify-center'>
-                                            </div>
+                                                <div className='flex justify-center'>
+                                                    <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
+                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAudience(audience._id)}}>
+                                                            <MenuOutlined />
+                                                        </a>
+                                                    </Dropdown>
+                                                </div>
                                             </td>
                                         </tr>
+                                        )
                                     })
                                 }
                             </tbody>
