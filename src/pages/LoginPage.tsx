@@ -13,18 +13,14 @@ function LoginPage() {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     useEffect(() => {
         const token = localStorage.removeItem("token");
-
-        console.log("ito le toekn", token)
     }, [])
     
 
     const handleLoginUser = async () => {
         const response = await login(loginCredentials.email, loginCredentials.password);
-        console.log("ito lty a", response)
         if(response.status) {
             setIsNotValidModalVisible(true);
         }
-        message.success(`eto eee ${loginCredentials.email} ${loginCredentials.password}`);
     }
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

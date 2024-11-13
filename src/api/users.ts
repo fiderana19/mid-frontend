@@ -100,12 +100,12 @@ export const initializePassword = async (token: string |null, id: string, data: 
   }
 }
 
-export const updatePassword = async (token: string |null, id: string, password: string) => {
+export const updatePassword = async (token: string |null, id: string, passwordData: any) => {
   try {
     const response = await axios({
       method: 'patch',
       url: `${UserAPIUrl}/password/${id}`,
-      data:  password ,
+      data:  passwordData ,
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -113,7 +113,8 @@ export const updatePassword = async (token: string |null, id: string, password: 
 
     return response;
   } catch (error: any) {
-    console.error("Erreur lors de la modification du mot de passe :", error)
+    console.error("Erreur lors de la modification du mot de passe :", error);
+    return error;
   }
 }
 

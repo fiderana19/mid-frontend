@@ -18,6 +18,11 @@ export interface SignupInterface {
     cni_photo: any;
 }
 
-export interface UpdateUserPassword {
+export interface InitializeUserPassword {
     password: string;
+}
+
+export interface UpdateUserPassword {
+    old_password: string;
+    new_password: string;
 }
