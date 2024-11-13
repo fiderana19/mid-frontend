@@ -119,14 +119,14 @@ function Header() {
   ];
   
     return(
-        <div className="bg-third px-4 py-2 flex justify-normal sm:justify-end">
+        <div className="bg-third px-4 py-3 flex justify-normal sm:justify-end">
           <div className="sm:flex hidden">
             <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
                 {
                   user &&
                     <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center'>
-                      <UserOutlined className="text-md mr-1"/>
+                      <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
                       <div className="sm:block hidden">{ user.email }</div>
                       <DownOutlined className="text-xs ml-2" />
                     </button>

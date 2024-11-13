@@ -41,26 +41,26 @@ function UserNavigation() {
       
 
     return(
-        <div className="px-4 py-2 fixed top-0 left-0 flex justify-between w-full bg-red-500 text-center">
-            <Link to='/user/home' className="flex gap-2">
+        <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-third text-center text-white">
+            <Link to='/user/home' className="flex items-center gap-2">
                 <img src={MidLogo} alt="Logo du ministere" className="w-10 h-10 object-cover rounded-full mx-auto" />
-                <div className="text-md font-semibold mt-2">Audience</div>
+                <div className="text-md font-semibold">MININTER: Audience</div>
             </Link>
-            <div className="flex gap-2 items-center">
-                <div className="text-left flex gap-2">
+            <div className="flex gap-4 items-center">
+                <div className="text-left flex gap-4">
                     <Link to="/user/home">
-                        <div className={location.pathname === '/user/home' ? "my-1 border bg-gray-400 hover:bg-gray-400 rounded px-2 py-1" : "my-1 border border-gray-400 hover:bg-gray-400 rounded px-2 py-1"}>
+                        <div className={location.pathname === '/user/home' ? "px-2 py-4 text-second border-b-2 border-second" : "transition-colors px-2 py-4 border-b-2 border-b-third hover:border-b-2 hover:border-second"}>
                             Accueil
                         </div>
                     </Link>
                     
                     <Link to="/user/demande">
-                        <div className={location.pathname === '/user/demande' ? "my-1 border bg-gray-400 hover:bg-gray-400 rounded px-2 py-1" : "my-1 border border-gray-400 hover:bg-gray-400 rounded px-2 py-1"}>
+                        <div className={location.pathname === '/user/demande' ? "px-2 py-4 text-second border-b-2 border-second" : "transition-colors px-2 py-4 border-b-2 border-b-third hover:border-b-2 hover:border-second"}>
                             Demande
                         </div>
                     </Link>
                     <Link to="/user/audience">
-                        <div className={location.pathname === '/user/audience' ? "my-1 border bg-gray-400 hover:bg-gray-400 rounded px-2 py-1" : "my-1 border border-gray-400 hover:bg-gray-400 rounded px-2 py-1"}>
+                        <div className={location.pathname === '/user/audience' ? "px-2 py-4 text-second border-b-2 border-second" : "transition-colors px-2 py-4 border-b-2 border-b-third hover:border-b-2 hover:border-second"}>
                             Audience
                         </div>
                     </Link>
@@ -69,8 +69,8 @@ function UserNavigation() {
                         <a onClick={(e) => e.preventDefault()}>
                         {
                             user &&
-                            <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded items-center'>
-                                <UserOutlined className="text-md mr-1"/>
+                            <button className='bg-gray-500 hover:bg-gray-700 text-white font-medium py-1 px-3 rounded flex items-center'>
+                                    <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
                                     { user.email }
                                 <DownOutlined className="text-xs ml-2" />
                             </button>

@@ -3,9 +3,10 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users";
+import { CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 function AdminInfo() {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState<any>();
 
     useEffect(() => { 
         async function fetchUser() {
@@ -23,26 +24,85 @@ function AdminInfo() {
 
     return(
         <>
-            <div className="w-full flex">
+             <div className="w-full flex">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="px-5 py-16">
-                        info admin
-                        <div className="text-center">
-                            <img src={MidLogo}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
-                            <div className="font-bold">EDEN Hazard</div>
-                            <div className="">
-                                <div className="m-2 w-96 mx-auto h-max">
-                                    <div className="text-left font-bold text-gray-600">Nom et prenom(s)</div>
-                                    <div className="text-right border-b-2 border-gray-500 hover:border-gray-400">eden hazard</div>
+                    <div className="pl-10 pr-5 pt-16 pb-5 w-full">
+                        <div className="font-bold text-lg mb-6">Votre profile</div>
+                        {
+                            user && 
+                            <div>
+                                <div className="gap-2 flex justify-between w-full">
+                                    <div className="w-2/4">
+                                        <div className=" border pt-6 rounded text-center">
+                                            <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-48 h-48  object-cover mx-auto border" />
+                                            <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
+                                            <div className="mx-auto w-full bg-gray-200 px-8 py-1">
+                                                <div className="flex gap-4 my-2">
+                                                    <EnvironmentOutlined />
+                                                    <div>{ user.adresse }</div>
+                                                </div>
+                                                <div className="flex gap-4 my-2">
+                                                    <MailOutlined />
+                                                    <div>{ user.email }</div>
+                                                </div>
+                                                <div className="flex gap-4 my-2">
+                                                    <PhoneOutlined />
+                                                    <div>+261{ user.telephone }</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="border rounded p-4 my-2">
+                                            <div className="font-bold text-md mb-3">Info</div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">Date de création</div>
+                                                <div className="font-semibold">{ user.user_creation }</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-2/4" >
+                                        <div className="border rounded p-4">
+                                            <div className="font-bold text-md mb-3">Naissance</div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">Date de naissance</div>
+                                                <div className="font-semibold">{ user.date_naissance }</div>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">Lieu de naissance</div>
+                                                <div className="font-semibold">{ user.lieu_naissance }</div>
+                                            </div>
+                                        </div>
+                                        <div className="border rounded p-4 my-5">
+                                            <div className="font-bold text-md mb-3">Identité Nationale</div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">CIN</div>
+                                                <div className="font-semibold">{ user.cni }</div>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">Date de délivrance</div>
+                                                <div className="font-semibold">{ user.date_cni }</div>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <div className="text-sm text-gray-500">Lieu</div>
+                                                <div className="font-semibold">{ user.lieu_cni }</div>
+                                            </div>
+                                        </div>
+                                        <div className="border rounded p-4 my-2">
+                                            <div className="font-bold text-md mb-3">Actions</div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="text-sm text-gray-500">Changer le mot de passe</div>
+                                                <button className='bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>Changer le mot de passe</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
+                        }
                     </div>
                 </div>
             </div>

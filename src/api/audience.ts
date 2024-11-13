@@ -34,6 +34,22 @@ export const getAudienceById = async (token: string | null, id:string) => {
   }
 }
 
+export const getAudienceByUser = async (token: string | null, id:string) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${AudienceAPIUrl}/user/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la recuperation de l'audience de l'utilisateur :", error)
+  }
+}
+
 export const audienceCreate = async (token: string | null, audienceData: any) => {
     try {
       const response = await axios({
@@ -48,5 +64,22 @@ export const audienceCreate = async (token: string | null, audienceData: any) =>
       return response;
     } catch (error) {
       console.error("Erreur lors de la creation del'audience :", error)
+    }
+  }
+
+  export const audienceReport = async (token: string | null, id: string, audienceData: any) => {
+    try {
+      const response = await axios({
+        method: 'patch',
+        url: `${AudienceAPIUrl}/report/${id}`,
+        data: { availability: audienceData },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors du report de l'audience :", error)
     }
   }

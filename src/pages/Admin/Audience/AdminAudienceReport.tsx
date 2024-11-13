@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
-import { MenuProps, Dropdown, Modal, Select } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
-import { getRequestById } from "../../../api/request";
-import { getAllFreeAvailability } from '../../../api/availability';
-import { audienceCreate } from "../../../api/audience";
+import { audienceReport, getAudienceById } from "../../../api/audience";
+import { getAllFreeAvailability } from "../../../api/availability";
 import dayjs from "dayjs";
-
+import { Select } from "antd";
 const { Option } = Select;
 
 function AdminAudienceReport() {
-    const [request, setRequest] = useState<any>();
-    const [audienceCredentials, setAudienceCredentials] = useState<any>({ user: '', availability: '', request: '' });
+    const [audience, setAudience] = useState<any>();
     let [availabilities, setAvailabilities] = useState<any[]>([]);
     const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
     const [access_token, setAccessToken] = useState<string | null>(
@@ -21,31 +18,25 @@ function AdminAudienceReport() {
     );
     let req = useParams();
     const navigate = useNavigate();
-    let reqestId = req.id;
+    let audienceId = req.id;
 
     useEffect(() => { 
         const token = localStorage.getItem('token');
         if(token) {
             setAccessToken(token);
         }
-        // fetchRequest();
-        // fetchAvailability();
+        fetchAudience()
+        fetchAvailability()
     }, [])
-    async function fetchRequest() {
+
+    const fetchAudience = async () => {
         const token = localStorage.getItem('token');
-
-        if(reqestId && token) {
-            console.log("ito le id", reqestId)
-
-            const response = await getRequestById(token,reqestId);
-
-            console.log(response)
-            setRequest(response)  
-            setAudienceCredentials({
-                ...audienceCredentials,
-                user: response.user,
-                request: response._id,
-            });  
+        if(audienceId && token) {
+            const response = await getAudienceById(access_token,audienceId);
+            if(response) {
+                setAudience(response.data);
+                console.log("tay", response.data)
+            }
         }
     }
 
@@ -57,32 +48,35 @@ function AdminAudienceReport() {
 
             console.log("h777",response)
             if(response) {
-                const availability_pref = response.data.filter((item: any) => {
-                    return (
-                        dayjs(item.date_initial) >= dayjs(request.debut_initial) && 
-                        dayjs(item.date_initial) <= dayjs(request.end_initial)
-                    )
-                })  
-                setAvailabilities(availability_pref);
+                if(audience.request_date_wanted_debut_initial && audience.request_date_wanted_end_initial) {
+                    const availability_pref = response.data.filter((item: any) => {
+                        console.log("999",audience.request_date_wanted_debut_initial)
+                        return (
+                            dayjs(item.date_initial) >= dayjs(audience.request_date_wanted_debut_initial) && 
+                            dayjs(item.date_initial) <= dayjs(audience.request_date_wanted_end_initial)
+                        )
+                    })  
+                    console.log(availability_pref)
+                    setAvailabilities(availability_pref);    
+                }
             }
         }
     }
 
-      //handle select change
+    //handle select change
     const handleSelectChange = (value: any) => {
         setSelectedAvailabilityId(value);
-        setAudienceCredentials({
-            ...audienceCredentials,
-            availability: value,
-        });
     };
-
-    const handleOrganizeSubmit = async () => {
-        console.log("crevyv", audienceCredentials);
-        const response = await audienceCreate(access_token,audienceCredentials);
-        console.log(response)
+    
+    const handleReportSubmit = async () => {
+        console.log("crevyv", selectedAvailabilityId, "id", audienceId);
+        if(audienceId && selectedAvailabilityId) {
+            const response = await audienceReport(access_token,audienceId,selectedAvailabilityId);
+                console.log(response)
+        }
         navigate("/admin/audience");
     }
+    
     
     return(
         <>
@@ -96,33 +90,33 @@ function AdminAudienceReport() {
                     </div>
                     <div className="">
                         <div className="pl-10 px-5 pt-16 pb-5 w-full">
-                            <div className="font-bold text-lg mb-6">Organiser une audience</div>
                             {
-                                request && 
+                                audience && 
                                     <div>
+                                   <div className="font-bold text-lg mb-6">Reporter l'audience du { audience.availability_date } </div>
                                     <div className="gap-2 flex justify-between">
-                                        <div className="w-1/4">
+                                    <div className="w-1/4">
                                             <div className=" border pt-6 rounded text-center">
-                                                <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
-                                                <div className="font-bold text-lg">{ request.user_nom } { request.user_prenom }</div>
+                                                <img src={`data:image/png;base64,${audience.user_profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
+                                                <div className="font-bold text-lg">{ audience.user_nom } { audience.user_prenom }</div>
                                                 <div className="flex justify-end px-8 py-2">
                                                 </div>
                                                 <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                     <div className="flex gap-4 my-2">
                                                         <EnvironmentOutlined />
-                                                        <div>cni </div>
+                                                        <div> { audience.user_cni } </div>
                                                     </div>
                                                     <div className="flex gap-4 my-2">
                                                         <EnvironmentOutlined />
-                                                        <div>user.adresse </div>
+                                                        <div> { audience.user_adresse } </div>
                                                     </div>
                                                     <div className="flex gap-4 my-2">
                                                         <MailOutlined />
-                                                        <div> user.email </div>
+                                                        <div> { audience.user_email } </div>
                                                     </div>
                                                     <div className="flex gap-4 my-2">
                                                         <PhoneOutlined />
-                                                        <div>+261 user.telephone </div>
+                                                        <div>+261 { audience.user_telephone } </div>
                                                     </div>
                                                 </div>
 
@@ -130,91 +124,98 @@ function AdminAudienceReport() {
                                         </div>
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4">
-                                                <div className="mb-3 flex items-center gap-2">
-                                                    <div className="text-md font-bold">
-                                                        { request.type_request }
-                                                    </div>
-                                                    <div >
-                                                        {
-                                                            request.status_request[0] === "En attente" ? 
+                                                <div className="flex justify-end">
+                                                    {
+                                                        audience.status_audience[0] === "En attente" ? 
                                                             <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
                                                                 <WarningOutlined />
-                                                                <div>{ request.status_request }</div>  
+                                                                <div>{ audience.status_audience }</div>  
                                                             </div>
-                                                            : (
-                                                                request.status_request[0] === "Accepté" ?
+                                                        : (
+                                                                audience.status_audience[0] === "Accepté" ?
                                                             <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
                                                                 <CheckOutlined />
-                                                                <div>{ request.status_request }</div>  
+                                                                <div>{ audience.status_audience }</div>  
                                                             </div>
-                                                            :
+                                                        :
                                                             <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
                                                                 <CloseOutlined />
-                                                                <div>{ request.status_request }</div>  
+                                                                <div>{ audience.status_audience }</div>  
                                                             </div>                                                    
-                                                            )
-                                                        } 
+                                                        )
+                                                    } 
+                                                </div>
+                                                <div className="mb-3 flex items-center gap-2">
+                                                    <div className="text-md font-bold">
+                                                        { audience.request_type }
                                                     </div>
-                                                    <div>soumise le <span className="font-semibold"> {request.request_creation}</span></div>
+                                                    
+                                                    <div>soumise le <span className="font-semibold"> {audience.request_creation}</span></div>
                                                 </div>
                                                     <div className="text-sm text-gray-500">Motif: </div>
-                                                    <div className=""> { request.object } </div>
+                                                    <div className=""> { audience.request_object } </div>
                                             </div>
                                             
                                         </div>
                                         <div className="w-1/4">
                                             <div className="border rounded p-5">
-                                                <div className="font-bold text-md mb-3">Préférence</div>
-                                                <div className="text-sm text-gray-500">Une audience demandé pour la semaine de :</div>
+                                                <div className="font-bold text-md mb-3">Organisation</div>
+                                                <div className="text-sm text-gray-500">Cette audience est organisée pour :</div>
                                                 <div className="flex justify-between">
-                                                    <div className="font-semibold"> { request.date_wanted_debut } </div>
+                                                    <div className="text-sm text-gray-500">Date</div>
+                                                    <div className="font-semibold"> { audience.availability_date } </div>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <div className="text-sm text-gray-500">De</div>
+                                                    <div className="font-semibold"> { audience.availability_hour_debut } </div>
                                                     <div className="text-sm text-gray-500">à</div>
-                                                    <div className="font-semibold"> { request.date_wanted_end } </div>
+                                                    <div className="font-semibold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
-                                            <div className="border rounded my-4 p-5">
-                                                <div className="font-bold text-md mb-3">Organisation</div>
-                                                <label htmlFor='idproduit' className="text-sm text-gray-500">Les disponibilités : </label><br />
-                                                <Select
-                                                    value={selectedAvailabilityId}
-                                                    onChange={handleSelectChange}
-                                                    className='w-full my-1'
-                                                    showSearch
-                                                    optionFilterProp="children"
-                                                    filterOption={(input: any, option: any) =>
-                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                    }
-                                                >
-                                                    <Option value="">Sélectionnez un disponibilité</Option>
-                                                    {
-                                                    availabilities.map((ava: any, index) => {
-                                                        if(availabilities.length < 1) {
-                                                            return(
-                                                                <Option key={index} value={ava._id}>
-                                                                    <div>
-                                                                        <CloseOutlined className="" />
-                                                                        Pas de disponibilité pour la semaine preféré
-                                                                    </div>
-                                                                </Option>
-                                                            )
-                                                        } else {
-                                                            return(
-                                                                <Option key={index} value={ava._id}>
-                                                                    <div className="flex gap-1">
-                                                                        <CheckCircleOutlined className="text-green-500" />
-                                                                        { `${ava.date_availability} de ${ava.hour_debut} à ${ava.hour_end}` }
-                                                                    </div>
-                                                                </Option>
-                                                            )
+                                            <div className="border rounded p-5">
+                                                <div className="font-bold text-md mb-3">Report</div>
+                                                    <label htmlFor='idproduit' className="text-sm text-gray-500">Les disponibilités pour le report : </label><br />
+                                                    <Select
+                                                        value={selectedAvailabilityId}
+                                                        onChange={handleSelectChange}
+                                                        className='w-full my-1'
+                                                        showSearch
+                                                        optionFilterProp="children"
+                                                        filterOption={(input: any, option: any) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                         }
-                                                    })
-                                                    }
-                                                </Select>
-                                                <div className="flex justify-end mt-2">
-                                                    <button onClick={handleOrganizeSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' >Organiser</button>
-                                                </div>
+                                                    >
+                                                        <Option value="">Sélectionnez un disponibilité</Option>
+                                                        {
+                                                        availabilities.map((ava: any, index) => {
+                                                            if(0 < 1) {
+                                                                return(
+                                                                    <Option key={index}>
+                                                                        <div>
+                                                                            <CloseOutlined className="" />
+                                                                            Pas de disponibilité pour la semaine preféré
+                                                                        </div>
+                                                                    </Option>
+                                                                )
+                                                            } else {
+                                                                return(
+                                                                    <Option key={index} value={ava._id}>
+                                                                        <div className="flex gap-1">
+                                                                            <CheckCircleOutlined className="text-green-500" />
+                                                                            { `${ava.date_availability} de ${ava.hour_debut} à ${ava.hour_end}` }
+                                                                        </div>
+                                                                    </Option>
+                                                                )
+                                                            }
+                                                        })
+                                                        }
+                                                    </Select>
+                                                    <div className="flex justify-end mt-2">
+                                                        <button onClick={handleReportSubmit} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' >Reporter</button>
+                                                    </div>
                                             </div>
                                         </div>
+                                       
                                     </div>
                                 </div>
                             }

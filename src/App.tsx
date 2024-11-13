@@ -23,6 +23,7 @@ import InitializePasswordAdmin from "./pages/Admin/InitializePasswordAdmin"
 import AdminOrganizeAudience from "./pages/Admin/Audience/AdminOrganizeAudience"
 import AdminAudienceView from "./pages/Admin/Audience/AdminAudienceView"
 import AdminAudienceReport from "./pages/Admin/Audience/AdminAudienceReport"
+import UserChangePassword from "./pages/User/Password/UserChangePassword"
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="info" element={<UserInfo />} />
           <Route path="add/demande" element={<UserAddDemande />} />
           <Route path="password" element={<InitializePasswordUser />} />
+          <Route path="change/password" element={<UserChangePassword />} />
         </Route>
         {/* Admin routes */}
         <Route path="/admin" element={<RoleBasedRoute allowedRoles={["admin"]} />}>
