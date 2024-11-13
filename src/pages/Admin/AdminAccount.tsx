@@ -58,7 +58,7 @@ function AdminAccount() {
             type: 'divider',
         },
         {
-            label: <div onClick={() => setIsValidateModalVisible(true)}>
+            label: <div onClick={() => setIsDeleteModalVisible(true)}>
                   <div className="flex gap-2">
                       <DeleteOutlined />
                       <div>Supprimer</div>
@@ -84,17 +84,16 @@ function AdminAccount() {
     const handleDeleteConfirm = async () => {
         if(selectedAcount) {
             const response = await deleteUser(access_token,selectedAcount);
-            console.log(response)    
+            console.log(response) 
+            fetchAccount();
+            setIsDeleteModalVisible(false);
         }
     }
     //handling delete cancel
     const handleDeleteCancel = async () => {
         setIsDeleteModalVisible(false)
     }
-    const showDeleteConfirmation = async () => {
-        setIsDeleteModalVisible(true);
-    }   
-    
+
     return(
         <>
             <div className="w-full flex">
