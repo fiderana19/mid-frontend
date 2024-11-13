@@ -14,7 +14,7 @@ export const getAllAudience = async (token: string | null) => {
 
     return response;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors de la récuperation des audiences :", error)
   }
 }
 
@@ -30,7 +30,7 @@ export const getAudienceById = async (token: string | null, id:string) => {
 
     return response;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors de la recuperation de l'audience :", error)
   }
 }
 
@@ -47,6 +47,6 @@ export const audienceCreate = async (token: string | null, audienceData: any) =>
   
       return response;
     } catch (error) {
-      console.error("Erreur lors de l'authentfiication :", error)
+      console.error("Erreur lors de la creation del'audience :", error)
     }
   }

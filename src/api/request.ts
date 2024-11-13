@@ -14,7 +14,7 @@ export const getAllRequest = async (token: string | null) => {
   
       return response.data;
     } catch (error) {
-      console.error("Erreur lors de l'authentfiication :", error)
+      console.error("Erreur lors de la recupeartion des demandes :", error)
     }
 }
 
@@ -30,7 +30,7 @@ export const getRequestById = async (token: string | null, id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors de la recuperation de la demande :", error)
   }
 }
 
@@ -46,7 +46,7 @@ export const getAllRequestByUser = async (token: string | null, id: string) => {
   
       return response.data;
     } catch (error) {
-      console.error("Erreur lors de l'authentfiication :", error)
+      console.error("Erreur lors de la recuperation des demandes de l'tilisateur :", error)
     }
 }
   
@@ -64,7 +64,7 @@ export const requestCreate = async (token: string | null, requestData: any) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors de la creation de la demande :", error)
   }
 }
 
@@ -81,7 +81,7 @@ export const validateRequest = async (token: string | null, id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors de la validation du demande :", error)
   }
 }
 
@@ -98,6 +98,6 @@ export const denyRequest = async (token: string | null, id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de l'authentfiication :", error)
+    console.error("Erreur lors du refus de la demande :", error)
   }
 }

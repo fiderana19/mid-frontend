@@ -46,7 +46,7 @@ export const validateUser = async (token: string | null, id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la validation :", error)
+    console.error("Erreur lors de la validation de l'utilisateur :", error)
   }
 }
 
@@ -62,7 +62,7 @@ export const getUserForChart = async (token: string | null) => {
 
     return response;
   } catch (error) {
-    console.error("Erreur lors de la validation :", error)
+    console.error("Erreur lors de la recupeartion des données pour la chart :", error)
   }
 }
 
@@ -79,7 +79,7 @@ export const editUser = async (token: string | null, id: string, editData: any) 
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la modification :", error)
+    console.error("Erreur lors de la modification de l'utilisateur :", error)
   }
 }
 
@@ -129,7 +129,7 @@ export const deleteUser = async (token: string | null, id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la suppression :", error)
+    console.error("Erreur lors de la suppression de l'utilisateur :", error)
   }
 }
 

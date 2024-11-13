@@ -22,6 +22,7 @@ import InitializePasswordUser from "./pages/User/InitializePasswordUser"
 import InitializePasswordAdmin from "./pages/Admin/InitializePasswordAdmin"
 import AdminOrganizeAudience from "./pages/Admin/Audience/AdminOrganizeAudience"
 import AdminAudienceView from "./pages/Admin/Audience/AdminAudienceView"
+import AdminAudienceReport from "./pages/Admin/Audience/AdminAudienceReport"
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="demande/view/:id" element={<AdminRequestView />} />
             <Route path="demande" element={<AdminDemande />} />
             <Route path="audience/view/:id" element={<AdminAudienceView />} />
+            <Route path="audience/report/:id" element={<AdminAudienceReport />} />
             <Route path="audience" element={<AdminAudience />} />
             <Route path="organize/audience/:id" element={<AdminOrganizeAudience />} />
             <Route path="availability" element={<AdminAvailability />} />

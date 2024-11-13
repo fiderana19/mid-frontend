@@ -11,7 +11,7 @@ function AdminNavigation() {
 
     const items: MenuItem[] = [
         {
-            key: 'sub1',
+            key: '1',
             label: <Link to="/admin/home">
                         <div className={location.pathname === "/admin/home" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -20,7 +20,7 @@ function AdminNavigation() {
                     </Link>,
           },
           {
-            key: 'sub2',
+            key: '2',
             label: <Link to="/admin/demande">
                         <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -28,11 +28,11 @@ function AdminNavigation() {
                         </div>
                     </Link>,
             children: [
-                { key: '1', label: 'Voir les anomalies' },
+                { key: '21', label: 'Voir les anomalies' },
               ],
           },
           {
-            key: 'sub3',
+            key: '3',
             label:   <Link to="/admin/audience">
                         <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -41,7 +41,7 @@ function AdminNavigation() {
                     </Link>,
           },
           {
-            key: 'sub4',
+            key: '4',
             label:  <Link to="/admin/availability">
                         <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -49,11 +49,11 @@ function AdminNavigation() {
                         </div>
                     </Link>,
             children: [
-                { key: '1', label: 'Vue calendrier' },
+                { key: '41', label: 'Vue calendrier' },
               ],
           },
           {
-            key: 'sub5',
+            key: '5',
             label:  <Link to="/admin/account">
                         <div className={location.pathname === "/admin/account" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -61,11 +61,11 @@ function AdminNavigation() {
                         </div>
                     </Link>,
             children: [
-                { key: '1', label: 'Filtrer par validation' },
+                { key: '51', label: 'Filtrer par validation' },
               ],
           },
           {
-            key: 'sub6',
+            key: '6',
             label:  <Link to="/admin/dashboard">
                         <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-white font-bold" : "flex gap-2" } >
                             <HomeOutlined className="md:mr-0 mr-3" />
@@ -76,7 +76,7 @@ function AdminNavigation() {
       ];
 
     return(
-        <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-green-900 text-center">
+        <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-second text-center">
             <MidProfile/>
             <div className="text-left w-full">
                 <Menu

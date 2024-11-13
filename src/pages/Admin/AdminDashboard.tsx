@@ -10,18 +10,18 @@ function AdminDashboard() {
 
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex bg-four min-h-screen">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col h-screen justify-center">
+                <div className=" w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="pt-12 h-screen">
-                        <div className="flex h-full">
-                            <div className="w-3/4 bg-gray-300 p-10">
-                                <div className="text-xl font-bold">Dashboard</div>
+                    <div className="pl-10 pr-5 pt-16 pb-5">
+                        <div className="flex gap-10">
+                            <div className="w-3/4">
+                                <div className="text-xl font-bold mb-3">Dashboard</div>
                                 <div className="flex justify-between">
                                     <div className="w-5/12">
                                         <RequestChart />
@@ -31,7 +31,7 @@ function AdminDashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="h-full w-1/4 p-5 bg-gray-400">
+                            <div className="w-1/4 p-5 bg-white">
                                 <div className="text-lg font-bold">CITOYENS</div>
                                 <AccountDashboard />
                                 <AccountLast />

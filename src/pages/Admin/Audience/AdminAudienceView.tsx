@@ -105,7 +105,10 @@ function AdminAudienceView() {
                                                 <div className="font-bold text-md mb-3">Actions</div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Reporter</div>
-                                                    <button className='bg-yellow-500 hover:bg-yellow-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-yellow-500'>Reporter</button>
+                                                    <button 
+                                                        onClick={() => {navigate(`/admin/audience/report/${audience._id}`)}}
+                                                        className='bg-yellow-500 hover:bg-yellow-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                                                    >Reporter</button>
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Annuler</div>
