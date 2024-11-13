@@ -4,20 +4,37 @@ import { UserOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, Select } from "antd";
 import { getWeekDates } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
-import { requestCreate } from "../../../api/request";
-import { useNavigate } from "react-router-dom";
+import { getRequestById, requestCreate } from "../../../api/request";
+import { useNavigate, useParams } from "react-router-dom";
 
-const UserAddDemande: FunctionComponent = () => {
+const UserEditDemande: FunctionComponent = () => {
+    const [request, setRequest] = useState<any>();
     const [requestCredentials, setRequestCredentials] = useState<RequestAddInterface>({type_request: '', object: '', date_wanted_debut: '', date_wanted_end: ''});
     const [access_token, setAccessToken] = useState<string>('');
     const navigate = useNavigate();
+    let req = useParams();
+    let reqestId = req.id;
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if(token) {
             setAccessToken(token);
         }
+        fetchRequest()
     }, []);
+
+    async function fetchRequest() {
+        const token = localStorage.getItem('token');
+
+        if(reqestId && token) {
+            console.log("ito le id", reqestId)
+
+            const response = await getRequestById(token,reqestId);
+
+            console.log(response)
+            setRequest(response)    
+        }
+    }
 
     const handleSelectChange = (value: string) => {
         setRequestCredentials({
@@ -53,8 +70,15 @@ const UserAddDemande: FunctionComponent = () => {
         <div className="w-full bg-four min-h-screen">
             <UserNavigation />
             <div className="py-16 px-10 text-center">
-                <div className="font-bold text-2xl mt-10">NOUVELLE DEMANDE D'AUDIENCE</div>
+                <div className="font-bold text-2xl mt-10">MODIFIER UNE DEMANDE </div>
                 <div className="mx-auto my-5 p-4 bg-white shadow-sm rounded w-80">
+                    <div className="mx-auto flex w-60 items-center gap-2">
+                        <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-11 h-11 rounded-full object-cover border" />
+                       <div className="">
+                            <span>Soumise le </span>
+                            { request.request_creation }
+                        </div>
+                    </div>
                     <div className='w-60 my-4 mx-auto shadow-sm focus:shadow'>
                         <div className="text-left text-xs font-bold">
                             Type de la demande
@@ -63,6 +87,7 @@ const UserAddDemande: FunctionComponent = () => {
                             className="w-full text-left"
                             placeholder="Selectionner le type de la requête"
                             onChange={handleSelectChange}
+                            defaultValue={request.type_request}
                             options={[
                             {
                                 value: "Demande d'information",
@@ -97,6 +122,7 @@ const UserAddDemande: FunctionComponent = () => {
                         <div className="relative">
                             <input 
                                 name="object" 
+                                value={request.object}
                                 onChange={handleChange}
                                 placeholder="Saisir le motif..."
                                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
@@ -104,11 +130,11 @@ const UserAddDemande: FunctionComponent = () => {
                             <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                         </div>
                     </div>
-                    <button onClick={handleRequestSubmit} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>SOUMETTRE</button>
+                    <button onClick={handleRequestSubmit} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>MODIFIER</button>
                 </div>
             </div>
         </div>
     )
 }
 
-export default UserAddDemande;
+export default UserEditDemande;

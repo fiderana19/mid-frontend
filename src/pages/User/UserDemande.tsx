@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserNavigation from "../../components/Navigation/UserNavigation";
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, EditOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -6,7 +6,8 @@ import { getAllRequestByUser } from "../../api/request";
 
 function UserDemande() {
     const [requests, setRequests] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string>('')
+    const [access_token, setAccessToken] = useState<string>('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchUserRequest () {
@@ -84,7 +85,9 @@ function UserDemande() {
                                     {
                                         request.status_request[0] !== "Accepté" &&
                                         <div className="flex justify-end mt-2 gap-2">
-                                            <button className='bg-blue-500 hover:bg-blue-700 text-white flex py-1 px-3 rounded items-center gap-1'>
+                                            <button 
+                                                onClick={() => {navigate(`/user/edit/demande/${request._id}`)}}
+                                                className='bg-blue-500 hover:bg-blue-700 text-white flex py-1 px-3 rounded items-center gap-1'>
                                                 <EditOutlined />
                                                 Modifier
                                             </button>

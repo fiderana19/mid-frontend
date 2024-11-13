@@ -24,6 +24,7 @@ import AdminOrganizeAudience from "./pages/Admin/Audience/AdminOrganizeAudience"
 import AdminAudienceView from "./pages/Admin/Audience/AdminAudienceView"
 import AdminAudienceReport from "./pages/Admin/Audience/AdminAudienceReport"
 import UserChangePassword from "./pages/User/Password/UserChangePassword"
+import UserEditDemande from "./pages/User/Demande/EditDemande"
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="audience" element={<UserAudience />} />
           <Route path="info" element={<UserInfo />} />
           <Route path="add/demande" element={<UserAddDemande />} />
+          <Route path="edit/demande/:id" element={<UserEditDemande />} />
           <Route path="password" element={<InitializePasswordUser />} />
           <Route path="change/password" element={<UserChangePassword />} />
         </Route>

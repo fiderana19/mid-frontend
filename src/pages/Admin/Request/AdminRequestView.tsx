@@ -1,6 +1,5 @@
 import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import MidLogo from '../../../assets/image/mid-logo.jpg';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "antd";

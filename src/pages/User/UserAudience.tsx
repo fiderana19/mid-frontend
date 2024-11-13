@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAudienceByUser } from "../../api/audience";
 import UserNavigation from "../../components/Navigation/UserNavigation";
+import { WarningOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 function UserAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -32,35 +33,58 @@ function UserAudience() {
             <div className="pt-16 px-20">
                 <div className="text-lg font-bold my-4">LISTE DE VOS AUDIENCES</div>
                 <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
-                    <div className="rounded bg-gray-100 w-72">
-                        <div className="flex bg-gray-400 justify-between items-center p-2">
-                            <div>
-                                <div className="flex gap-2">
-                                    <div> Date : </div>
-                                    <div className="">25-12-2024</div>
+                    {
+                        audiences && audiences.map((audience, index) => {
+                            return(
+                            <div className="rounded bg-gray-100 w-72">
+                                <div className="flex bg-gray-300 justify-between items-center p-2">
+                                    <div>
+                                        <div className="flex gap-2">
+                                            <div> Date : </div>
+                                            <div className=""> { audience.availability_date } </div>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <div> De  </div>
+                                            <div className="font-bold"> { audience.availability_hour_debut } </div>
+                                            <div> à  </div>
+                                            <div className="font-bold"> { audience.availability_hour_end } </div>
+                                        </div>
+                                    </div> 
+                                    <div className="flex justify-end">
+                                    {
+                                        audience.status_audience[0] === "Reporté" ? 
+                                            <div className="rounded bg-blue-500 px-2 flex gap-2 border border-yellow-600 text-xs">
+                                                <WarningOutlined />
+                                                <div>{ audience.status_audience }</div>  
+                                            </div>
+                                            : (
+                                            audience.status_audience[0] === "Fixé" ?
+                                            <div className="rounded bg-green-500 px-2 flex gap-2 border border-green-600 text-xs">
+                                                <CheckCircleOutlined />
+                                                <div>{ audience.status_audience }</div>  
+                                            </div>                                                
+                                            :
+                                            <div className="rounded bg-red-500 px-2 flex gap-2 border border-red-600 text-xs">
+                                                <CloseCircleOutlined />
+                                                <div>{ audience.status_audience }</div>  
+                                            </div>
+                                        )
+                                    }
+                                    </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <div> De  </div>
-                                    <div className="font-bold">08:00</div>
-                                    <div> à  </div>
-                                    <div className="font-bold">10:00</div>
+                                <div className="p-2">
+                                    <div className="text-lg"> { audience.request_type } </div>
+                                    <div>
+                                        <span>Objet : </span>
+                                        <span className="font-semibold"> { audience.request_object } </span>
+                                    </div>
                                 </div>
-                            </div> 
-                            <div className="flex justify-end">
-                                <div className="rounded bg-red-300 px-2">Refusé</div>
                             </div>
-                        </div>
-                            
-                        <div className="h-28 bg-red-400">
-                        </div>
-                        <div className="p-2">
-                            <div className="text-lg font-bold">Proposition</div>
-                            <div className="font-semibold">veyufvbuejvhvhrvuih hvbrivgrhirhglrihbnri</div>
-                            <div className="flex justify-end mt-2 gap-2">
-                                <div className="rounded bg-blue-300 px-2">QR CODE</div>
-                            </div>
-                        </div>
-                    </div>
+                            )
+                        })
+
+                    }
+                    
                
                 </div>
             </div>
