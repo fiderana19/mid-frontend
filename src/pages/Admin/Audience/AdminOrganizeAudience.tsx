@@ -15,6 +15,7 @@ function AdminOrganizeAudience() {
     const [request, setRequest] = useState<any>();
     const [audienceCredentials, setAudienceCredentials] = useState<any>({ user: '', availability: '', request: '' });
     let [availabilities, setAvailabilities] = useState<any[]>([]);
+    let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
     const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
@@ -30,6 +31,13 @@ function AdminOrganizeAudience() {
         }
         fetchRequest();
         fetchAvailability();
+        fetchAvailability();
+        const intervalId = setInterval(() => {
+            fetchFilterAvailability();
+          }, 1000);
+      
+          // Nettoyer l'intervalle lors du démontage
+          return () => clearInterval(intervalId);
     }, [])
     async function fetchRequest() {
         const token = localStorage.getItem('token');
@@ -41,36 +49,38 @@ function AdminOrganizeAudience() {
 
             if(response) {
                 console.log("666",response)
-
                 setRequest(response);
+                console.log("777",response);
+                setAudienceCredentials({
+                    ...audienceCredentials,
+                    user: response.user,
+                    request: response._id,
+                }); 
             }
-            setAudienceCredentials({
-                ...audienceCredentials,
-                user: response.user,
-                request: response._id,
-            });  
+             
         }
     }
 
     async function fetchAvailability() {
         const token = localStorage.getItem('token');
-
         if(token) {
             const response = await getAllFreeAvailability(token);
-
-            console.log("h777",response)
             if(response) {
-                const availability_pref: any = response.data.filter((item: any) => {
-                    if(request) {
-                        return (
-                            dayjs(item.date_initial) >= dayjs(request?.debut_initial) && 
-                            dayjs(item.date_initial) <= dayjs(request?.end_initial)
-                        )    
-                    }
-                })  
-                setAvailabilities(availability_pref);
+                setAvailabilities(response.data);
             }
         }
+    }
+
+    async function fetchFilterAvailability() {
+        const availability_pref: any = availabilities.filter((item: any) => {
+            if(request) {
+                return (
+                    dayjs(item.date_initial) >= dayjs(request?.debut_initial) && 
+                    dayjs(item.date_initial) <= dayjs(request?.end_initial)
+                )    
+            }
+        })  
+        setAvailabilitiesPref(availability_pref);
     }
 
       //handle select change
@@ -85,8 +95,10 @@ function AdminOrganizeAudience() {
     const handleOrganizeSubmit = async () => {
         console.log("crevyv", audienceCredentials);
         const response = await audienceCreate(access_token,audienceCredentials);
-        console.log(response)
-        navigate("/admin/audience");
+        if(response?.status === 200 || response?.status === 201) {
+            console.log("619",response)
+            navigate("/admin/audience");
+        }
     }
     
     return(
@@ -192,7 +204,7 @@ function AdminOrganizeAudience() {
                                                 >
                                                     <Option value="">Sélectionnez un disponibilité</Option>
                                                     {
-                                                    availabilities.map((ava: any, index) => {
+                                                    availabilities_pref.map((ava: any, index) => {
                                                         if(availabilities.length < 1) {
                                                             return(
                                                                 <Option key={index} value={ava._id}>
