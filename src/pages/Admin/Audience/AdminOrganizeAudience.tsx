@@ -39,8 +39,11 @@ function AdminOrganizeAudience() {
 
             const response = await getRequestById(token,reqestId);
 
-            console.log(response)
-            setRequest(response)  
+            if(response) {
+                console.log("666",response)
+
+                setRequest(response);
+            }
             setAudienceCredentials({
                 ...audienceCredentials,
                 user: response.user,
@@ -57,11 +60,13 @@ function AdminOrganizeAudience() {
 
             console.log("h777",response)
             if(response) {
-                const availability_pref = response.data.filter((item: any) => {
-                    return (
-                        dayjs(item.date_initial) >= dayjs(request.debut_initial) && 
-                        dayjs(item.date_initial) <= dayjs(request.end_initial)
-                    )
+                const availability_pref: any = response.data.filter((item: any) => {
+                    if(request) {
+                        return (
+                            dayjs(item.date_initial) >= dayjs(request?.debut_initial) && 
+                            dayjs(item.date_initial) <= dayjs(request?.end_initial)
+                        )    
+                    }
                 })  
                 setAvailabilities(availability_pref);
             }

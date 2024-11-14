@@ -93,9 +93,10 @@ function AdminDemande() {
         if(selectedRequest) {
             const response = await validateRequest(access_token,selectedRequest);
             fetchUserRequest();
-            setIsValidateModalVisible(false)
-            navigate(`/admin/organize/audience/${selectedRequest}`);
-            console.log(response)    
+            setIsValidateModalVisible(false);
+            if(response?.status === 200 || response?.status === 201) {
+                navigate(`/admin/organize/audience/${selectedRequest}`);
+            }    
         }
     }
     //handling delete cancel

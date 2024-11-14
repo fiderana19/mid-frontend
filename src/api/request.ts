@@ -56,7 +56,7 @@ export const requestCreate = async (token: string | null, requestData: any) => {
     const response = await axios({
       method: 'post',
       url: `${RequestAPUrl}/create`,
-      data: requestData,
+      data: requestData, 
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -72,14 +72,14 @@ export const validateRequest = async (token: string | null, id: string) => {
   try {
     const response = await axios({
       method: 'patch',
-      url: `${RequestAPUrl}/treat/${id}`,
+      url: `${RequestAPUrl}/accept/${id}`,
       data: { status_request: "Accepté" },
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la validation du demande :", error)
   }
@@ -89,14 +89,14 @@ export const denyRequest = async (token: string | null, id: string) => {
   try {
     const response = await axios({
       method: 'patch',
-      url: `${RequestAPUrl}/treat/${id}`,
+      url: `${RequestAPUrl}/deny/${id}`,
       data: { status_request: "Refusé" },
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors du refus de la demande :", error)
   }
