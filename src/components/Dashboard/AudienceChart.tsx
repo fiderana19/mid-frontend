@@ -11,7 +11,7 @@ const AudienceChart: React.FunctionComponent = () => {
     });
 
     return(
-        <div className="rounded border border-red-400 p-4">
+        <div className="rounded border shadow-md bg-white  p-4">
             <div className="text-lg font-bold">LES ETATS DES DEMANDES D'AUDIENCE</div>
             <ReactApexChart 
                 options={chartData.options}  

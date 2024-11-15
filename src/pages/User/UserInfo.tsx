@@ -25,7 +25,7 @@ function UserInfo() {
 
 
     return(
-        <div className="w-full">
+        <div className="w-full min-h-screen bg-four">
             <UserNavigation />
             <div className="px-10 pt-16 pb-5 w-full">
                     <div className="font-bold text-lg mb-6">Votre profile</div>
@@ -34,7 +34,7 @@ function UserInfo() {
                             <div>
                                 <div className="gap-2 flex justify-between w-full">
                                     <div className="w-2/4">
-                                        <div className=" border pt-6 rounded text-center">
+                                        <div className=" border pt-6 rounded text-center shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-48 h-48  object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
@@ -52,7 +52,7 @@ function UserInfo() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-2">
+                                        <div className="border rounded p-4 my-2 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Info</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de création</div>
@@ -61,7 +61,7 @@ function UserInfo() {
                                         </div>
                                     </div>
                                     <div className="w-2/4" >
-                                        <div className="border rounded p-4">
+                                        <div className="border rounded p-4 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Naissance</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de naissance</div>
@@ -72,7 +72,7 @@ function UserInfo() {
                                                 <div className="font-semibold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-5">
+                                        <div className="border rounded p-4 my-5 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">CIN</div>
@@ -87,7 +87,7 @@ function UserInfo() {
                                                 <div className="font-semibold">{ user.lieu_cni }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-2">
+                                        <div className="border rounded p-4 my-2 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>

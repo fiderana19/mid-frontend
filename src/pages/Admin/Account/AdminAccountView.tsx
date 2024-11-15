@@ -68,7 +68,7 @@ const AdminAccountView: React.FC = () => {
 
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -84,7 +84,7 @@ const AdminAccountView: React.FC = () => {
                             <div>
                                 <div className="gap-2 flex justify-between">
                                     <div className="w-1/4">
-                                        <div className=" border pt-6 rounded text-center">
+                                        <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
@@ -116,7 +116,7 @@ const AdminAccountView: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="w-1/4" >
-                                        <div className="border rounded p-4">
+                                        <div className="border rounded p-4 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Naissance</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de naissance</div>
@@ -127,7 +127,7 @@ const AdminAccountView: React.FC = () => {
                                                 <div className="font-semibold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-5">
+                                        <div className="border rounded p-4 my-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">CIN</div>
@@ -142,7 +142,7 @@ const AdminAccountView: React.FC = () => {
                                                 <div className="font-semibold">{ user.lieu_cni }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4">
+                                        <div className="border rounded p-4 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Info</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de création</div>
@@ -151,7 +151,7 @@ const AdminAccountView: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="w-2/4">
-                                        <div className="border rounded p-5">
+                                        <div className="border rounded p-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Carte d'identité nationale</div>
                                             <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover" />
                                         </div>

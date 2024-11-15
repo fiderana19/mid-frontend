@@ -54,7 +54,7 @@ const UserAddDemande: FunctionComponent = () => {
             <UserNavigation />
             <div className="py-16 px-10 text-center">
                 <div className="font-bold text-2xl mt-10">NOUVELLE DEMANDE D'AUDIENCE</div>
-                <div className="mx-auto my-5 p-4 bg-white shadow-sm rounded w-80">
+                <div className="mx-auto my-5 p-4 bg-white shadow-md rounded w-80">
                     <div className='w-60 my-4 mx-auto shadow-sm focus:shadow'>
                         <div className="text-left text-xs font-bold">
                             Type de la demande

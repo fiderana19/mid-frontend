@@ -36,7 +36,7 @@ function UserAudience() {
                     {
                         audiences && audiences.map((audience, index) => {
                             return(
-                            <div className="rounded bg-gray-100 w-72">
+                            <div key={index} className="rounded bg-gray-100 w-72  shadow-md">
                                 <div className="flex bg-gray-300 justify-between items-center p-2">
                                     <div>
                                         <div className="flex gap-2">

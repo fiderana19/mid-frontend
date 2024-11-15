@@ -40,7 +40,7 @@ function UserDemande() {
                 <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
                     { requests && requests.map((request, index) => {
                         return(
-                            <div key={index} className="rounded bg-gray-100 w-72">
+                            <div key={index} className="rounded bg-gray-100 w-72 shadow-md">
                                 <div className="flex gap-2 p-2 bg-gray-400">
                                     <img src={`data:image/png;base64,${request.profile_photo}`} className="w-9 h-9 rounded-full object-cover border" />
                                     <div className="">

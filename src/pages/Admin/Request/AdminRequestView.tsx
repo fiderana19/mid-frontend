@@ -69,7 +69,7 @@ const AdminRequestView: React.FC = () => {
 
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex bg-four min-h-screen">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -84,7 +84,7 @@ const AdminRequestView: React.FC = () => {
                                 <div>
                                 <div className="gap-2 flex justify-between">
                                     <div className="w-1/4">
-                                        <div className=" border pt-6 rounded text-center">
+                                        <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                             <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ request.user_nom } { request.user_prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
@@ -111,7 +111,7 @@ const AdminRequestView: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="w-2/4" >
-                                        <div className="border rounded p-4">
+                                        <div className="border rounded p-4 bg-white shadow-md">
                                             <div className="mb-3 flex items-center gap-2">
                                                 <div className="text-md font-bold">
                                                     { request.type_request }
@@ -144,14 +144,14 @@ const AdminRequestView: React.FC = () => {
                                         
                                     </div>
                                     <div className="w-1/4">
-                                        <div className="border rounded p-5">
+                                        <div className="border rounded p-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Soumission</div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Date de soumission</div>
                                                     <div className="font-semibold"> { request.request_creation } </div>
                                                 </div>
                                         </div>
-                                        <div className="border rounded my-2 p-5">
+                                        <div className="border rounded my-2 p-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Préférence</div>
                                             <div className="text-sm text-gray-500">Une audience demandé pour la semaine de :</div>
                                             <div className="flex justify-between">
@@ -161,7 +161,7 @@ const AdminRequestView: React.FC = () => {
                                             </div>
                                         </div>
                                         {
-                                            request.status_request[0] === "En attente" && <div className="border rounded p-5">
+                                            request.status_request[0] === "En attente" && <div className="border rounded p-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Approbation</div>

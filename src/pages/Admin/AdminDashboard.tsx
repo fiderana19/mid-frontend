@@ -7,7 +7,6 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 
 function AdminDashboard() {
 
-
     return(
         <>
             <div className="w-full flex bg-four min-h-screen">
@@ -31,7 +30,7 @@ function AdminDashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="w-1/4 p-5 bg-white">
+                            <div className="w-1/4 p-5 bg-white shadow-md border">
                                 <div className="text-lg font-bold">CITOYENS</div>
                                 <AccountDashboard />
                                 <AccountLast />

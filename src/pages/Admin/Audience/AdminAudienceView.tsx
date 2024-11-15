@@ -35,7 +35,7 @@ function AdminAudienceView() {
     
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -52,7 +52,7 @@ function AdminAudienceView() {
                                     <div className="gap-2 flex justify-between">
                                         
                                         <div className="w-2/4" >
-                                            <div className="border rounded p-4">
+                                            <div className="border rounded p-4 bg-white shadow-md">
                                                 <div className="flex justify-end">
                                                     {
                                                         audience.status_audience[0] === "En attente" ? 
@@ -87,7 +87,7 @@ function AdminAudienceView() {
                                             
                                         </div>
                                         <div className="w-1/4">
-                                            <div className="border rounded p-5">
+                                            <div className="border rounded p-5 bg-white shadow-md">
                                                 <div className="font-bold text-md mb-3">Organisation</div>
                                                 <div className="text-sm text-gray-500">Cette audience est organisée pour :</div>
                                                 <div className="flex justify-between">
@@ -101,7 +101,7 @@ function AdminAudienceView() {
                                                     <div className="font-semibold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
-                                            <div className="border rounded p-5">
+                                            <div className="border rounded p-5 bg-white shadow-md">
                                                 <div className="font-bold text-md mb-3">Actions</div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Reporter</div>
@@ -117,7 +117,7 @@ function AdminAudienceView() {
                                             </div>
                                         </div>
                                         <div className="w-1/4">
-                                            <div className=" border pt-6 rounded text-center">
+                                            <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                                 <img src={`data:image/png;base64,${audience.user_profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
                                                 <div className="font-bold text-lg">{ audience.user_nom } { audience.user_prenom }</div>
                                                 <div className="flex justify-end px-8 py-2">

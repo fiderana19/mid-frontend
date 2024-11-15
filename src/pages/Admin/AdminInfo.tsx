@@ -24,7 +24,7 @@ function AdminInfo() {
 
     return(
         <>
-             <div className="w-full flex">
+             <div className="w-full flex bg-four">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -39,7 +39,7 @@ function AdminInfo() {
                             <div>
                                 <div className="gap-2 flex justify-between w-full">
                                     <div className="w-2/4">
-                                        <div className=" border pt-6 rounded text-center">
+                                        <div className=" border pt-6 rounded text-center  bg-white border shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-48 h-48  object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
@@ -57,7 +57,7 @@ function AdminInfo() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-2">
+                                        <div className="rounded p-4 my-2 bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Info</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de création</div>
@@ -66,7 +66,7 @@ function AdminInfo() {
                                         </div>
                                     </div>
                                     <div className="w-2/4" >
-                                        <div className="border rounded p-4">
+                                        <div className="rounded p-4  bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Naissance</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">Date de naissance</div>
@@ -77,7 +77,7 @@ function AdminInfo() {
                                                 <div className="font-semibold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-5">
+                                        <div className="rounded p-4 my-5 bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">CIN</div>
@@ -92,7 +92,7 @@ function AdminInfo() {
                                                 <div className="font-semibold">{ user.lieu_cni }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-2">
+                                        <div className="rounded p-4 my-2 bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>
