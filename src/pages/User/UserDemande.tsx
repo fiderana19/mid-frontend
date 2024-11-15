@@ -27,17 +27,17 @@ function UserDemande() {
     return(
         <div className="w-full">
             <UserNavigation />
-            <div className="pt-16 px-20">
-                <div className="flex justify-between items-center">
+            <div className="pt-16 sm:px-20 px-4">
+                <div className="sm:flex block justify-between items-center">
                     <div className="text-lg font-bold my-4">LISTE DE VOS DEMANDES D'AUDIENCE</div>
-                    <Link to="/user/add/demande">
+                    <Link to="/user/add/demande" className="flex justify-end">
                         <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
                             <PlusOutlined />
                             <div>Faire une demande</div>
                         </button>
                     </Link>
                 </div>
-                <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
+                <div className='my-7 grid gap-4 justify-center grid-cols-customized'>
                     { requests && requests.map((request, index) => {
                         return(
                             <div key={index} className="rounded bg-gray-100 w-72 shadow-md">

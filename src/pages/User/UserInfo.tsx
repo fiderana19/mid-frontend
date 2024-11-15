@@ -27,13 +27,13 @@ function UserInfo() {
     return(
         <div className="w-full min-h-screen bg-four">
             <UserNavigation />
-            <div className="px-10 pt-16 pb-5 w-full">
+            <div className="sm:px-10 px-4 pt-16 pb-5 w-full">
                     <div className="font-bold text-lg mb-6">Votre profile</div>
                         {
                             user && 
                             <div>
-                                <div className="gap-2 flex justify-between w-full">
-                                    <div className="w-2/4">
+                                <div className="gap-2 sm:flex block justify-between w-full">
+                                    <div className="sm:w-2/4 w-full">
                                         <div className=" border pt-6 rounded text-center shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-48 h-48  object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
@@ -60,7 +60,7 @@ function UserInfo() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-2/4" >
+                                    <div className="sm:w-2/4 w-full" >
                                         <div className="border rounded p-4 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Naissance</div>
                                             <div className="flex justify-between">
@@ -72,7 +72,7 @@ function UserInfo() {
                                                 <div className="font-semibold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
-                                        <div className="border rounded p-4 my-5 shadow-md bg-white">
+                                        <div className="border rounded p-4 sm:my-5 my-2 shadow-md bg-white">
                                             <div className="font-bold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">CIN</div>
