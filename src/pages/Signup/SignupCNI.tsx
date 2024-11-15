@@ -1,5 +1,6 @@
 import { ContactsOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
+import dayjs from "dayjs";
 import { FunctionComponent, useState } from 'react';
 
 interface StepsProp {
@@ -14,11 +15,19 @@ interface StepsProp {
 const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKeyPress, formData, handlePrev, handleChange, handleNext}) => {
     const [cniError, setCNIError] = useState<string>('');
     const [lieuCniError, setLieuCNIError] = useState<string>('');
+    const [dateError, setDateError] = useState<string>('');
 
     async function handleSubmit () {
         setCNIError('');
         setLieuCNIError('');
+        setDateError('');
+        const now = dayjs(new Date()).toISOString();
+        const major = dayjs(formData.date_cni);
+        const mj = major.add(18, 'year')
 
+        if(dayjs(now) < mj) {
+            setDateError("Votre CIN doit être reçu après votre 18 ans !")
+        }
         if(formData.cni.length !== 12) {
             setCNIError("Le CNI doit être composé de 12 chiffres !");
         }
@@ -26,7 +35,7 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
             setLieuCNIError("Le lieu de delivrance CNI ne doit pas être nul !")
         }
 
-        if(formData.cni.length === 12 && formData.lieu_cni !== "") {
+        if(dayjs(now) >= mj && formData.cni.length === 12 && formData.lieu_cni !== "") {
             handleNext();
         }
     }
@@ -56,8 +65,9 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
                 </div>
                 <DatePicker 
                     onChange={handleDateCNIChange} 
-                    className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
+                    className= {dateError ? "border-red-500 w-full py-1.5 bg-transparent placeholder:text-slate-400" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" }  
                     placeholder= { formData.date_cni ? formData.date_cni : "Date CNI..." }   />
+                    {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">

@@ -14,6 +14,7 @@ export const userLogin = async (email:string, password: string) => {
     return response;
   } catch (error: any) {
     console.error("Erreur lors de l'authentfication :", error)
+    return error;
   }
 }
 

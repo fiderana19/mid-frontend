@@ -1,6 +1,7 @@
 import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import { FunctionComponent, useState } from "react";
+import dayjs from 'dayjs';
 
 interface StepsProp {
     handlePrev: () => void;
@@ -14,10 +15,19 @@ interface StepsProp {
 const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, handleKeyPress, formData, handlePrev, handleNext, handleChange}) => {
     const [lieuNaissError, setLieuNaissError] = useState<string>('');
     const [telephoneError, setTelephoneError] = useState<string>('');
+    const [birthError, setBirthError] = useState<string>('');
 
     async function handleSubmit () {
         setLieuNaissError('');
         setTelephoneError('');
+        setBirthError('');
+        const now = dayjs(new Date()).toISOString();
+        const major = dayjs(formData.date_naissance);
+        const mj = major.add(18, 'year')
+    
+        if(dayjs(now) < mj) {
+            setBirthError("Vous devez au moins avoir 18 ans !")
+        }
 
         if(formData.lieu_naissance === "") {
             setLieuNaissError("Veuillez remplir votre lieu de naissance !")
@@ -26,7 +36,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
             setTelephoneError("Le numero de telephone doit être 9 chiffres !")
         }
 
-        if(formData.lieu_naissance !== "" && formData.telephone.length === 9) {
+        if(formData.lieu_naissance !== "" && formData.telephone.length === 9 && dayjs(now) >= mj) {
             handleNext();
         }
     }
@@ -39,8 +49,9 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
                 </div>
                 <DatePicker 
                     onChange={handleDateNaissanceChange} 
-                    className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
+                    className= {birthError ? "border-red-500 w-full py-1.5 bg-transparent placeholder:text-slate-400" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" }  
                     placeholder= { formData.date_naissance ? formData.date_naissance : "Date de naissance..." } />
+                    {birthError && <div className="text-left text-red-500 text-xs">{birthError}</div>}
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">

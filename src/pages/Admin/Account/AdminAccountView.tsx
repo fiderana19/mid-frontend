@@ -155,9 +155,13 @@ const AdminAccountView: React.FC = () => {
                                             <div className="font-bold text-md mb-3">Carte d'identité nationale</div>
                                             <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover" />
                                         </div>
+                                        
                                         <div className="p-4">
                                             <div className="flex justify-end gap-2">
-                                                <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button>
+                                            {
+                                                !user.validation && 
+                                                <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button> 
+                                            }
                                                 <button className='bg-red-500 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDeleteConfirmation}>Supprimer</button>
                                             </div>
                                         </div>

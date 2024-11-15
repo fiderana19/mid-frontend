@@ -1,4 +1,4 @@
-import { CheckCircleFilled, EyeOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, EyeOutlined, LockOutlined, MailOutlined, WarningFilled } from '@ant-design/icons';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import { useAuth } from '../context/AuthContext';
 function LoginPage() {
     const [loginCredentials, setLoginCredentials] = useState<LoginInterface>({ email: '', password: '' });
     const { login } = useAuth();
+    const [loginError, setLoginError] = useState<string>('');
     const [isNotValidModalVisible, setIsNotValidModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     useEffect(() => {
@@ -18,7 +19,8 @@ function LoginPage() {
 
     const handleLoginUser = async () => {
         const response = await login(loginCredentials.email, loginCredentials.password);
-        if(response.status) {
+        if(response) {
+            setLoginError(response?.message)
             setIsNotValidModalVisible(true);
         }
     }
@@ -97,14 +99,17 @@ function LoginPage() {
                     </div>
                 </div>
             </div>
-            <Modal title="En attente de validation" 
+            <Modal title="Erreur" 
                 open={isNotValidModalVisible}
                 onOk={handleModalOk}
                 onCancel={handleModalOk}
             >
-                <div className='text-red-900'>
-                    <CheckCircleFilled className='mr-2' /> 
-                    Votre compte n'est pas encore validé actuellement ! 
+                <div>
+                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
+                    {
+                        loginError &&
+                        <span> {loginError} </span>
+                    }
                 </div>
             </Modal>
         </div>

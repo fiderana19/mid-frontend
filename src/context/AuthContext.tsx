@@ -56,8 +56,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     }
                 }
                 return { status: 201 }
-            } else {
-                return { status: 401 }
+            } 
+            if(response?.status === 400 ||response?.status === 401) {
+                return { status: 401, message: response?.response.data.message }
             }
         } catch (error) {
             throw error;
