@@ -31,13 +31,17 @@ function AdminOrganizeAudience() {
         }
         fetchRequest();
         fetchAvailability();
-        fetchAvailability();
+        let count: number = 0;
+        if(count < 2) {
         const intervalId = setInterval(() => {
             fetchFilterAvailability();
           }, 1000);
       
+          count += 1;
           // Nettoyer l'intervalle lors du démontage
           return () => clearInterval(intervalId);
+        }
+
     }, [])
     async function fetchRequest() {
         const token = localStorage.getItem('token');

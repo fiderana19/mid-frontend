@@ -1,15 +1,15 @@
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { getAllAudience } from '../../api/audience';
+import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined } from "@ant-design/icons";
-import { Dropdown, MenuProps } from "antd";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { Dropdown, MenuProps, Modal } from "antd";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
     const [selectedAudience, setSelectedAudience] = useState<string>();
-    const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
+    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const navigate = useNavigate();
     const [access_token, setAccessToken] = useState<string | null>(
@@ -60,7 +60,7 @@ function AdminAudience() {
           key: '3',
         },
         {
-            label: <div onClick={() => setIsDenyModalVisible(true)}>
+            label: <div onClick={() => setIsCancelModalVisible(true)}>
                 <div className="flex gap-2">
                     <CloseCircleOutlined  />
                     <div>Annuler</div>
@@ -71,6 +71,15 @@ function AdminAudience() {
           },
   
     ];
+
+    const handleCancelAudienceConfirm = async () => {
+        if(selectedAudience) {
+            const response = await audienceCancel(access_token,selectedAudience);
+            console.log(response);
+            fetchAllAudience();
+            setIsCancelModalVisible(false);
+        }
+    }
 
     return(
         <>
@@ -143,6 +152,18 @@ function AdminAudience() {
                             </tbody>
                         </table>
                         </div>
+                        <Modal title="Annulation" 
+                            open={isCancelModalVisible}
+                            onOk={handleCancelAudienceConfirm}
+                            onCancel={() => {setIsCancelModalVisible(false)}}
+                            okText="Confirmer"
+                            cancelText="Annuler"
+                        >
+                            <div className='text-red-900'>
+                            <WarningOutlined className='mr-2' />  
+                            Êtes-vous sûr de vouloir annuler cette audience ?
+                            </div>
+                        </Modal>
                 </div>
             </div>
         </>
