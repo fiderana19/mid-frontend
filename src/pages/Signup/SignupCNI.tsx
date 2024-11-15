@@ -54,7 +54,10 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
                 <div className="text-left text-xs font-bold">
                     Date du CIN
                 </div>
-                <DatePicker onChange={handleDateCNIChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date CNI..."  />
+                <DatePicker 
+                    onChange={handleDateCNIChange} 
+                    className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
+                    placeholder= { formData.date_cni ? formData.date_cni : "Date CNI..." }   />
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">

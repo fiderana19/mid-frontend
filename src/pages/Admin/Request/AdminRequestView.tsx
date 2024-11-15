@@ -3,8 +3,9 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "antd";
-import { CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
+import { okConfirmStyle, okDeleteStyle } from "../../../utils/ModalStyle";
 
 const AdminRequestView: React.FC = () => {
     const [request, setRequest] = useState<any>();
@@ -178,27 +179,29 @@ const AdminRequestView: React.FC = () => {
                         }
                     </div>
                 </div>
-                <Modal title="Refus" 
+                <Modal title="Refus d'une demande" 
                     open={isDenyModalVisible}
                     onOk={handleDenyConfirm}
                     onCancel={handleDenyCancel}
+                    okButtonProps={{style: okDeleteStyle}}
                     okText="Refuser"
                     cancelText="Annuler"
                 >
-                    <div className='text-red-900'>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir refuser ce demande d'audience ?
                     </div>
                 </Modal>
-                <Modal title="Validation" 
+                <Modal title="Validation d'une demande" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
                     onCancel={handleValidateCancel}
+                    okButtonProps={{style: okConfirmStyle}}
                     okText="Valider"
                     cancelText="Annuler"
                 >
-                    <div className=''>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce demande d'audience ?
                     </div>
                 </Modal>

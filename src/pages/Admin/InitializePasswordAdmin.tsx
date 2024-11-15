@@ -71,10 +71,13 @@ function InitializePasswordAdmin() {
                     </div>
                     <div className='text-xl font-bold my-4 text-center'>Veuillez initialiser votre mot de passe</div>
                     <div className='border border-gray-300 p-2 rounded'>
-                        <div className='w-64 p-2 mx-auto flex items-center gap-2'>
-                            <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-10 h-10 rounded-full  object-cover border" />
-                            <div className='font-bold'>{ user.nom }  {user.prenom} </div>
-                        </div>
+                        {
+                            user &&
+                            <div className='w-64 p-2 mx-auto flex items-center gap-2'>
+                                <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-10 h-10 rounded-full  object-cover border" />
+                                <div className='font-bold'>{ user.nom }  {user.prenom} </div>
+                            </div>
+                        }
                         <div className='w-64 my-2 mx-auto'>
                             <div className="text-left text-xs font-bold">
                                 Mot de passe

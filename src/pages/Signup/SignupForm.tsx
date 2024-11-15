@@ -116,14 +116,21 @@ const AddForms: FunctionComponent = () => {
                 <Modal title="Inscription réussie" 
                     open={isRegisteredModalVisible}
                     onOk={handleModalOk}
-                    onCancel={handleModalOk}
+                    closeIcon={false}
+                    footer={null}
                 >
-                    <div className='text-red-900'>
-                        <CheckCircleFilled className='mr-2' />  
-                        Vos informations sont bien envoyés et en attente du validation de l'administrateur.
+                    <div>
+                        <CheckCircleFilled  className='text-green-500 mr-2' />  
+                        Vos informations sont bien envoyés et en attente du validation de l'administrateur.<br />
                         Vous serez notifier par email quand votre compte sera validé !
-                        <div>
+                        <div className='mt-4'>
                             Votre mot de passe initial est : { initialPwd }
+                        </div>
+                        <div className='flex justify-end'>
+                        <button 
+                        onClick={handleModalOk}
+                            className="border mt-2 bg-blue-500 hover:border-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >OK</button>
                         </div>
                     </div>
                 </Modal> 

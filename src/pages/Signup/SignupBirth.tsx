@@ -37,7 +37,10 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
                 <div className="text-left text-xs font-bold">
                     Date de naissance
                 </div>
-                <DatePicker onChange={handleDateNaissanceChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de naissance..." />
+                <DatePicker 
+                    onChange={handleDateNaissanceChange} 
+                    className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
+                    placeholder= { formData.date_naissance ? formData.date_naissance : "Date de naissance..." } />
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">

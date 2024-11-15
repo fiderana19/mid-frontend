@@ -5,7 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { Modal } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { okConfirmStyle, okDeleteStyle } from "../../../utils/ModalStyle";
 
 const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
@@ -162,57 +163,33 @@ const AdminAccountView: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-
-
-                            {/* <div className="text-center">
-                            <img src={`data:image/png;base64,${user.profile_photo}`}  className="mx-auto w-40 h-40 object-cover rounded-full border border-red-200"/>
-                            <div className="font-bold">{ user.nom }</div>
-                            <div className="font-bold">{ user.prenom }</div>
-                            <div className="font-bold">{ user.telephone }</div>
-                            <div className="font-bold">{ user.email }</div>
-                            <div className="font-bold">{ user.date_naissance }</div>
-                            <div className="font-bold">{ user.lieu_naissance }</div>
-                            <div className="font-bold">{ user.cni }</div>
-                            <div className="font-bold">{ user.date_cni }</div>
-                            <div className="font-bold">{ user.lieu_cni }</div>
-                            { user.validation ? 
-                                                <div className="flex gap-2 text-green-500">
-                                                    <CheckCircleFilled /><div>Validé</div>
-                                                </div> 
-                                                : 
-                                                <div className="flex gap-2 text-red-500">
-                                                    <CloseCircleFilled /><div>Non Validé</div>
-                                                </div>
-                                            }  
-
-                            <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button>
-                            <button className='bg-red-500 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDeleteConfirmation}>Supprimer</button>
-                            </div> */}
                         </div>
                         }
                     </div>
                 </div>
-                <Modal title="Suppression" 
+                <Modal title="Suppression du compte" 
                     open={isDeleteModalVisible}
                     onOk={handleDeleteConfirm}
                     onCancel={handleDeleteCancel}
+                    okButtonProps={{style: okDeleteStyle}}
                     okText="Supprimer"
                     cancelText="Annuler"
                 >
-                    <div className='text-red-900'>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
                     </div>
                 </Modal>
-                <Modal title="Validation" 
+                <Modal title="Validation du compte" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
                     onCancel={handleValidateCancel}
-                    okText="Supprimer"
+                    okButtonProps={{style: okConfirmStyle}}
+                    okText="Valider"
                     cancelText="Annuler"
                 >
-                    <div className='text-red-900'>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce compte de citoyen ?
                     </div>
                 </Modal>

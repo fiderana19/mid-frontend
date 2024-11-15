@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import { okConfirmStyle, okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
@@ -182,27 +183,29 @@ function AdminDemande() {
                         </table>
                     </div>
                 </div>
-                <Modal title="Refus" 
+                <Modal title="Refus d'une demande" 
                     open={isDenyModalVisible}
                     onOk={handleDenyConfirm}
                     onCancel={handleDenyCancel}
+                    okButtonProps={{style: okDeleteStyle}}
                     okText="Refuser"
                     cancelText="Annuler"
                 >
-                    <div className='text-red-900'>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir refuser ce demande d'audience ?
                     </div>
                 </Modal>
-                <Modal title="Validation" 
+                <Modal title="Validation d'une demande" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
                     onCancel={handleValidateCancel}
+                    okButtonProps={{style: okConfirmStyle}}
                     okText="Valider"
                     cancelText="Annuler"
                 >
-                    <div className=''>
-                    <WarningOutlined className='mr-2' />  
+                    <div>
+                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce demande d'audience ?
                     </div>
                 </Modal>

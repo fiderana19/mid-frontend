@@ -3,8 +3,9 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { Dropdown, MenuProps, Modal } from "antd";
+import { okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -152,15 +153,16 @@ function AdminAudience() {
                             </tbody>
                         </table>
                         </div>
-                        <Modal title="Annulation" 
+                        <Modal title="Annulation de l'audience" 
                             open={isCancelModalVisible}
                             onOk={handleCancelAudienceConfirm}
                             onCancel={() => {setIsCancelModalVisible(false)}}
+                            okButtonProps={{style: okDeleteStyle}}
                             okText="Confirmer"
                             cancelText="Annuler"
                         >
-                            <div className='text-red-900'>
-                            <WarningOutlined className='mr-2' />  
+                            <div>
+                            <WarningFilled className='mr-2 text-red-500 text-xl' />  
                             Êtes-vous sûr de vouloir annuler cette audience ?
                             </div>
                         </Modal>

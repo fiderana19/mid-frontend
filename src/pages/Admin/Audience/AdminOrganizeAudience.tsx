@@ -31,6 +31,7 @@ function AdminOrganizeAudience() {
         }
         fetchRequest();
         fetchAvailability();
+        fetchAvailability();
         let count: number = 0;
         if(count < 2) {
         const intervalId = setInterval(() => {

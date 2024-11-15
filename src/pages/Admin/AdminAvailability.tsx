@@ -1,12 +1,13 @@
 import { Calendar, DatePicker, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckOutlined, CloseCircleFilled, CloseOutlined, DeleteFilled, EditFilled, PlusOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, CloseOutlined, DeleteFilled, EditFilled, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability, getAvailabilityById } from "../../api/availability";
+import { okConfirmStyle, okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
@@ -199,6 +200,7 @@ function AdminAvailability() {
                 onOk={handleAddAvailabilitySubmit}
                 onCancel={handleCloseAddAvailabilityModal}
                 onClose={handleCloseAddAvailabilityModal}
+                okButtonProps={{style: okConfirmStyle}}
                 okText="Ajouter"
                  >
                     <div>
@@ -214,16 +216,17 @@ function AdminAvailability() {
                         </div>                                  
                     </div>
             </Modal>    
-            <Modal title="Annuler un disponibilité" 
+            <Modal title="Annuler une disponibilité" 
                 open={isCancelModalVisible}
                 onOk={handleCancelOk}
                 onCancel={handleCancelClose}
+                okButtonProps={{style: okDeleteStyle}}
                 okText="Confirmer"
                 cancelText="Annuler"
             >
-                <div className='text-red-900'>
-                <WarningOutlined className='mr-2' />  
-                Êtes-vous sûr de vouloir annuler disponibilité ?
+                <div>
+                <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                Êtes-vous sûr de vouloir annuler cette disponibilité ?
                 </div>
             </Modal>
         </>

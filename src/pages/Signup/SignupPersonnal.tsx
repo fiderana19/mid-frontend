@@ -26,7 +26,7 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
         <div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">
-                    Votre nom...
+                    Nom
                 </div>
                 <div className="relative">
                     <input 
@@ -42,7 +42,7 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">
-                    Votre prenom(s)...
+                    Prenom(s)
                 </div>
                 <div className="relative">
                     <input 
@@ -57,7 +57,7 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
             </div>
             <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">
-                    Votre adresse...
+                    Adresse
                 </div>
                 <div className="relative">
                     <input 

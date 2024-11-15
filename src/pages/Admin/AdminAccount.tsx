@@ -3,8 +3,9 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
-import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, EditOutlined, MenuOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, EditOutlined, MenuOutlined, UserOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -174,27 +175,28 @@ function AdminAccount() {
                     </div>
                 </div>
             </div>
-            <Modal title="Validation" 
+            <Modal title="Validation du compte" 
                 open={isValidateModalVisible}
                 onOk={handleValidateConfirm}
                 onCancel={handleValidateCancel}
                 okText="Valider"
                 cancelText="Annuler"
             >
-                <div className=''>
-                    <WarningOutlined className='mr-2' />  
+                <div>
+                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce demande d'audience ?
                 </div>
             </Modal>
-            <Modal title="Suppression" 
+            <Modal title="Suppression du compte" 
                 open={isDeleteModalVisible}
                 onOk={handleDeleteConfirm}
                 onCancel={handleDeleteCancel}
+                okButtonProps={{style: okDeleteStyle}}
                 okText="Supprimer"
                 cancelText="Annuler"
             >
-                <div className='text-red-900'>
-                    <WarningOutlined className='mr-2' />  
+                <div>
+                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
                 </div>
             </Modal>

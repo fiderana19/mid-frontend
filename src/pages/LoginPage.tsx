@@ -56,7 +56,7 @@ function LoginPage() {
                     <div className='text-2xl font-bold my-4'>Connexion à votre compte</div>
                     <div className='w-64 my-2 mx-auto'>
                         <div className="text-left text-xs font-bold">
-                                Adresse mail...
+                                Adresse mail
                         </div>
                         <div className="relative">
                             <input
@@ -70,7 +70,7 @@ function LoginPage() {
                     </div>
                     <div className='w-64 my-2 mx-auto'>
                         <div className="text-left text-xs font-bold">
-                                Mot de passe...
+                                Mot de passe
                         </div>
                         <div className="relative">
                             <input 
