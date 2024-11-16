@@ -85,7 +85,7 @@ function UserNavigation() {
         <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-second text-center text-white md:py-0 py-3">
             <Link to='/user/home' className="flex items-center gap-2">
                 <img src={MidLogo} alt="Logo du ministere" className="w-10 h-10 object-cover rounded-full mx-auto" />
-                <div className="text-md font-semibold">MININTER: Audience</div>
+                <div className="text-md font-latobold">MININTER: Audience</div>
             </Link>
             <div className="flex gap-4 items-center">
                 <div className="text-left gap-4 md:flex hidden">
@@ -110,7 +110,7 @@ function UserNavigation() {
                         <a onClick={(e) => e.preventDefault()}>
                         {
                             user &&
-                            <button className='bg-gray-500 hover:bg-gray-700 text-white font-medium py-1 px-3 rounded flex items-center'>
+                            <button className='bg-gray-500 hover:bg-gray-700 text-white font-medium py-1 px-3 rounded flex font-latobold items-center'>
                                     <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
                                     { user.email }
                                 <DownOutlined className="text-xs ml-2" />

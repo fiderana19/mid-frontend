@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       fontFamily: {
         lato: ['Lato', 'sans'],
+        latobold: ['LatoBold', 'sans'],
         geist: ['Geist','sans'],
         hostgrotesk: ['HostGrotesk','sans'],
       },

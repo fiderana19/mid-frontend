@@ -29,9 +29,9 @@ function UserDemande() {
             <UserNavigation />
             <div className="pt-16 sm:px-20 px-4">
                 <div className="sm:flex block justify-between items-center">
-                    <div className="text-lg font-bold my-4">LISTE DE VOS DEMANDES D'AUDIENCE</div>
+                    <div className="text-lg font-latobold my-4">LISTE DE VOS DEMANDES D'AUDIENCE</div>
                     <Link to="/user/add/demande" className="flex justify-end">
-                        <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
+                        <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
                             <PlusOutlined />
                             <div>Faire une demande</div>
                         </button>
@@ -44,7 +44,7 @@ function UserDemande() {
                                 <div className="flex gap-2 p-2 bg-gray-400 bg-opacity-80 rounded">
                                     <img src={`data:image/png;base64,${request.profile_photo}`} className="w-9 h-9 rounded-full object-cover border" />
                                     <div className="">
-                                        <div className="font-bold">
+                                        <div className="font-latobold">
                                                 { request.type_request }
                                             </div>
                                             <div className="text-xs">
@@ -76,11 +76,11 @@ function UserDemande() {
                                     </div>
                                     <div className="mt-4">
                                         <span>Motif :</span>
-                                        <span className="font-semibold"> { request.object } </span>
+                                        <span className="font-latobold"> { request.object } </span>
                                     </div>
                                     <div className="flex gap-2">
                                         <div>Pour la semaine de </div>
-                                        <div className="font-bold"> { request.date_wanted_debut } </div>
+                                        <div className="font-latobold"> { request.date_wanted_debut } </div>
                                     </div>
                                     {
                                         request.status_request[0] !== "Accepté" &&

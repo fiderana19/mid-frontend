@@ -31,7 +31,7 @@ function UserAudience() {
         <div className="w-full min-h-screen bg-four">
             <UserNavigation />
             <div className="pt-16 px-20">
-                <div className="text-lg font-bold my-4">LISTE DE VOS AUDIENCES</div>
+                <div className="text-lg font-latobold my-4">LISTE DE VOS AUDIENCES</div>
                 <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
                     {
                         audiences && audiences.map((audience, index) => {
@@ -45,9 +45,9 @@ function UserAudience() {
                                         </div>
                                         <div className="flex gap-2">
                                             <div> De  </div>
-                                            <div className="font-bold"> { audience.availability_hour_debut } </div>
+                                            <div className="font-latobold"> { audience.availability_hour_debut } </div>
                                             <div> à  </div>
-                                            <div className="font-bold"> { audience.availability_hour_end } </div>
+                                            <div className="font-latobold"> { audience.availability_hour_end } </div>
                                         </div>
                                     </div> 
                                     <div className="flex justify-end">
@@ -76,7 +76,7 @@ function UserAudience() {
                                     <div className="text-lg"> { audience.request_type } </div>
                                     <div>
                                         <span>Objet : </span>
-                                        <span className="font-semibold"> { audience.request_object } </span>
+                                        <span className="font-latobold"> { audience.request_object } </span>
                                     </div>
                                 </div>
                             </div>

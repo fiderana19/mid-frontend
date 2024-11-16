@@ -49,15 +49,15 @@ function LoginPage() {
                     <div className='flex flex-col justify-center h-screen bg-black bg-opacity-45'>
                         <div className='text-white px-20'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />
-                            <div className='text-4xl font-bold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
+                            <div className='text-4xl font-latobold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
                             <div>Demander une audience avec le ministre en ligne </div>
                         </div>
                     </div>
                 </div>
                 <div className='w-1/3 bg-second h-screen text-center py-5 px-10 flex flex-col justify-center'>
-                    <div className='text-2xl font-bold my-4'>Connexion à votre compte</div>
+                    <div className='text-2xl font-latobold my-4'>Connexion à votre compte</div>
                     <div className='w-64 my-2 mx-auto'>
-                        <div className="text-left text-xs font-bold">
+                        <div className="text-left text-xs font-latobold">
                                 Adresse mail
                         </div>
                         <div className="relative">
@@ -71,7 +71,7 @@ function LoginPage() {
                         </div>
                     </div>
                     <div className='w-64 my-2 mx-auto'>
-                        <div className="text-left text-xs font-bold">
+                        <div className="text-left text-xs font-latobold">
                                 Mot de passe
                         </div>
                         <div className="relative">
@@ -88,11 +88,11 @@ function LoginPage() {
                                 className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
                         </div>
                     </div>
-                    <button className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-bold py-2 my-4 px-4 rounded w-64' onClick={handleLoginUser}>SE CONNECTER</button>
+                    <button className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64' onClick={handleLoginUser}>SE CONNECTER</button>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous n'avez pas encore un compte ?</div>
                         <Link to="/signup">
-                            <div className='text-blue-400 font-bold'>
+                            <div className='text-blue-400 font-latobold'>
                                 S'inscrire
                             </div>
                         </Link>

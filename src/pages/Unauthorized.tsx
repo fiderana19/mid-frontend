@@ -7,9 +7,9 @@ function Unauthoriezd() {
                 <div className='w-80 mx-auto'>
                     <div className='text-center'>
                         <img src={MidLogo} className='h-36 w-36 object-cover mx-auto' alt="Logo du ministere" />
-                        <div className='text-lg font-bold'>MINITER: Audience</div>
+                        <div className='text-lg font-latobold'>MININTER: Audience</div>
                     </div>
-                    <div className='text-xl font-bold my-4 text-center'>Erreur : Page non autorisé !</div>
+                    <div className='text-xl font-latobold my-4 text-center'>Erreur : Page non autorisé !</div>
                 </div>
         </div>
         </>

@@ -49,7 +49,7 @@ function Header() {
     {
       key: '1',
       label: <Link to="/admin/home">
-                  <div className={location.pathname === "/admin/home" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/home" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Acceuil</div>
                   </div>
@@ -58,7 +58,7 @@ function Header() {
     {
       key: '2',
       label: <Link to="/admin/demande">
-                  <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Demande</div>
                   </div>
@@ -70,7 +70,7 @@ function Header() {
     {
       key: '3',
       label:   <Link to="/admin/audience">
-                  <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Audience</div>
                   </div>
@@ -79,31 +79,25 @@ function Header() {
     {
       key: '4',
       label:  <Link to="/admin/availability">
-                  <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Disponibilite</div>
                   </div>
               </Link>,
-      children: [
-          { key: '11', label: 'Vue calendrier' },
-        ],
     },
     {
       key: '5',
       label:  <Link to="/admin/account">
-                  <div className={location.pathname === "/admin/account" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/account" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Citoyen</div>
                   </div>
               </Link>,
-      children: [
-          { key: '12', label: 'Filtrer par validation' },
-        ],
     },
     {
       key: '6',
       label:  <Link to="/admin/dashboard">
-                  <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-blue-500 font-bold" : "flex gap-2" } >
+                  <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
                       <div className="">Dashboard</div>
                   </div>
@@ -125,7 +119,7 @@ function Header() {
               <a onClick={(e) => e.preventDefault()}>
                 {
                   user &&
-                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center'>
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-latobold py-1 px-3 rounded items-center'>
                       <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
                       <div className="sm:block hidden">{ user.email }</div>
                       <DownOutlined className="text-xs ml-2" />

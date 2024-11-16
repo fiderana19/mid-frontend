@@ -12,37 +12,37 @@ function AdminNavigation() {
             <MidProfile/>
             <div className="text-left w-full">
                 <Link to="/admin/home">
-                    <div className={location.pathname === "/admin/home" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/home" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/home" ? <HomeFilled className="md:mr-0 mr-3" /> : <HomeOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Acceuil</div>
                     </div>
                 </Link>
                 <Link to="/admin/demande">
-                    <div className={location.pathname === "/admin/demande" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/demande" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/demande" ? <SnippetsFilled className="md:mr-0 mr-3" /> : <SnippetsOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Demande</div>
                     </div>
                 </Link>
                 <Link to="/admin/audience">
-                    <div className={location.pathname === "/admin/audience" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/audience" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/audience" ? <ContactsFilled className="md:mr-0 mr-3" /> : <ContactsOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Audience</div>
                     </div>
                 </Link>
                 <Link to="/admin/availability">
-                    <div className={location.pathname === "/admin/availability" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/availability" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/availability" ? <CalendarFilled className="md:mr-0 mr-3" /> : <CalendarOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Disponibilite</div>
                     </div>
                 </Link>
                 <Link to="/admin/account">
-                    <div className={location.pathname === "/admin/account" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/account" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/account" ? <UserOutlined className="md:mr-0 mr-3" /> : <UserOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Citoyen</div>
                     </div>
                 </Link>
                 <Link to="/admin/dashboard">
-                    <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 font-bold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
+                    <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/dashboard" ? <PieChartFilled className="md:mr-0 mr-3" /> : <PieChartOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Dashboard</div>
                     </div>
