@@ -28,7 +28,7 @@ function UserAudience() {
     }
 
     return(
-        <div className="w-full">
+        <div className="w-full min-h-screen bg-four">
             <UserNavigation />
             <div className="pt-16 px-20">
                 <div className="text-lg font-bold my-4">LISTE DE VOS AUDIENCES</div>

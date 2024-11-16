@@ -11,12 +11,12 @@ module.exports = {
         hostgrotesk: ['HostGrotesk','sans'],
       },
       colors: {
-        'primary': '#B4D4FF',
-        'second': '#86B6F6',
-        'third': '#176B87',
-        'four':'#EEF5FF',
-        'five':'rgba(0,0,0,.25)',
-        'six':'#B2BEB5',
+        'primary': '#29ADB2',
+        'second': '#508C9B',
+        'third': '#8ed1fc',
+        'four':'#EEEEEE',
+        'five':'#468585',
+        'six':'#7FC8A9',
         'seven':'#E5E4E2',
       },
       keyframes: {

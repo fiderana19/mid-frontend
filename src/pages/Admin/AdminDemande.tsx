@@ -107,11 +107,11 @@ function AdminDemande() {
     
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
-                <div className="flex flex-col justify-center w-full">
+                <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>

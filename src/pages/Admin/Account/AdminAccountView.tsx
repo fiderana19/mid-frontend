@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { Modal } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { okConfirmStyle, okDeleteStyle } from "../../../utils/ModalStyle";
 
 const AdminAccountView: React.FC = () => {
@@ -77,11 +77,25 @@ const AdminAccountView: React.FC = () => {
                         <Header />
                     </div>
                     <div className="pl-10 pr-5 pt-16 pb-5 w-full">
-                        <div className="font-bold text-lg mb-6">Compte citoyen</div>
-
                         {
                             user && 
                             <div>
+                                <div className="flex justify-between items-center">
+                                    <div className="font-bold text-lg mb-6">Compte citoyen</div>
+                                    <div className="">
+                                            <div className="flex justify-end gap-2">
+                                            {
+                                                !user.validation && 
+                                                <div className='bg-green-500 border border-green-600 hover:bg-green-600 text-white py-1 px-2 text-sm  rounded-full focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>
+                                                    <CheckCircleFilled />
+                                                </div> 
+                                            }
+                                                <div className='bg-red-500 border border-red-600 rounded-full hover:bg-red-600 text-white py-1 px-2 text-sm  focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDeleteConfirmation}>
+                                                    <DeleteFilled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
                                 <div className="gap-2 flex justify-between">
                                     <div className="w-1/4">
                                         <div className=" border pt-6 rounded text-center bg-white shadow-md">
@@ -154,17 +168,7 @@ const AdminAccountView: React.FC = () => {
                                         <div className="border rounded p-5 bg-white shadow-md">
                                             <div className="font-bold text-md mb-3">Carte d'identité nationale</div>
                                             <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover" />
-                                        </div>
-                                        
-                                        <div className="p-4">
-                                            <div className="flex justify-end gap-2">
-                                            {
-                                                !user.validation && 
-                                                <button className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button> 
-                                            }
-                                                <button className='bg-red-500 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDeleteConfirmation}>Supprimer</button>
-                                            </div>
-                                        </div>
+                                        </div>                                        
                                     </div>
                                 </div>
                         </div>

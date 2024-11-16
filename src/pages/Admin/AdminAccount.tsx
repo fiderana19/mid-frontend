@@ -3,9 +3,9 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
-import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, EditOutlined, MenuOutlined, UserOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, FilterOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { okDeleteStyle } from "../../utils/ModalStyle";
+import { okDeleteStyle, okConfirmStyle } from '../../utils/ModalStyle';
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -15,6 +15,7 @@ function AdminAccount() {
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
+    const [searchRef, setSearchRef] = useState<string>('');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -79,13 +80,13 @@ function AdminAccount() {
     
       const filter: MenuProps['items'] = [
         {
-          label:  <div onClick={() => filterAccounts(true)}>
+          label:  <div onClick={() => filterAccounts(true)} className="px-4">
                     Validé                    
                     </div>,
           key: '0',
         },
         {
-            label:  <div onClick={() => filterAccounts(false)}>
+            label:  <div onClick={() => filterAccounts(false)} className="px-4">
                       Non validé                    
                     </div>,
             key: '1',
@@ -94,7 +95,7 @@ function AdminAccount() {
             type: 'divider',
         },
         {
-            label:  <div onClick={() => setFilterRef(false)}>
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
                       Normal                    
                     </div>,
             key: '2',
@@ -127,9 +128,18 @@ function AdminAccount() {
         setIsDeleteModalVisible(false)
     }
 
+    //handling the keypress
+    const handleKeyPress =async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        const charCode = e.which || e.keyCode;
+
+        if (charCode < 48 || charCode > 57) {
+        e.preventDefault();
+        }
+    }
+
     return(
         <>
-            <div className="w-full flex">
+            <div className="w-full flex bg-four min-h-screen">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -141,11 +151,11 @@ function AdminAccount() {
                         <div className="flex justify-between items-center my-4">
                             <div className="text-lg font-bold">LISTE DES CITOYENS INSCRITS</div>
                             <div className="flex items-center gap-1">
-                                <Input name="filter" type="text" className="h-9" placeholder="Saisir le CNI..." />
+                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CNI..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
                                 <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
                                     <a onClick={(e) => {e.preventDefault()}}>
-                                        <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
-                                            <UserOutlined className="text-md mr-1"/>
+                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
+                                            <FilterOutlined className="text-md mr-1"/>
                                             <div className="">Filtrer</div>
                                             <DownOutlined />
                                         </button>
@@ -169,6 +179,9 @@ function AdminAccount() {
                                 {
                                     filterRef ? 
                                     filteredAccounts.map((account, index) => {
+                                        if (searchRef && !account.cni.includes(searchRef)) {
+                                            return null;
+                                        }
                                         return(
                                             <tr key={index}>
                                                 <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
@@ -203,6 +216,9 @@ function AdminAccount() {
                                     })
                                     :
                                     accounts.map((account, index) => {
+                                        if (searchRef && !account.cni.includes(searchRef)) {
+                                            return null;
+                                        }
                                         return(
                                             <tr key={index}>
                                                 <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
@@ -246,6 +262,7 @@ function AdminAccount() {
                 open={isValidateModalVisible}
                 onOk={handleValidateConfirm}
                 onCancel={handleValidateCancel}
+                okButtonProps={{style: okConfirmStyle}}
                 okText="Valider"
                 cancelText="Annuler"
             >

@@ -18,7 +18,7 @@ function Signup() {
                         </Link>
                     </div>
                 </div>
-                <div className=" bg-[url('src/assets/image/bg-login.jpeg')] bg-cover w-full">
+                <div className="w-2/3 bg-[url('src/assets/image/bg-login.jpeg')] bg-cover">
                     <div className='flex flex-col justify-center h-screen bg-black bg-opacity-45'>
                         <div className='text-white px-20'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />

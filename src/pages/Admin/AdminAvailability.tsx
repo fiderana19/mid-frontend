@@ -123,15 +123,15 @@ function AdminAvailability() {
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="pl-10 pr-5 py-16">
+                    <div className="pl-10 pr-5 py-16 min-h-screen bg-four">
                         <div className="flex justify-between items-center">
                             <div className="text-lg font-bold mb-6">DISPONIBILITE DU MINISTRE</div>
-                            <button className="items-center flex gap-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 my-4 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
+                            <button className="items-center flex gap-2 bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-bold py-1 my-4 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
                                 <PlusOutlined />
                                 <span>Nouvelle disponibilité</span>
                             </button>
                         </div>
-                        <div className="h-80 w-full">
+                        <div className="w-full">
                             <div className="gap-2">
                                 <table className='w-full divide-y divide-gray-200'>
                                     <thead>
@@ -174,12 +174,8 @@ function AdminAvailability() {
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
-                                                        availability.status_availability[0] === "Annulé" ?
+                                                        availability.status_availability[0] !== "Annulé" &&
                                                         <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
-                                                            <CloseCircleFilled /> Annuler 
-                                                        </button>
-                                                        :
-                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                     }

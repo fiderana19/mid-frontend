@@ -22,7 +22,7 @@ const UserHome: FunctionComponent = () => {
 
 
     return(
-        <div className="w-full flex flex-col justify-center min-h-screen">
+        <div className="w-full flex flex-col justify-center bg-four min-h-screen">
             <UserNavigation />
             <div className="pt-16 sm:px-20 px-4">
                 {

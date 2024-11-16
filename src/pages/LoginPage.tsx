@@ -45,7 +45,7 @@ function LoginPage() {
     return (
         <div className='h-screen flex flex-col justify-center'>
             <div className='flex justify-between '>
-                <div className=" bg-[url('src/assets/image/bg-login.jpeg')] bg-cover w-full">
+                <div className="bg-[url('src/assets/image/bg-login.jpeg')] bg-cover w-2/3">
                     <div className='flex flex-col justify-center h-screen bg-black bg-opacity-45'>
                         <div className='text-white px-20'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />

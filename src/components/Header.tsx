@@ -119,7 +119,7 @@ function Header() {
   ];
   
     return(
-        <div className="bg-third px-4 py-3 flex justify-normal sm:justify-end">
+        <div className="bg-five shadow-sm px-4 py-3 flex justify-normal sm:justify-end">
           <div className="sm:flex hidden">
             <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>

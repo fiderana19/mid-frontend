@@ -1,9 +1,8 @@
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users";
-import { CheckCircleFilled, CloseCircleFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 function AdminInfo() {
     const [user, setUser] = useState<any>();
@@ -32,14 +31,14 @@ function AdminInfo() {
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="pl-10 pr-5 pt-16 pb-5 w-full">
+                    <div className="md:pl-10 md:pr-5 sm:pl-20 pl-4 pr-4 pt-16 pb-5 w-full">
                         <div className="font-bold text-lg mb-6">Votre profile</div>
                         {
                             user && 
                             <div>
-                                <div className="gap-2 flex justify-between w-full">
-                                    <div className="w-2/4">
-                                        <div className=" border pt-6 rounded text-center  bg-white border shadow-md">
+                                <div className="gap-2 md:flex justify-between w-full">
+                                    <div className="md:w-2/4 w-full">
+                                        <div className=" pt-6 rounded text-center  bg-white border shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-48 h-48  object-cover mx-auto border" />
                                             <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
@@ -65,7 +64,7 @@ function AdminInfo() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-2/4" >
+                                    <div className="md:w-2/4 w-full" >
                                         <div className="rounded p-4  bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Naissance</div>
                                             <div className="flex justify-between">
@@ -77,7 +76,7 @@ function AdminInfo() {
                                                 <div className="font-semibold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
-                                        <div className="rounded p-4 my-5 bg-white border shadow-md">
+                                        <div className="rounded p-4 md:my-5 my-2 bg-white border shadow-md">
                                             <div className="font-bold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between">
                                                 <div className="text-sm text-gray-500">CIN</div>
