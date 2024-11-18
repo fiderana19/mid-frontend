@@ -9,7 +9,7 @@ function Unauthoriezd() {
                         <img src={MidLogo} className='h-36 w-36 object-cover mx-auto' alt="Logo du ministere" />
                         <div className='text-lg font-latobold'>MININTER: Audience</div>
                     </div>
-                    <div className='text-xl font-latobold my-4 text-center'>Erreur : Page non autorisé !</div>
+                    <div className='text-xl font-latobold my-4 text-center'>Erreur 403 : Page non autorisé !</div>
                 </div>
         </div>
         </>

@@ -39,8 +39,8 @@ const RequestChart: React.FunctionComponent = () => {
 
 
     return(
-        <div className="rounded border bg-white shadow-md p-4">
-            <div className="text-lg font-bold">LES ETATS DES DEMANDES D'AUDIENCE</div>
+        <div className="rounded border bg-white shadow-md p-4 h-full">
+            <div className="text-lg font-bold">DEMANDES D'AUDIENCE</div>
             <ReactApexChart 
                 options={chartData.options}  
                 series={chartData.series}

@@ -174,8 +174,12 @@ function AdminAvailability() {
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
-                                                        availability.status_availability[0] !== "Annulé" &&
-                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        availability.status_availability[0] === "Annulé" ?
+                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                            <CloseCircleFilled /> Annuler 
+                                                        </button>
+                                                        :
+                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                     }

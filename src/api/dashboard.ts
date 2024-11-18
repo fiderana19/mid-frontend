@@ -54,3 +54,20 @@ export const getRequestChart = async (token: string |null) => {
       return error;
     }
 }
+
+export const getAudienceChart = async (token: string |null) => {
+  try {
+      const response = await axios({
+        method: 'get',
+        url: `${AudienceAPIUrl}/chart`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error: any) {
+      console.error("Erreur lors de la recuperation des stat audience :", error)
+      return error;
+    }
+}

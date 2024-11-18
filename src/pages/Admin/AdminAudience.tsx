@@ -48,12 +48,12 @@ function AdminAudience() {
           type: 'divider',
         },
         {
-          label: <div>
+          label: <Link to={`/admin/audience/report/${selectedAudience}`}>
                     <div className="flex gap-2">
                         <EditFilled  />
                         <div>Reporter</div>
                     </div>
-                </div>
+                </Link>
           ,
           key: '3',
         },
