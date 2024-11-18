@@ -10,7 +10,7 @@ function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
     const [filteredAccounts, setFilteredAccounts] = useState<any[]>([]);
     const [access_token, setAccessToken] = useState<string>('');
-    const [selectedAcount, setSelectedAccount] = useState<string>()
+    const [selectedAcount, setSelectedAccount] = useState<any>()
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
@@ -42,7 +42,7 @@ function AdminAccount() {
     
     const items: MenuProps['items'] = [
         {
-          label:  <Link to={`/admin/account/view/${selectedAcount}`} >
+          label:  <Link to={`/admin/account/view/${selectedAcount?._id}`} >
                     <div className="flex gap-2">
                         <UserOutlined  />
                         <div>Voir</div>
@@ -54,12 +54,12 @@ function AdminAccount() {
           type: 'divider',
         },
         {
-          label: <div onClick={() => setIsValidateModalVisible(true)}>
-                <div className="flex gap-2">
+          label: <button disabled={selectedAcount?.validation ? true : false}>
+                <div onClick={() => setIsValidateModalVisible(true)} className={selectedAcount?.validation ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" } >
                     <CheckCircleOutlined />
                     <div>Valider</div>
                 </div>
-            </div>,
+            </button>,
           key: '3',
         },
         {
@@ -103,7 +103,7 @@ function AdminAccount() {
     const handleValidateConfirm = async () => {
         setApiLoading(true);
         if(selectedAcount) {
-            const response = await validateUser(access_token,selectedAcount);
+            const response = await validateUser(access_token,selectedAcount?._id);
             if(response?.status === 200 || response?.status === 201) {
                 setApiLoading(false);
                 setIsValidateModalVisible(false);
@@ -120,7 +120,7 @@ function AdminAccount() {
     const handleDeleteConfirm = async () => {
         setApiLoading(true);
         if(selectedAcount) {
-            const response = await deleteUser(access_token,selectedAcount);
+            const response = await deleteUser(access_token,selectedAcount?._id);
             if(response?.status === 200 || response?.status === 201) {
                 fetchAccount();
                 setApiLoading(false);
@@ -212,7 +212,7 @@ function AdminAccount() {
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account._id)}}>
+                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account)}}>
                                                             <MenuOutlined />
                                                         </a>
                                                     </Dropdown>
@@ -249,7 +249,7 @@ function AdminAccount() {
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account._id)}}>
+                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAccount(account)}}>
                                                             <MenuOutlined />
                                                         </a>
                                                     </Dropdown>

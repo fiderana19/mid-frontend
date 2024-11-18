@@ -128,8 +128,8 @@ function AdminAudience() {
                                                     </div> 
                                                     : (
                                                         audience.status_audience[0] === "Reporté" ?
-                                                        <div className="flex gap-2 text-yellow-500">
-                                                            <CloseCircleFilled /><div>{ audience.status_audience }</div>
+                                                        <div className="flex gap-2 text-blue-500">
+                                                            <CheckCircleFilled /><div>{ audience.status_audience }</div>
                                                         </div>
                                                         :
                                                         <div className="flex gap-2 text-red-500">

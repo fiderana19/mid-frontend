@@ -10,7 +10,7 @@ function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [filteredRequests, setFilteredRequests] = useState<any[]>([]);
-    const [selectedRequest, setSelectedRequest] = useState<string>();
+    const [selectedRequest, setSelectedRequest] = useState<any>();
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const navigate = useNavigate();
@@ -33,7 +33,6 @@ function AdminDemande() {
         if(token) {
             const response = await getAllRequest(token);
             if(response) {
-                console.log("kitaso", response)
                 setRequests(response);
             }
         }
@@ -42,7 +41,7 @@ function AdminDemande() {
 
     const items: MenuProps['items'] = [
         {
-            label:  <Link to={`/admin/demande/view/${selectedRequest}`} >
+            label:  <Link to={`/admin/demande/view/${selectedRequest?._id}`} >
                       <div className="flex gap-2">
                           <EyeOutlined  />
                           <div>Voir</div>
@@ -54,22 +53,22 @@ function AdminDemande() {
           type: 'divider',
         },
         {
-          label: <div onClick={() => setIsValidateModalVisible(true)}>
-                    <div className="flex gap-2">
+          label: <button disabled={(selectedRequest?.status_request[0] === "Refusé" || selectedRequest?.status_request[0] === "Accepté") ? true : false}>
+                    <div onClick={() => setIsValidateModalVisible(true)} className={(selectedRequest?.status_request[0] === "Refusé" || selectedRequest?.status_request[0] === "Accepté") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
                         <CheckCircleOutlined  />
                         <div>Approuver</div>
                     </div>
-                </div>
+                </button>
           ,
           key: '3',
         },
         {
-            label: <div onClick={() => setIsDenyModalVisible(true)}>
-                <div className="flex gap-2">
+            label: <button disabled={(selectedRequest?.status_request[0] === "Refusé" || selectedRequest?.status_request[0] === "Accepté") ? true : false}>
+                    <div onClick={() => setIsDenyModalVisible(true)} className={(selectedRequest?.status_request[0] === "Refusé" || selectedRequest?.status_request[0] === "Accepté") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
                     <CloseCircleOutlined  />
                     <div>Refuser</div>
                 </div>
-            </div>
+            </button>
             ,
             key: '4',
           },
@@ -117,7 +116,7 @@ function AdminDemande() {
     const handleDenyConfirm = async () => {
         setApiLoading(true);
         if(selectedRequest) {
-            const response = await denyRequest(access_token,selectedRequest);
+            const response = await denyRequest(access_token,selectedRequest?._id);
             if(response?.status === 200 || response?.status === 201) {
                 fetchUserRequest();        
                 setApiLoading(false);
@@ -137,13 +136,13 @@ function AdminDemande() {
     const handleValidateConfirm = async () => {
         setApiLoading(true);
         if(selectedRequest) {
-            const response = await validateRequest(access_token,selectedRequest);
+            const response = await validateRequest(access_token,selectedRequest?._id);
             if(response?.status === 200 || response?.status === 201) {
                 fetchUserRequest();
                 setApiLoading(false);
                 message.success("Demande approuvée !");
                 setIsValidateModalVisible(false);    
-                navigate(`/admin/organize/audience/${selectedRequest}`);
+                navigate(`/admin/organize/audience/${selectedRequest?._id}`);
             }    
         }
     }
@@ -241,7 +240,7 @@ function AdminDemande() {
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>
                                                         <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request._id)}}>
+                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request)}}>
                                                                 <MenuOutlined />
                                                             </a>
                                                         </Dropdown>
@@ -289,7 +288,7 @@ function AdminDemande() {
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>
                                                         <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request._id)}}>
+                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request); console.log(selectedRequest)}}>
                                                                 <MenuOutlined />
                                                             </a>
                                                         </Dropdown>
