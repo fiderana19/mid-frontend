@@ -2,18 +2,15 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, LoadingOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
-import { Dropdown, MenuProps, Modal } from "antd";
-import { okDeleteStyle } from "../../utils/ModalStyle";
+import { Link } from "react-router-dom";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
+import { Dropdown, MenuProps, message, Modal } from "antd";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [selectedAudience, setSelectedAudience] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
-    const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
-    const navigate = useNavigate();
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -32,7 +29,6 @@ function AdminAudience() {
         if(token) {
             const response = await getAllAudience(token);
             if(response) {
-                console.log("reto lty ar", response)
                 setAudiences(response.data);
             }
         }
@@ -52,7 +48,7 @@ function AdminAudience() {
           type: 'divider',
         },
         {
-          label: <div onClick={() => setIsValidateModalVisible(true)}>
+          label: <div>
                     <div className="flex gap-2">
                         <EditFilled  />
                         <div>Reporter</div>
@@ -81,6 +77,7 @@ function AdminAudience() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchAllAudience();
                 setApiLoading(false);
+                message.success("Audience annulé !")
                 setIsCancelModalVisible(false);    
             }
         }

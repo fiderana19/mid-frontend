@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
-import { MenuProps, Dropdown, Modal, Select } from "antd";
+import { MenuProps, Dropdown, Modal, Select, message } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
@@ -84,6 +84,7 @@ function AdminOrganizeAudience() {
             const response = await audienceCreate(access_token,audienceCredentials);
             if(response?.status === 200 || response?.status === 201) {
                 setApiLoading(false);
+                message.success("Audience organisée !");
                 navigate("/admin/audience");
             }    
         }

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
-import { getAudienceById } from "../../../api/audience";
+import { audienceCancel, getAudienceById } from "../../../api/audience";
+import { message, Modal } from "antd";
 
 function AdminAudienceView() {
     const [audience, setAudience] = useState<any>();
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -32,6 +35,18 @@ function AdminAudienceView() {
         }
     }
     
+    const handleCancelAudienceConfirm = async () => {
+        setApiLoading(true);
+        if(audience) {
+            const response = await audienceCancel(access_token,audience);
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAudience();
+                setApiLoading(false);
+                message.success("Audience annulée !");
+                setIsCancelModalVisible(false);    
+            } 
+        }
+    }
     
     return(
         <>
@@ -55,13 +70,13 @@ function AdminAudienceView() {
                                             <div className="border rounded p-4 bg-white shadow-md">
                                                 <div className="flex justify-end">
                                                     {
-                                                        audience.status_audience[0] === "En attente" ? 
-                                                            <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
+                                                        audience.status_audience[0] === "Reporté" ? 
+                                                            <div className="rounded bg-blue-200 px-2 border border-blue-500 flex gap-2 text-xs">
                                                                 <WarningOutlined />
                                                                 <div>{ audience.status_audience }</div>  
                                                             </div>
                                                         : (
-                                                                audience.status_audience[0] === "Accepté" ?
+                                                                audience.status_audience[0] === "Fixé" ?
                                                             <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
                                                                 <CheckOutlined />
                                                                 <div>{ audience.status_audience }</div>  
@@ -101,8 +116,8 @@ function AdminAudienceView() {
                                                     <div className="font-semibold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
-                                            <div className="border rounded p-5 bg-white shadow-md">
-                                                <div className="font-bold text-md mb-3">Actions</div>
+                                            <div className="border rounded p-5 bg-white shadow-md my-2">
+                                                <div className="font-latobold text-md mb-3">Actions</div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Reporter</div>
                                                     <button 
@@ -112,7 +127,7 @@ function AdminAudienceView() {
                                                 </div>
                                                 <div className="flex justify-between">
                                                     <div className="text-sm text-gray-500">Annuler</div>
-                                                    <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>Annuler</button>
+                                                    <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500' onClick={() => setIsCancelModalVisible(true)}>Annuler</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,7 +139,7 @@ function AdminAudienceView() {
                                                 </div>
                                                 <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                     <div className="flex gap-4 my-2">
-                                                        <EnvironmentOutlined />
+                                                        <PhoneOutlined />
                                                         <div> { audience.user_cni } </div>
                                                     </div>
                                                     <div className="flex gap-4 my-2">
@@ -149,6 +164,33 @@ function AdminAudienceView() {
                         </div>
                     </div>
                 </div>
+                <Modal title="Annulation de l'audience" 
+                    open={isCancelModalVisible}
+                    onOk={handleCancelAudienceConfirm}
+                    onCancel={() => {setIsCancelModalVisible(false)}}
+                    footer={null}
+                >
+                    <div>
+                        <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                        Êtes-vous sûr de vouloir annuler cette audience ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={() => {setIsCancelModalVisible(false)}}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleCancelAudienceConfirm}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Confirmer</div>
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </>
     )

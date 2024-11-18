@@ -1,4 +1,4 @@
-import { Dropdown, Input, MenuProps, Modal } from "antd";
+import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
@@ -28,8 +28,6 @@ function AdminAccount() {
 
     async function fetchAccount () {
         const response = await getAllUser(access_token);
-
-        console.log(response)
         if(response) {
             setAccounts(response.data)
         }
@@ -107,9 +105,10 @@ function AdminAccount() {
         if(selectedAcount) {
             const response = await validateUser(access_token,selectedAcount);
             if(response?.status === 200 || response?.status === 201) {
-                setIsValidateModalVisible(false);
-                fetchAccount();    
                 setApiLoading(false);
+                setIsValidateModalVisible(false);
+                message.success("Compte validé !")
+                fetchAccount();    
             }
         }
     }
@@ -125,6 +124,7 @@ function AdminAccount() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchAccount();
                 setApiLoading(false);
+                message.success("Compte supprimé !")
                 setIsDeleteModalVisible(false);    
             }
         }

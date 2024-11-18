@@ -3,7 +3,7 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 
 const AdminAccountView: React.FC = () => {
@@ -29,8 +29,6 @@ const AdminAccountView: React.FC = () => {
         const token = localStorage.getItem('token');
 
         if(userId && token) {
-            console.log("ito le id", userId)
-
             const response = await getUserById(token,userId);
 
             console.log(response)
@@ -43,6 +41,7 @@ const AdminAccountView: React.FC = () => {
         const response = await deleteUser(access_token,user._id);
         if(response?.status === 200 || response?.status === 201) {
             setApiLoading(false);
+            message.success("Compte supprimé !");
             navigate("/admin/account");
         }
     }
@@ -60,6 +59,7 @@ const AdminAccountView: React.FC = () => {
         if(response?.status === 200 || response?.status === 201) {
             fetchUser();
             setApiLoading(false);
+            message.success("Compte validé !");
             setIsValidateModalVisible(false)
         }
     }

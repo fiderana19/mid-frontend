@@ -1,9 +1,9 @@
-import { CheckCircleFilled, EyeOutlined, LockOutlined, MailOutlined, WarningFilled } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined, LockOutlined, MailOutlined, WarningFilled } from '@ant-design/icons';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
-import { message, Modal } from 'antd';
+import { Modal } from 'antd';
 import { useAuth } from '../context/AuthContext';
 
 function LoginPage() {
@@ -13,9 +13,7 @@ function LoginPage() {
     const [isNotValidModalVisible, setIsNotValidModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     useEffect(() => {
-        const token = localStorage.removeItem("token");
     }, [])
-    
 
     const handleLoginUser = async () => {
         const response = await login(loginCredentials.email, loginCredentials.password);
@@ -83,9 +81,16 @@ function LoginPage() {
                                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
                             <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
-                            <EyeOutlined 
+                            {
+                                isPasswordVisible ?
+                                <EyeInvisibleOutlined 
                                 onClick={handlePasswordVisible}
                                 className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                                : 
+                                <EyeOutlined 
+                                onClick={handlePasswordVisible}
+                                className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                            }
                         </div>
                     </div>
                     <button className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64' onClick={handleLoginUser}>SE CONNECTER</button>

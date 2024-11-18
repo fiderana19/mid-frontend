@@ -3,7 +3,7 @@ import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
-import { MenuProps, Dropdown, Modal, Input } from "antd";
+import { MenuProps, Dropdown, Modal, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
 function AdminDemande() {
@@ -22,7 +22,6 @@ function AdminDemande() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-
         if(token) {
             setAccessToken(token);
         }
@@ -34,7 +33,6 @@ function AdminDemande() {
         if(token) {
             const response = await getAllRequest(token);
             if(response) {
-                console.log("reto lty ar", response)
                 setRequests(response);
             }
         }
@@ -122,6 +120,7 @@ function AdminDemande() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchUserRequest();        
                 setApiLoading(false);
+                message.success("Demande refusée !")
                 setIsDenyModalVisible(false);
             }
         }
@@ -141,6 +140,7 @@ function AdminDemande() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchUserRequest();
                 setApiLoading(false);
+                message.success("Demande approuvée !");
                 setIsValidateModalVisible(false);    
                 navigate(`/admin/organize/audience/${selectedRequest}`);
             }    

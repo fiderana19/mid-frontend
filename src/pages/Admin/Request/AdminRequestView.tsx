@@ -2,7 +2,7 @@ import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import { CheckOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
 
@@ -29,11 +29,7 @@ const AdminRequestView: React.FC = () => {
         const token = localStorage.getItem('token');
 
         if(reqestId && token) {
-            console.log("ito le id", reqestId)
-
             const response = await getRequestById(token,reqestId);
-
-            console.log(response)
             setRequest(response)    
         }
     }
@@ -44,6 +40,7 @@ const AdminRequestView: React.FC = () => {
         if(response?.status === 200 || response?.status === 201) {
             fetchRequest();
             setApiLoading(false);
+            message.success("Demande refusée !");
             setIsDenyModalVisible(false);
         }
     }
@@ -61,6 +58,7 @@ const AdminRequestView: React.FC = () => {
         if(response?.status === 200 || response?.status === 201) {
             fetchRequest();
             setApiLoading(false);
+            message.success("Demande approuvée !");
             setIsValidateModalVisible(false);
             navigate(`/admin/organize/audience/${reqestId}`)    
         }

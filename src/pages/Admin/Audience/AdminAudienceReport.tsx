@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { CheckCircleOutlined, CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { audienceReport, getAudienceById } from "../../../api/audience";
@@ -35,7 +35,6 @@ function AdminAudienceReport() {
             const response = await getAudienceById(access_token,audienceId);
             if(response) {
                 setAudience(response.data);
-                console.log("tay", response.data)
             }
         }
     }
@@ -46,11 +45,9 @@ function AdminAudienceReport() {
         if(token) {
             const response = await getAllFreeAvailability(token);
 
-            console.log("h777",response)
             if(response) {
                 if(audience.request_date_wanted_debut_initial && audience.request_date_wanted_end_initial) {
                     const availability_pref = response.data.filter((item: any) => {
-                        console.log("999",audience.request_date_wanted_debut_initial)
                         return (
                             dayjs(item.date_initial) >= dayjs(audience.request_date_wanted_debut_initial) && 
                             dayjs(item.date_initial) <= dayjs(audience.request_date_wanted_end_initial)
@@ -69,10 +66,9 @@ function AdminAudienceReport() {
     };
     
     const handleReportSubmit = async () => {
-        console.log("crevyv", selectedAvailabilityId, "id", audienceId);
         if(audienceId && selectedAvailabilityId) {
             const response = await audienceReport(access_token,audienceId,selectedAvailabilityId);
-                console.log(response)
+            console.log(response)
         }
         navigate("/admin/audience");
     }
