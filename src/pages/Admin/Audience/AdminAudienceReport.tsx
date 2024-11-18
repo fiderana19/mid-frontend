@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
-import { CheckCircleOutlined, CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CheckOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { audienceReport, getAudienceById } from "../../../api/audience";
 import { getAllFreeAvailability } from "../../../api/availability";
 import dayjs from "dayjs";
-import { Select } from "antd";
+import { message, Select } from "antd";
 const { Option } = Select;
 
 function AdminAudienceReport() {
     const [audience, setAudience] = useState<any>();
-    let [availabilities, setAvailabilities] = useState<any[]>([]);
+    let [apiLoading, setApiLoading] = useState<boolean>(false);
+    let [selectError, setSelectError] = useState<string>('');
+    let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
+    const [reportCredentials, setReportCredentials] = useState<any>({ new_availability: '', old_availability: '' });
     const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
@@ -35,42 +38,46 @@ function AdminAudienceReport() {
             const response = await getAudienceById(access_token,audienceId);
             if(response) {
                 setAudience(response.data);
+                setReportCredentials((prev: any) => ({...prev, old_availability: response?.data.availability}));
             }
         }
     }
 
     async function fetchAvailability() {
         const token = localStorage.getItem('token');
-
-        if(token) {
+        if(audienceId && token) {
             const response = await getAllFreeAvailability(token);
-
-            if(response) {
-                if(audience.request_date_wanted_debut_initial && audience.request_date_wanted_end_initial) {
-                    const availability_pref = response.data.filter((item: any) => {
-                        return (
-                            dayjs(item.date_initial) >= dayjs(audience.request_date_wanted_debut_initial) && 
-                            dayjs(item.date_initial) <= dayjs(audience.request_date_wanted_end_initial)
-                        )
-                    })  
-                    console.log(availability_pref)
-                    setAvailabilities(availability_pref);    
-                }
-            }
+            const audi = await getAudienceById(token,audienceId);
+            const availability_pref: any = response?.data.filter((item: any) => {
+                return (
+                    dayjs(item.date_initial) >= dayjs(audi?.data.date_initial) && 
+                    dayjs(item.date_initial) <= dayjs(audi?.data.request_date_wanted_end_initial)
+                )            
+            })  
+            setAvailabilitiesPref(availability_pref);
         }
     }
 
     //handle select change
     const handleSelectChange = (value: any) => {
         setSelectedAvailabilityId(value);
+        setReportCredentials((prev: any) => ({...prev, new_availability: value}));
     };
     
     const handleReportSubmit = async () => {
-        if(audienceId && selectedAvailabilityId) {
-            const response = await audienceReport(access_token,audienceId,selectedAvailabilityId);
-            console.log(response)
+        setSelectError('');
+        if(!selectedAvailabilityId) {
+            setSelectError("Veuillez selectionner un disponibilité !")
         }
-        navigate("/admin/audience");
+        if(audienceId && selectedAvailabilityId) {
+            setApiLoading(true);
+            const response = await audienceReport(access_token,audienceId,reportCredentials);
+            if(response?.status === 200 || response?.status === 201) {
+                setApiLoading(false);
+                message.success("Audience reportée !");
+                navigate("/admin/audience");    
+            }
+        }
     }
     
     
@@ -99,7 +106,7 @@ function AdminAudienceReport() {
                                                 </div>
                                                 <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                     <div className="flex gap-4 my-2">
-                                                        <EnvironmentOutlined />
+                                                        <PhoneOutlined />
                                                         <div> { audience.user_cni } </div>
                                                     </div>
                                                     <div className="flex gap-4 my-2">
@@ -122,13 +129,13 @@ function AdminAudienceReport() {
                                             <div className="border rounded p-4">
                                                 <div className="flex justify-end">
                                                     {
-                                                        audience.status_audience[0] === "En attente" ? 
-                                                            <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
+                                                        audience.status_audience[0] === "Reporté" ? 
+                                                            <div className="rounded bg-blue-200 px-2 border border-blue-500 flex gap-2 text-xs">
                                                                 <WarningOutlined />
                                                                 <div>{ audience.status_audience }</div>  
                                                             </div>
                                                         : (
-                                                                audience.status_audience[0] === "Accepté" ?
+                                                                audience.status_audience[0] === "Fixé" ?
                                                             <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
                                                                 <CheckOutlined />
                                                                 <div>{ audience.status_audience }</div>  
@@ -174,7 +181,7 @@ function AdminAudienceReport() {
                                                     <Select
                                                         value={selectedAvailabilityId}
                                                         onChange={handleSelectChange}
-                                                        className='w-full my-1'
+                                                        className={ selectError ? 'w-full my-1 border border-red-500 rounded' : 'w-full my-1'  }
                                                         showSearch
                                                         optionFilterProp="children"
                                                         filterOption={(input: any, option: any) =>
@@ -183,8 +190,8 @@ function AdminAudienceReport() {
                                                     >
                                                         <Option value="">Sélectionnez un disponibilité</Option>
                                                         {
-                                                        availabilities.map((ava: any, index) => {
-                                                            if(0 < 1) {
+                                                        availabilities_pref.map((ava: any, index) => {
+                                                            if(availabilities_pref.length < 1) {
                                                                 return(
                                                                     <Option key={index}>
                                                                         <div>
@@ -193,7 +200,7 @@ function AdminAudienceReport() {
                                                                         </div>
                                                                     </Option>
                                                                 )
-                                                            } else {
+                                                            }
                                                                 return(
                                                                     <Option key={index} value={ava._id}>
                                                                         <div className="flex gap-1">
@@ -202,12 +209,19 @@ function AdminAudienceReport() {
                                                                         </div>
                                                                     </Option>
                                                                 )
-                                                            }
                                                         })
                                                         }
                                                     </Select>
+                                                    {selectError && <div className="text-left text-red-500 text-xs">{selectError}</div>}
                                                     <div className="flex justify-end mt-2">
-                                                        <button onClick={handleReportSubmit} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500' >Reporter</button>
+                                                        <button 
+                                                            onClick={handleReportSubmit} 
+                                                            disabled={ apiLoading ? true : false }
+                                                            className= { apiLoading ? "bg-blue-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" : "flex gap-2 items-center border mt-2 bg-blue-500 hover:border-blue-600 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" } 
+                                                        >   
+                                                        { apiLoading && <LoadingOutlined /> }
+                                                        <div>Reporter</div>                                                    
+                                                    </button>
                                                     </div>
                                             </div>
                                         </div>

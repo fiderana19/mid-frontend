@@ -72,7 +72,7 @@ export const audienceCreate = async (token: string | null, audienceData: any) =>
       const response = await axios({
         method: 'patch',
         url: `${AudienceAPIUrl}/report/${id}`,
-        data: { availability: audienceData },
+        data: audienceData,
         headers: {
           Authorization: `Bearer ${token}`
         }
