@@ -16,6 +16,7 @@ const AddForms: FunctionComponent = () => {
     const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', adresse: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', profile_photo: '', cni_photo : ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
     const [initialPwd, setInitialPwd] = useState<any>();
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,9 +60,11 @@ const AddForms: FunctionComponent = () => {
     };
 
     const handleSignupUser = async () => {
+        setApiLoading(true);
         const response = await userSignup(signupCredentials);
         setInitialPwd(response?.data.initialPwd);
         if(response?.status === 201) {
+            setApiLoading(false);
             setIsRegisteredModalVisible(true);
         }
     }
@@ -107,12 +110,12 @@ const AddForms: FunctionComponent = () => {
           )}
           {currentStep === 2 && (
             <div>
-                <SignupCNI formData={signupCredentials} handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                <SignupCNI formData={signupCredentials}  handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
             </div>
           )}
           {currentStep === 3 && (
             <div>
-                <SignupFile formData={signupCredentials} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
+                <SignupFile formData={signupCredentials} apiLoading={apiLoading} setApiLoading={setApiLoading} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
                 <Modal title="Inscription réussie" 
                     open={isRegisteredModalVisible}
                     onOk={handleModalOk}

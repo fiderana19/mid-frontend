@@ -25,7 +25,7 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
         const major = dayjs(formData.date_cni);
         const mj = major.add(18, 'year')
 
-        if(dayjs(now) < mj) {
+        if(dayjs(now) < mj || formData.date_cni === '') {
             setDateError("Votre CIN doit être reçu après votre 18 ans !")
         }
         if(formData.cni.length !== 12) {
@@ -87,7 +87,7 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
             </div>
             <div className="flex justify-end gap-2">
                 <button onClick={handlePrev} className="border hover:border-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500">Précédent</button>
-                <button onClick={handleSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>S'incrire</button>
+                <button onClick={handleSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>Suivant</button>
             </div>  
         </div>
     )

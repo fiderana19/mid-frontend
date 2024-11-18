@@ -1,15 +1,14 @@
 import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import MidLogo from '../../../assets/image/mid-logo.jpg';
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { Modal } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
-import { okConfirmStyle, okDeleteStyle } from "../../../utils/ModalStyle";
+import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 
 const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
@@ -40,9 +39,12 @@ const AdminAccountView: React.FC = () => {
     }
 
     const handleDeleteConfirm = async () => {
+        setApiLoading(true);
         const response = await deleteUser(access_token,user._id);
-        console.log(response)
-        navigate("/admin/account");
+        if(response?.status === 200 || response?.status === 201) {
+            setApiLoading(false);
+            navigate("/admin/account");
+        }
     }
     //handling delete cancel
     const handleDeleteCancel = async () => {
@@ -53,10 +55,13 @@ const AdminAccountView: React.FC = () => {
     }   
     
     const handleValidateConfirm = async () => {
+        setApiLoading(true);
         const response = await validateUser(access_token,user._id);
-        fetchUser();
-        setIsValidateModalVisible(false)
-        console.log(response)
+        if(response?.status === 200 || response?.status === 201) {
+            fetchUser();
+            setApiLoading(false);
+            setIsValidateModalVisible(false)
+        }
     }
     //handling delete cancel
     const handleValidateCancel = async () => {
@@ -175,30 +180,58 @@ const AdminAccountView: React.FC = () => {
                         }
                     </div>
                 </div>
+                <Modal title="Validation du compte" 
+                    open={isValidateModalVisible}
+                    onOk={handleValidateConfirm}
+                    onClose={handleValidateCancel}
+                    footer={null}
+                >
+                    <div>
+                        <WarningFilled className='mr-2 text-green-500 text-xl' />  
+                        Êtes-vous sûr de vouloir valider ce demande d'audience ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={handleValidateCancel}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleValidateConfirm}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Valider</div>
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
                 <Modal title="Suppression du compte" 
                     open={isDeleteModalVisible}
                     onOk={handleDeleteConfirm}
                     onCancel={handleDeleteCancel}
-                    okButtonProps={{style: okDeleteStyle}}
-                    okText="Supprimer"
-                    cancelText="Annuler"
+                    footer={null}
                 >
                     <div>
-                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
-                    Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
-                    </div>
-                </Modal>
-                <Modal title="Validation du compte" 
-                    open={isValidateModalVisible}
-                    onOk={handleValidateConfirm}
-                    onCancel={handleValidateCancel}
-                    okButtonProps={{style: okConfirmStyle}}
-                    okText="Valider"
-                    cancelText="Annuler"
-                >
-                    <div>
-                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
-                    Êtes-vous sûr de vouloir valider ce compte de citoyen ?
+                        <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                        Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={handleDeleteCancel}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleDeleteConfirm}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Supprimer</div>
+                            </button>
+                        </div>
                     </div>
                 </Modal>
             </div>

@@ -3,14 +3,14 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "antd";
-import { CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
-import { okConfirmStyle, okDeleteStyle } from "../../../utils/ModalStyle";
 
 const AdminRequestView: React.FC = () => {
     const [request, setRequest] = useState<any>();
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -39,10 +39,13 @@ const AdminRequestView: React.FC = () => {
     }
 
     const handleDenyConfirm = async () => {
+        setApiLoading(true);
         const response = await denyRequest(access_token,request._id);
-        console.log(response)
-        setIsDenyModalVisible(false)
-        fetchRequest()
+        if(response?.status === 200 || response?.status === 201) {
+            fetchRequest();
+            setApiLoading(false);
+            setIsDenyModalVisible(false);
+        }
     }
     //handling delete cancel
     const handleDenyCancel = async () => {
@@ -53,11 +56,14 @@ const AdminRequestView: React.FC = () => {
     }   
     
     const handleValidateConfirm = async () => {
+        setApiLoading(true);
         const response = await validateRequest(access_token,request._id);
-        fetchRequest();
-        setIsValidateModalVisible(false)
-        console.log(response)
-        navigate(`/admin/organize/audience/${reqestId}`)
+        if(response?.status === 200 || response?.status === 201) {
+            fetchRequest();
+            setApiLoading(false);
+            setIsValidateModalVisible(false);
+            navigate(`/admin/organize/audience/${reqestId}`)    
+        }
     }
     //handling delete cancel
     const handleValidateCancel = async () => {
@@ -183,26 +189,54 @@ const AdminRequestView: React.FC = () => {
                     open={isDenyModalVisible}
                     onOk={handleDenyConfirm}
                     onCancel={handleDenyCancel}
-                    okButtonProps={{style: okDeleteStyle}}
-                    okText="Refuser"
-                    cancelText="Annuler"
+                    footer={null}
                 >
                     <div>
-                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
-                    Êtes-vous sûr de vouloir refuser ce demande d'audience ?
+                        <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                        Êtes-vous sûr de vouloir refuser ce demande d'audience ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={handleDenyCancel}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleDenyConfirm}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Refuser</div>
+                            </button>
+                        </div>
                     </div>
                 </Modal>
-                <Modal title="Validation d'une demande" 
+                <Modal title="Approbation d'une demande" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
                     onCancel={handleValidateCancel}
-                    okButtonProps={{style: okConfirmStyle}}
-                    okText="Valider"
-                    cancelText="Annuler"
+                    footer={null}
                 >
                     <div>
-                    <WarningFilled className='mr-2 text-green-500 text-xl' />  
-                    Êtes-vous sûr de vouloir valider ce demande d'audience ?
+                        <WarningFilled className='mr-2 text-green-500 text-xl' />  
+                        Êtes-vous sûr de vouloir approuver ce demande d'audience ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={handleValidateCancel}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleValidateConfirm}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Approuver</div>
+                            </button>
+                        </div> 
                     </div>
                 </Modal>
             </div>

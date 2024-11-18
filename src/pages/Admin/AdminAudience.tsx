@@ -3,12 +3,13 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, LoadingOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { Dropdown, MenuProps, Modal } from "antd";
 import { okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [selectedAudience, setSelectedAudience] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
@@ -74,11 +75,14 @@ function AdminAudience() {
     ];
 
     const handleCancelAudienceConfirm = async () => {
+        setApiLoading(true);
         if(selectedAudience) {
             const response = await audienceCancel(access_token,selectedAudience);
-            console.log(response);
-            fetchAllAudience();
-            setIsCancelModalVisible(false);
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAllAudience();
+                setApiLoading(false);
+                setIsCancelModalVisible(false);    
+            }
         }
     }
 
@@ -157,13 +161,27 @@ function AdminAudience() {
                             open={isCancelModalVisible}
                             onOk={handleCancelAudienceConfirm}
                             onCancel={() => {setIsCancelModalVisible(false)}}
-                            okButtonProps={{style: okDeleteStyle}}
-                            okText="Confirmer"
-                            cancelText="Annuler"
+                            footer={null}
                         >
                             <div>
-                            <WarningFilled className='mr-2 text-red-500 text-xl' />  
-                            Êtes-vous sûr de vouloir annuler cette audience ?
+                                <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                                Êtes-vous sûr de vouloir annuler cette audience ?
+                                <div className='flex justify-end gap-2'>
+                                    <button 
+                                        onClick={() => {setIsCancelModalVisible(false)}}
+                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                    >   
+                                        Annuler
+                                    </button>
+                                    <button 
+                                        onClick={handleCancelAudienceConfirm}
+                                        disabled={ apiLoading ? true : false }
+                                        className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                    >   
+                                        { apiLoading && <LoadingOutlined /> }
+                                        <div>Confirmer</div>
+                                    </button>
+                                </div>
                             </div>
                         </Modal>
                 </div>

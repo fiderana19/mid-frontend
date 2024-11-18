@@ -25,7 +25,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
         const major = dayjs(formData.date_naissance);
         const mj = major.add(18, 'year')
     
-        if(dayjs(now) < mj) {
+        if(dayjs(now) < mj || formData.date_naissance === '') {
             setBirthError("Vous devez au moins avoir 18 ans !")
         }
 

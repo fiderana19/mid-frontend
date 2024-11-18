@@ -3,9 +3,8 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
-import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, FilterOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { okDeleteStyle, okConfirmStyle } from '../../utils/ModalStyle';
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -15,6 +14,7 @@ function AdminAccount() {
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [searchRef, setSearchRef] = useState<string>('');
 
     useEffect(() => {
@@ -103,11 +103,14 @@ function AdminAccount() {
       ];
       
     const handleValidateConfirm = async () => {
+        setApiLoading(true);
         if(selectedAcount) {
             const response = await validateUser(access_token,selectedAcount);
-            setIsValidateModalVisible(false);
-            fetchAccount();
-            console.log(response)    
+            if(response?.status === 200 || response?.status === 201) {
+                setIsValidateModalVisible(false);
+                fetchAccount();    
+                setApiLoading(false);
+            }
         }
     }
     //handling delete cancel
@@ -116,11 +119,14 @@ function AdminAccount() {
     }
 
     const handleDeleteConfirm = async () => {
+        setApiLoading(true);
         if(selectedAcount) {
             const response = await deleteUser(access_token,selectedAcount);
-            console.log(response) 
-            fetchAccount();
-            setIsDeleteModalVisible(false);
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAccount();
+                setApiLoading(false);
+                setIsDeleteModalVisible(false);    
+            }
         }
     }
     //handling delete cancel
@@ -261,27 +267,55 @@ function AdminAccount() {
             <Modal title="Validation du compte" 
                 open={isValidateModalVisible}
                 onOk={handleValidateConfirm}
-                onCancel={handleValidateCancel}
-                okButtonProps={{style: okConfirmStyle}}
-                okText="Valider"
-                cancelText="Annuler"
+                onClose={handleValidateCancel}
+                footer={null}
             >
                 <div>
                     <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce demande d'audience ?
+                    <div className='flex justify-end gap-2'>
+                        <button 
+                            onClick={handleValidateCancel}
+                            className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >   
+                            Annuler
+                        </button>
+                        <button 
+                            onClick={handleValidateConfirm}
+                            disabled={ apiLoading ? true : false }
+                            className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                        >   
+                            { apiLoading && <LoadingOutlined /> }
+                            <div>Valider</div>
+                        </button>
+                    </div>
                 </div>
             </Modal>
             <Modal title="Suppression du compte" 
                 open={isDeleteModalVisible}
                 onOk={handleDeleteConfirm}
                 onCancel={handleDeleteCancel}
-                okButtonProps={{style: okDeleteStyle}}
-                okText="Supprimer"
-                cancelText="Annuler"
+                footer={null}
             >
                 <div>
                     <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
+                    <div className='flex justify-end gap-2'>
+                        <button 
+                            onClick={handleDeleteCancel}
+                            className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >   
+                            Annuler
+                        </button>
+                        <button 
+                            onClick={handleDeleteConfirm}
+                            disabled={ apiLoading ? true : false }
+                            className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                        >   
+                            { apiLoading && <LoadingOutlined /> }
+                            <div>Supprimer</div>
+                        </button>
+                    </div>
                 </div>
             </Modal>
         </>

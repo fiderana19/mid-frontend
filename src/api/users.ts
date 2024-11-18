@@ -45,7 +45,7 @@ export const validateUser = async (token: string | null, id: string) => {
       }
     })
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la validation de l'utilisateur :", error)
   }
@@ -129,7 +129,7 @@ export const deleteUser = async (token: string | null, id: string) => {
       }
     })
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la suppression de l'utilisateur :", error)
   }

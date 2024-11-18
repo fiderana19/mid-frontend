@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseOutlined, DownOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, MenuOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Select } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
@@ -14,7 +14,8 @@ const { Option } = Select;
 function AdminOrganizeAudience() {
     const [request, setRequest] = useState<any>();
     const [audienceCredentials, setAudienceCredentials] = useState<any>({ user: '', availability: '', request: '' });
-    let [availabilities, setAvailabilities] = useState<any[]>([]);
+    let [apiLoading, setApiLoading] = useState<boolean>(false);
+    let [selectError, setSelectError] = useState<string>('');
     let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
     const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
     const [access_token, setAccessToken] = useState<string | null>(
@@ -31,61 +32,37 @@ function AdminOrganizeAudience() {
         }
         fetchRequest();
         fetchAvailability();
-        fetchAvailability();
-        let count: number = 0;
-        if(count < 2) {
-        const intervalId = setInterval(() => {
-            fetchFilterAvailability();
-          }, 1000);
-      
-          count += 1;
-          // Nettoyer l'intervalle lors du démontage
-          return () => clearInterval(intervalId);
-        }
-
     }, [])
     async function fetchRequest() {
         const token = localStorage.getItem('token');
 
         if(reqestId && token) {
-            console.log("ito le id", reqestId)
-
             const response = await getRequestById(token,reqestId);
 
             if(response) {
-                console.log("666",response)
                 setRequest(response);
-                console.log("777",response);
                 setAudienceCredentials({
                     ...audienceCredentials,
                     user: response.user,
                     request: response._id,
                 }); 
             }
-             
         }
     }
 
     async function fetchAvailability() {
         const token = localStorage.getItem('token');
-        if(token) {
+        if(reqestId && token) {
             const response = await getAllFreeAvailability(token);
-            if(response) {
-                setAvailabilities(response.data);
-            }
-        }
-    }
-
-    async function fetchFilterAvailability() {
-        const availability_pref: any = availabilities.filter((item: any) => {
-            if(request) {
+            const req = await getRequestById(token,reqestId);
+            const availability_pref: any = response?.data.filter((item: any) => {
                 return (
-                    dayjs(item.date_initial) >= dayjs(request?.debut_initial) && 
-                    dayjs(item.date_initial) <= dayjs(request?.end_initial)
-                )    
-            }
-        })  
-        setAvailabilitiesPref(availability_pref);
+                    dayjs(item.date_initial) >= dayjs(req?.debut_initial) && 
+                    dayjs(item.date_initial) <= dayjs(req?.end_initial)
+                )            
+            })  
+            setAvailabilitiesPref(availability_pref);
+        }
     }
 
       //handle select change
@@ -98,11 +75,17 @@ function AdminOrganizeAudience() {
     };
 
     const handleOrganizeSubmit = async () => {
-        console.log("crevyv", audienceCredentials);
-        const response = await audienceCreate(access_token,audienceCredentials);
-        if(response?.status === 200 || response?.status === 201) {
-            console.log("619",response)
-            navigate("/admin/audience");
+        setSelectError('');
+        if(!selectedAvailabilityId) {
+            setSelectError("Veuillez selectionner un disponibilité !")
+        }
+        if(selectedAvailabilityId) {
+            setApiLoading(true);
+            const response = await audienceCreate(access_token,audienceCredentials);
+            if(response?.status === 200 || response?.status === 201) {
+                setApiLoading(false);
+                navigate("/admin/audience");
+            }    
         }
     }
     
@@ -120,7 +103,7 @@ function AdminOrganizeAudience() {
                         <div className="pl-10 px-5 pt-16 pb-5 w-full">
                             <div className="font-bold text-lg mb-6">Organiser une audience</div>
                             {
-                                request && 
+                                request && availabilities_pref && 
                                     <div>
                                     <div className="gap-2 flex justify-between">
                                         <div className="w-1/4">
@@ -200,7 +183,7 @@ function AdminOrganizeAudience() {
                                                 <Select
                                                     value={selectedAvailabilityId}
                                                     onChange={handleSelectChange}
-                                                    className='w-full my-1'
+                                                    className={ selectError ? 'w-full my-1 border border-red-500 rounded' : 'w-full my-1'  }
                                                     showSearch
                                                     optionFilterProp="children"
                                                     filterOption={(input: any, option: any) =>
@@ -209,8 +192,8 @@ function AdminOrganizeAudience() {
                                                 >
                                                     <Option value="">Sélectionnez un disponibilité</Option>
                                                     {
-                                                    availabilities_pref.map((ava: any, index) => {
-                                                        if(availabilities.length < 1) {
+                                                       availabilities_pref && availabilities_pref.map((ava: any, index) => {
+                                                        if(availabilities_pref.length < 1) {
                                                             return(
                                                                 <Option key={index} value={ava._id}>
                                                                     <div>
@@ -232,8 +215,16 @@ function AdminOrganizeAudience() {
                                                     })
                                                     }
                                                 </Select>
+                                                {selectError && <div className="text-left text-red-500 text-xs">{selectError}</div>}
                                                 <div className="flex justify-end mt-2">
-                                                    <button onClick={handleOrganizeSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' >Organiser</button>
+                                                    <button 
+                                                        onClick={handleOrganizeSubmit} 
+                                                        disabled={ apiLoading ? true : false }
+                                                        className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                                    >   
+                                                        { apiLoading && <LoadingOutlined /> }
+                                                        <div>Organiser</div>                                                    
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
