@@ -71,3 +71,21 @@ export const getAudienceChart = async (token: string |null) => {
       return error;
     }
 }
+
+export const getAudienceLast = async (token: string |null) => {
+  try {
+      const response = await axios({
+        method: 'get',
+        url: `${AudienceAPIUrl}/last`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error: any) {
+      console.error("Erreur lors de la recuperation de la derniere audience :", error)
+      return error;
+    }
+}
+
