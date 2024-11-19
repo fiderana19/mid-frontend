@@ -18,15 +18,15 @@ function AdminDashboard() {
                     <div className="z-40 fixed top-0 right-0 w-full">
                         <Header />
                     </div>
-                    <div className="pl-10 pr-5 pt-16 pb-5">
-                        <div className="flex gap-10">
-                            <div className="w-3/4">
+                    <div className="md:pl-10 sm:pl-24 md:pr-5 sm:pr-10 pl-4 pr-4 pt-16 pb-5 md:w-auto min-w-max ">
+                        <div className="md:flex block gap-5">
+                            <div className="lg:w-3/4 md:w-1/2 w-full">
                                 <div className="text-xl font-bold mb-3">Dashboard</div>
-                                <div className="flex justify-between gap-4">
-                                    <div className="w-1/2 h-80">
+                                <div className="lg:flex block justify-between gap-4 w-full">
+                                    <div className="lg:w-1/2 w-5/6 md:h-80 md:mx-0 mx-auto">
                                         <RequestChart />
                                     </div>
-                                    <div className="w-1/2 h-80">
+                                    <div className="lg:w-1/2 w-5/6 md:h-80 lg:my-0 my-4 md:mx-0 mx-auto">
                                         <AudienceChart />
                                     </div>
                                 </div>
@@ -35,7 +35,7 @@ function AdminDashboard() {
                                     <AudienceLast />
                                 </div>
                             </div>
-                            <div className="w-1/4 p-5 bg-white shadow-md border">
+                            <div className="lg:w-1/4 md:w-1/2 w-full p-5 md:my-0 my-4 bg-white shadow-md border">
                                 <div className="text-lg font-bold">CITOYENS</div>
                                 <AccountDashboard />
                                 <AccountLast />

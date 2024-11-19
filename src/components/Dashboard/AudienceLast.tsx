@@ -79,7 +79,7 @@ const AudienceLast: React.FunctionComponent = () => {
                                                 )
                                             } 
                                         </div>
-                                        <div>Organisé pour la date de <span className="font-latobold"> { audience?.availability_date } </span>  de <span className="font-latobold"> { audience?.availability_hour_debut } </span> à <span className="font-latobold"> { audience?.availability_hour_end } </span></div>
+                                        <div className="whitespace-normal">Organisé pour la date de <span className="font-latobold"> { audience?.availability_date } </span>  de <span className="font-latobold"> { audience?.availability_hour_debut } </span> à <span className="font-latobold"> { audience?.availability_hour_end } </span></div>
                                     </div>
                                 </div>
                     }

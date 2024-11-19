@@ -5,7 +5,7 @@ import {QrReader} from "react-qr-reader";
 import { useNavigate } from "react-router-dom";
 
 function AdminAudienceQRCode() {
-    const [data, setData] = useState<any>('No result');
+    const [data, setData] = useState<any>('Aucun QR Code scanné !');
     const navigate = useNavigate();
 
     const handleScan = (data: any) => {
@@ -17,7 +17,7 @@ function AdminAudienceQRCode() {
     
     return(
         <>
-            <div className="w-full flex min-h-screen">
+            <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
                     <AdminNavigation />
                 </div>
@@ -43,7 +43,7 @@ function AdminAudienceQRCode() {
                                 className="w-full"
                             />
                         </div>
-                        <div>{ data }</div>
+                        <div className="mx-auto max-w-max bg-white p-4 rounded shadow-md">{ data }</div>
                     </div>
                 </div>
             </div>

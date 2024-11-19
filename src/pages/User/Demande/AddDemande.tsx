@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
-import { UserOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, Select } from "antd";
 import { getWeekDates } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
@@ -101,7 +101,7 @@ const UserAddDemande: FunctionComponent = () => {
                                 placeholder="Saisir le motif..."
                                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                             />
-                            <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
+                            <InfoCircleOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                         </div>
                     </div>
                     <button onClick={handleRequestSubmit} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>SOUMETTRE</button>
