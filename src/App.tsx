@@ -25,6 +25,8 @@ import AdminAudienceView from "./pages/Admin/Audience/AdminAudienceView"
 import AdminAudienceReport from "./pages/Admin/Audience/AdminAudienceReport"
 import UserChangePassword from "./pages/User/Password/UserChangePassword"
 import UserEditDemande from "./pages/User/Demande/EditDemande"
+import AdminAudienceQRCode from "./pages/Admin/Audience/AdminAudienceQRCode"
+import AdminAudienceViewByQrCode from "./pages/Admin/Audience/AdminAudienceViewByQrCode"
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
             <Route path="home" element={<AdminHome />} />
             <Route path="demande/view/:id" element={<AdminRequestView />} />
             <Route path="demande" element={<AdminDemande />} />
+            <Route path="audience/qrcode" element={<AdminAudienceQRCode />} />
+            <Route path="audience/scanned/:id" element={<AdminAudienceViewByQrCode />} />
             <Route path="audience/view/:id" element={<AdminAudienceView />} />
             <Route path="audience/report/:id" element={<AdminAudienceReport />} />
             <Route path="audience" element={<AdminAudience />} />

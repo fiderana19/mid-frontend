@@ -2,8 +2,8 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, EditFilled, EyeOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, MenuProps, message, Modal } from "antd";
 
 function AdminAudience() {
@@ -11,6 +11,7 @@ function AdminAudience() {
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [selectedAudience, setSelectedAudience] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+    const navigate = useNavigate();
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -94,8 +95,17 @@ function AdminAudience() {
                         <Header />
                     </div>
                     <div className="pl-10 pr-5 py-16">
-                        <div className="flex justify-between">
-                            <div className="text-lg font-bold mb-6">LISTE DES AUDIENCES</div>
+                        <div className="flex justify-between items-center  mb-6">
+                            <div className="text-lg font-bold">LISTE DES AUDIENCES</div>
+                                <div className="flex items-center gap-1">
+                                <button 
+                                    className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-bold py-1 px-3 rounded items-center gap-1'
+                                    onClick={() => navigate('/admin/audience/qrcode')}
+                                >
+                                    <QrcodeOutlined />
+                                    <div className="">Scanner un QR Code</div>
+                                </button>
+                            </div>
                         </div>
                         <table className='min-w-full divide-y divide-gray-200'>
                             <thead>
@@ -103,6 +113,7 @@ function AdminAudience() {
                                     <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom(s)</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CNI</th>
+                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Ref</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Type</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Date</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Status</th>
@@ -119,6 +130,7 @@ function AdminAudience() {
                                                 </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_cni }  </td>
+                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.ref_audience }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_type }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   

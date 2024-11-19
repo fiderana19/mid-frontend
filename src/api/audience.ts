@@ -34,6 +34,22 @@ export const getAudienceById = async (token: string | null, id:string) => {
   }
 }
 
+export const getAudienceByRef = async (token: string | null, id:string) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${AudienceAPIUrl}/ref/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la recuperation de l'audience :", error)
+  }
+}
+
 export const getAudienceByUser = async (token: string | null, id:string) => {
   try {
     const response = await axios({

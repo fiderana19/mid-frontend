@@ -30,7 +30,7 @@ function UserAudience() {
     return(
         <div className="w-full min-h-screen bg-four">
             <UserNavigation />
-            <div className="pt-16 px-20">
+            <div className="pt-16 sm:px-20 px-4">
                 <div className="text-lg font-latobold my-4">LISTE DE VOS AUDIENCES</div>
                 <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
                     {
