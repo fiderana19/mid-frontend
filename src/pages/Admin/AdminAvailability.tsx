@@ -1,7 +1,7 @@
-import { DatePicker, Modal, TimePicker } from "antd";
+import { DatePicker, Dropdown, MenuProps, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckOutlined, CloseCircleFilled, CloseOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
@@ -11,11 +11,14 @@ import { okConfirmStyle, okDeleteStyle } from "../../utils/ModalStyle";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
+    const [filteredAvailabilities, setFilteredAvailabilities] = useState<any[]>([]);
     const [createAvailabilityCredentials, setCreateAvailabilityCredentials] = useState<CreateAvailabilityInterface>({date_availability: '', hour_debut: '', hour_end: ''});
     const [isAddAvailabilityModalVisible, setIsAddAvailabilityModalVisible] = useState<boolean>(false);
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
-    const [day, setDay] = useState<any>()
+    const [day, setDay] = useState<any>();
+    const [filterRef, setFilterRef] = useState<boolean>(false);
+    const [filterText, setFilterText] = useState<string>('');
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     )
@@ -90,6 +93,44 @@ function AdminAvailability() {
         }
     };
 
+    const filter: MenuProps['items'] = [
+        {
+          label:  <div onClick={() => filterAvailabilities('Libre')} className="px-4">
+                    Libre                    
+                    </div>,
+          key: '0',
+        },
+        {
+            label:  <div onClick={() => filterAvailabilities('Occupé')} className="px-4">
+                      Occupé                    
+                    </div>,
+            key: '1',
+        },
+        {
+            label:  <div onClick={() => filterAvailabilities('Annulé')} className="px-4">
+                      Annulé                    
+                    </div>,
+            key: '2',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
+                      Normal                    
+                    </div>,
+            key: '3',
+        },
+    ];
+
+    async function filterAvailabilities (filter: string) {
+        setFilterRef(true);
+        setFilterText(filter);
+        const acc = availabilities.filter((availability: any) => availability.status_availability[0] === filter);
+        console.log(acc)
+        setFilteredAvailabilities(acc);
+    }
+
     const handleAddAvailabilitySubmit = async () => {
         console.log("reto redential", createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
@@ -124,12 +165,28 @@ function AdminAvailability() {
                         <Header />
                     </div>
                     <div className="pl-10 pr-5 py-16 min-h-screen bg-four">
-                        <div className="flex justify-between items-center">
-                            <div className="text-lg font-bold mb-6">DISPONIBILITE DU MINISTRE</div>
-                            <button className="items-center flex gap-2 bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-bold py-1 my-4 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
-                                <PlusOutlined />
-                                <span>Nouvelle disponibilité</span>
-                            </button>
+                        <div className="flex justify-between items-center my-4">
+                            <div className="text-lg font-latobold">DISPONIBILITE DU MINISTRE</div>
+                            <div className="flex items-center gap-1">
+                                <button className="items-center flex gap-2 bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-latobold py-1 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
+                                    <PlusOutlined />
+                                    <span>Nouvelle disponibilité</span>
+                                </button>
+                                <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
+                                    <a onClick={(e) => {e.preventDefault()}}>
+                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
+                                            <FilterOutlined className="text-md mr-1"/>
+                                            {
+                                                (filterRef && filterText) ?
+                                                <div className="min-w-max"> {filterText} </div>
+                                                :
+                                                <div className="min-w-max">Filtrer</div>
+                                            }
+                                            <DownOutlined />
+                                        </button>
+                                    </a>
+                                </Dropdown>
+                            </div>
                         </div>
                         <div className="w-full">
                             <div className="gap-2">
@@ -140,11 +197,54 @@ function AdminAvailability() {
                                             <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Heure debut</th>
                                             <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Heure fin</th>
                                             <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Status</th>
-                                            <th className='px-1 py-3 max-w-max bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider text-center'>fibi</th>
+                                            <th className='px-1 py-3 max-w-max bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider text-center'></th>
                                         </tr>
                                     </thead> 
                                 <tbody className='bg-white divide-y divide-gray-200'>
                                     {
+                                        filterRef ? 
+                                        filteredAvailabilities && filteredAvailabilities.map((availability: any, index: any) => {
+                                            return ( 
+                                                <tr key={index}>
+                                                <td className='md:px-6 pr-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'> { availability.date_availability } </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
+                                                <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
+                                                {
+                                                    availability.status_availability[0] === "Occupé" ? 
+                                                    <div className="rounded text-blue-500 flex gap-2 text-xs">
+                                                        <WarningOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>
+                                                    : (
+                                                        availability.status_availability[0] === "Libre" ?
+                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
+                                                        <CheckOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>                                                        
+                                                    :
+                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
+                                                        <CloseOutlined />
+                                                        <div>{ availability.status_availability }</div>  
+                                                    </div>                                                    
+                                                    )
+                                                }    
+                                                </td>
+                                                <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
+                                                    {
+                                                        availability.status_availability[0] === "Annulé" ?
+                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                            <CloseCircleFilled /> Annuler 
+                                                        </button>
+                                                        :
+                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                            <CloseCircleFilled /> Annuler 
+                                                        </button>
+                                                    }
+                                                </td>
+                                            </tr>)
+                                        })
+                                        :
                                         availabilities && availabilities.map((availability: any, index: any) => {
                                             return ( 
                                                 <tr key={index}>

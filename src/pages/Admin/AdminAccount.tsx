@@ -14,6 +14,7 @@ function AdminAccount() {
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
+    const [filterText, setFilterText] = useState<string>('');
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [searchRef, setSearchRef] = useState<string>('');
 
@@ -33,8 +34,9 @@ function AdminAccount() {
         }
     }
 
-    async function filterAccounts (filter: boolean) {
+    async function filterAccounts (filter: boolean, text: string) {
         setFilterRef(true);
+        setFilterText(text);
         const acc = accounts.filter(accounts => accounts.validation === filter);
         setFilteredAccounts(acc);
     }
@@ -78,13 +80,13 @@ function AdminAccount() {
     
       const filter: MenuProps['items'] = [
         {
-          label:  <div onClick={() => filterAccounts(true)} className="px-4">
+          label:  <div onClick={() => filterAccounts(true, 'Validé')} className="px-4">
                     Validé                    
                     </div>,
           key: '0',
         },
         {
-            label:  <div onClick={() => filterAccounts(false)} className="px-4">
+            label:  <div onClick={() => filterAccounts(false, 'Non validé')} className="px-4">
                       Non validé                    
                     </div>,
             key: '1',
@@ -155,14 +157,19 @@ function AdminAccount() {
                     </div>
                     <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center my-4">
-                            <div className="text-lg font-bold">LISTE DES CITOYENS INSCRITS</div>
+                            <div className="text-lg font-latobold">LISTE DES CITOYENS INSCRITS</div>
                             <div className="flex items-center gap-1">
-                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CNI..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
+                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
                                 <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
                                     <a onClick={(e) => {e.preventDefault()}}>
-                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
+                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
                                             <FilterOutlined className="text-md mr-1"/>
-                                            <div className="">Filtrer</div>
+                                            {
+                                                (filterRef && filterText) ? 
+                                                <div className="min-w-max">{filterText}</div>
+                                                :
+                                                <div className="min-w-max">Filtrer</div>
+                                            }
                                             <DownOutlined />
                                         </button>
                                     </a>
@@ -174,7 +181,7 @@ function AdminAccount() {
                                 <tr>
                                     <th className='md:px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom(s)</th>
-                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CNI</th>
+                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CIN</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Mail</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Creation</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Validation</th>

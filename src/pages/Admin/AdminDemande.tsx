@@ -15,6 +15,7 @@ function AdminDemande() {
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const navigate = useNavigate();
     const [filterRef, setFilterRef] = useState<boolean>(false);
+    const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
@@ -84,7 +85,7 @@ function AdminDemande() {
         },
         {
             label:  <div onClick={() => filterAccounts('Accepté')} className="px-4">
-                      Approuvé                    
+                      Accepté                    
                     </div>,
             key: '1',
         },
@@ -107,6 +108,7 @@ function AdminDemande() {
 
     async function filterAccounts (filter: string) {
         setFilterRef(true);
+        setFilterText(filter);
         const acc = requests.filter(requests => requests.status_request[0] === filter);
         console.log(acc)
         setFilteredRequests(acc);
@@ -171,15 +173,20 @@ function AdminDemande() {
                         <Header />
                     </div>
                     <div className="pl-10 pr-5 py-16">
-                        <div className="flex justify-between items-center">
-                            <div className="text-lg font-bold mb-6">LISTE DES DEMANDES D'AUDIENCES</div>
+                        <div className="flex justify-between items-center mt-4 mb-6">
+                            <div className="text-lg font-latobold ">LISTE DES DEMANDES D'AUDIENCES</div>
                             <div className="flex items-center gap-1">
-                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CNI..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
+                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
                                 <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
                                     <a onClick={(e) => {e.preventDefault()}}>
-                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-bold py-1 px-3 rounded items-center gap-1'>
+                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
                                             <FilterOutlined className="text-md mr-1"/>
-                                            <div className="">Filtrer</div>
+                                            {
+                                                (filterRef && filterText) ?
+                                                <div className="min-w-max"> {filterText} </div>
+                                                :
+                                                <div className="min-w-max">Filtrer</div>
+                                            }
                                             <DownOutlined />
                                         </button>
                                     </a>
@@ -191,7 +198,7 @@ function AdminDemande() {
                                 <tr>
                                     <th className='md:px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Nom et prenom(s)</th>
-                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CNI</th>
+                                    <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>CIN</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Type</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Date de soumission</th>
                                     <th className='md:px-6 px-2 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'>Semaine preferé</th>
