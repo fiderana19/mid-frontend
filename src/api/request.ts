@@ -18,6 +18,22 @@ export const getAllRequest = async (token: string | null) => {
     }
 }
 
+export const getNotOrganizedRequest = async (token: string | null) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${RequestAPUrl}/fail`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la recupeartion des demandes :", error)
+  }
+}
+
 export const getRequestById = async (token: string | null, id: string) => {
   try {
     const response = await axios({

@@ -1,11 +1,24 @@
-import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, HomeFilled, HomeOutlined, PieChartFilled, PieChartOutlined, SnippetsFilled, SnippetsOutlined, UserOutlined } from "@ant-design/icons";
+import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, DownOutlined, HomeFilled, HomeOutlined, PieChartFilled, PieChartOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import MidProfile from "../MidProfile";
 import MidCopyright from "../Midopyright";
+import { useEffect, useState } from "react";
 
 
 function AdminNavigation() {
     const location = useLocation();
+    const [isFailRequest, setIsFailRequest] = useState<boolean>(false);
+
+    useEffect(() => {
+
+    }, [])
+    async function setRequestDropdown() {
+        if(isFailRequest) {
+            setIsFailRequest(false)
+        } else {
+            setIsFailRequest(true)
+        }
+    }
 
     return(
         <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-second text-center">
@@ -21,8 +34,25 @@ function AdminNavigation() {
                     <div className={location.pathname === "/admin/demande" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/demande" ? <SnippetsFilled className="md:mr-0 mr-3" /> : <SnippetsOutlined className="md:mr-0 mr-3" />}
                         <div className="md:block hidden">Demande</div>
+                        <button onClick={setRequestDropdown}>
+                            {
+                                isFailRequest ?
+                                <UpOutlined className="text-xs p-1 hover:bg-gray-400 transition-opacity rounded-full" />
+                                :
+                                <DownOutlined className="text-xs p-1 hover:bg-gray-400 transition-opacity rounded-full" />
+                            }
+                        </button>
                     </div>
                 </Link>
+                {
+                    (isFailRequest || (location.pathname === "/admin/demande/notorganized")) &&
+                        <Link to="/admin/demande/notorganized">
+                            <div className={location.pathname === "/admin/demande/notorganized" ? "flex gap-2 font-latobold py-2 pl-8 pr-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 pl-8 pr-4 hover:bg-four rounded transition-colors" } >
+                                {location.pathname === "/admin/demande/notorganized" ? <SnippetsFilled className="md:mr-0 mr-3" /> : <SnippetsOutlined className="md:mr-0 mr-3" />}
+                                <div className="md:block hidden">Anomalie</div>
+                            </div>
+                        </Link>
+                }
                 <Link to="/admin/audience">
                     <div className={location.pathname === "/admin/audience" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/audience" ? <ContactsFilled className="md:mr-0 mr-3" /> : <ContactsOutlined className="md:mr-0 mr-3" />}

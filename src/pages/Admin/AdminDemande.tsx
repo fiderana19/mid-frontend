@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
+import { denyRequest, getAllRequest, getNotOrganizedRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
@@ -31,6 +31,8 @@ function AdminDemande() {
 
     async function fetchUserRequest () {
         const token = localStorage.getItem('token');
+        const req = getNotOrganizedRequest(token);
+
         if(token) {
             const response = await getAllRequest(token);
             if(response) {

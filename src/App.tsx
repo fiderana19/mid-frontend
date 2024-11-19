@@ -27,6 +27,7 @@ import UserChangePassword from "./pages/User/Password/UserChangePassword"
 import UserEditDemande from "./pages/User/Demande/EditDemande"
 import AdminAudienceQRCode from "./pages/Admin/Audience/AdminAudienceQRCode"
 import AdminAudienceViewByQrCode from "./pages/Admin/Audience/AdminAudienceViewByQrCode"
+import AdminFailRequest from "./pages/Admin/Request/AdminFailRequest"
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/admin" element={<RoleBasedRoute allowedRoles={["admin"]} />}>
             <Route path="home" element={<AdminHome />} />
             <Route path="demande/view/:id" element={<AdminRequestView />} />
+            <Route path="demande/notorganized" element={<AdminFailRequest />} />
             <Route path="demande" element={<AdminDemande />} />
             <Route path="audience/qrcode" element={<AdminAudienceQRCode />} />
             <Route path="audience/scanned/:id" element={<AdminAudienceViewByQrCode />} />
