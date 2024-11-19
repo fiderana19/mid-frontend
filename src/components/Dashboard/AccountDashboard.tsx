@@ -44,7 +44,7 @@ const AccountDashboard: React.FunctionComponent = () => {
                 </div>
                 <div className="flex items-center gap-2 my-4">
                     <UserOutlined className="text-lg p-2 bg-blue-400 border rounded-full border-blue-500" />
-                    <div className="text-3xl font-bold"> {stat.total_user} </div>
+                    <div className="text-3xl font-latobold"> {stat.total_user} </div>
                 </div>
                 <div className="flex">
                     <div className="flex gap-1 items-center w-1/2">

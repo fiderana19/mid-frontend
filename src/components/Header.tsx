@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined } from '@ant-design/icons'
+import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
@@ -64,7 +64,14 @@ function Header() {
                   </div>
               </Link>,
       children: [
-          { key: '10', label: 'Voir les anomalies' },
+          { key: '10', label: 
+            <Link to="/admin/demande/notorganized">
+              <div className={location.pathname === "/admin/demande/notorganized" ? "flex gap-2 font-latobold items-center" : "items-center flex gap-2" } >
+                  <ExceptionOutlined className="" />
+                  <div className="">Anomalie</div>
+              </div>
+          </Link>
+           },
         ],
     },
     {
@@ -119,9 +126,9 @@ function Header() {
               <a onClick={(e) => e.preventDefault()}>
                 {
                   user &&
-                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-latobold py-1 px-3 rounded items-center'>
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
                       <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
-                      <div className="sm:block hidden">{ user.email }</div>
+                      <div className="sm:block hidden font-latobold">{ user.email }</div>
                       <DownOutlined className="text-xs ml-2" />
                     </button>
                 }

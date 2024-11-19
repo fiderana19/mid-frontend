@@ -28,7 +28,7 @@ const AccountLast: React.FunctionComponent = () => {
                 <div className="flex justify-between items-center">
                     <div className="text-sm">Dernieres inscriptions</div>
                     <Link to="/admin/account">
-                        <div className="text-xs font-semibold hover:underline">VOIR TOUT</div>
+                        <div className="text-xs font-latobold hover:underline">VOIR TOUT</div>
                     </Link>
                 </div>
                 <div className="h-0.5 bg-red-500 my-2">
@@ -42,7 +42,7 @@ const AccountLast: React.FunctionComponent = () => {
                                     <div className="flex items-center gap-2">
                                         <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="bg-red-400 rounded w-10 h-10 object-cover" />
                                         <div>
-                                            <div className="text-md font-semibold">
+                                            <div className="text-md font-latobold">
                                                 { user.cni }
                                             </div>
                                             <div className="text-xs text-gray-600 ">

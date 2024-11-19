@@ -157,7 +157,7 @@ function AdminAccount() {
                     </div>
                     <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center my-4">
-                            <div className="text-lg font-latobold">LISTE DES CITOYENS INSCRITS</div>
+                            <div className="text-lg font-latobold">Les comptes des citoyens</div>
                             <div className="flex items-center gap-1">
                                 <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
                                 <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>

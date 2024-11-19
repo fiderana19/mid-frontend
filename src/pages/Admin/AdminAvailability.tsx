@@ -166,7 +166,7 @@ function AdminAvailability() {
                     </div>
                     <div className="pl-10 pr-5 py-16 min-h-screen bg-four">
                         <div className="flex justify-between items-center my-4">
-                            <div className="text-lg font-latobold">DISPONIBILITE DU MINISTRE</div>
+                            <div className="text-lg font-latobold">Les disponibilités du ministre</div>
                             <div className="flex items-center gap-1">
                                 <button className="items-center flex gap-2 bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-latobold py-1 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
                                     <PlusOutlined />

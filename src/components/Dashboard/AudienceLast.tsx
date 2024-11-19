@@ -43,7 +43,7 @@ const AudienceLast: React.FunctionComponent = () => {
                                             <div className="flex items-center gap-2">
                                                 <img src={`data:image/png;base64,${audience?.user_profile_photo}`} alt="" className="bg-red-400 rounded w-10 h-10 object-cover" />
                                                 <div>
-                                                    <div className="text-md font-semibold">
+                                                    <div className="text-md font-latobold">
                                                         { audience?.user_nom } { audience?.user_prenom }
                                                     </div>
                                                     <div className="text-xs text-gray-600 ">

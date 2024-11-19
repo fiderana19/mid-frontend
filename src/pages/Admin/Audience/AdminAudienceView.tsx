@@ -63,7 +63,7 @@ function AdminAudienceView() {
                             {
                                 audience && 
                                     <div>
-                                   <div className="font-bold text-lg mb-6">Audience du { audience.availability_date } </div>
+                                   <div className="font-latobold text-lg my-4">Audience du { audience.availability_date } </div>
                                     <div className="gap-2 flex justify-between">
                                         
                                         <div className="w-2/4" >
@@ -90,11 +90,11 @@ function AdminAudienceView() {
                                                     } 
                                                 </div>
                                                 <div className="mb-3 flex items-center gap-2">
-                                                    <div className="text-md font-bold">
+                                                    <div className="text-md font-latobold">
                                                         { audience.request_type }
                                                     </div>
                                                     
-                                                    <div>soumise le <span className="font-semibold"> {audience.request_creation}</span></div>
+                                                    <div>soumise le <span className="font-latobold"> {audience.request_creation}</span></div>
                                                 </div>
                                                     <div className="text-sm text-gray-500">Motif: </div>
                                                     <div className=""> { audience.request_object } </div>
@@ -103,29 +103,29 @@ function AdminAudienceView() {
                                         </div>
                                         <div className="w-1/4">
                                             <div className="border rounded p-5 bg-white shadow-md">
-                                                <div className="font-bold text-md mb-3">Organisation</div>
+                                                <div className="font-latobold text-md mb-3">Organisation</div>
                                                 <div className="text-sm text-gray-500">Cette audience est organisée pour :</div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">Date</div>
-                                                    <div className="font-semibold"> { audience.availability_date } </div>
+                                                    <div className="font-latobold"> { audience.availability_date } </div>
                                                 </div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">De</div>
-                                                    <div className="font-semibold"> { audience.availability_hour_debut } </div>
+                                                    <div className="font-latobold"> { audience.availability_hour_debut } </div>
                                                     <div className="text-sm text-gray-500">à</div>
-                                                    <div className="font-semibold"> { audience.availability_hour_end } </div>
+                                                    <div className="font-latobold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
                                             <div className="border rounded p-5 bg-white shadow-md my-2">
                                                 <div className="font-latobold text-md mb-3">Actions</div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">Reporter</div>
                                                     <button 
                                                         onClick={() => {navigate(`/admin/audience/report/${audience._id}`)}}
                                                         className='bg-yellow-500 hover:bg-yellow-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-yellow-500'
                                                     >Reporter</button>
                                                 </div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">Annuler</div>
                                                     <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500' onClick={() => setIsCancelModalVisible(true)}>Annuler</button>
                                                 </div>
@@ -134,7 +134,7 @@ function AdminAudienceView() {
                                         <div className="w-1/4">
                                             <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                                 <img src={`data:image/png;base64,${audience.user_profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
-                                                <div className="font-bold text-lg">{ audience.user_nom } { audience.user_prenom }</div>
+                                                <div className="font-latobold text-lg">{ audience.user_nom } { audience.user_prenom }</div>
                                                 <div className="flex justify-end px-8 py-2">
                                                 </div>
                                                 <div className="mx-auto w-full bg-gray-200 px-8 py-1">

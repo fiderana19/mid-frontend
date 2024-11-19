@@ -86,7 +86,7 @@ const AdminAccountView: React.FC = () => {
                             user && 
                             <div>
                                 <div className="flex justify-between items-center">
-                                    <div className="font-bold text-lg mb-6">Compte citoyen</div>
+                                    <div className="font-latobold text-lg mb-6">Compte citoyen</div>
                                     <div className="">
                                             <div className="flex justify-end gap-2">
                                             {
@@ -105,7 +105,7 @@ const AdminAccountView: React.FC = () => {
                                     <div className="w-1/4">
                                         <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
-                                            <div className="font-bold text-lg">{ user.nom } { user.prenom }</div>
+                                            <div className="font-latobold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
                                                 { user.validation ? 
                                                     <div className="flex gap-2 text-green-500 border px-2 rounded border-green-500">
@@ -136,42 +136,42 @@ const AdminAccountView: React.FC = () => {
                                     </div>
                                     <div className="w-1/4" >
                                         <div className="border rounded p-4 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Naissance</div>
-                                            <div className="flex justify-between">
+                                            <div className="font-latobold text-md mb-3">Naissance</div>
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de naissance</div>
-                                                <div className="font-semibold">{ user.date_naissance }</div>
+                                                <div className="font-latobold">{ user.date_naissance }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Lieu de naissance</div>
-                                                <div className="font-semibold">{ user.lieu_naissance }</div>
+                                                <div className="font-latobold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
                                         <div className="border rounded p-4 my-5 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Identité Nationale</div>
-                                            <div className="flex justify-between">
+                                            <div className="font-latobold text-md mb-3">Identité Nationale</div>
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">CIN</div>
-                                                <div className="font-semibold">{ user.cni }</div>
+                                                <div className="font-latobold">{ user.cni }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de délivrance</div>
-                                                <div className="font-semibold">{ user.date_cni }</div>
+                                                <div className="font-latobold">{ user.date_cni }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Lieu</div>
-                                                <div className="font-semibold">{ user.lieu_cni }</div>
+                                                <div className="font-latobold">{ user.lieu_cni }</div>
                                             </div>
                                         </div>
                                         <div className="border rounded p-4 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Info</div>
-                                            <div className="flex justify-between">
+                                            <div className="font-latobold text-md mb-3">Info</div>
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de création</div>
-                                                <div className="font-semibold">{ user.user_creation }</div>
+                                                <div className="font-latobold">{ user.user_creation }</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="w-2/4">
                                         <div className="border rounded p-5 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Carte d'identité nationale</div>
+                                            <div className="font-latobold text-md mb-3">Carte d'identité nationale</div>
                                             <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover" />
                                         </div>                                        
                                     </div>

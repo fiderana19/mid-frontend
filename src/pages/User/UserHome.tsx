@@ -32,7 +32,7 @@ const UserHome: FunctionComponent = () => {
                             <img src={`data:image/png;base64,${user.profile_photo}`} className="w-52 h-52 object-cover border mx-auto" />
                         </div>
                         <div className="sm:w-3/4 w-full sm:text-left text-center sm:my-0 my-4">
-                            <div className="text-5xl font-latobold whitespace-normal">
+                            <div className="text-5xl font-bold whitespace-normal">
                                 <Typewriter text={`Bonjour, ${user.nom} ${user.prenom}`} />
                             </div>
                         </div>

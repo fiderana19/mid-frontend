@@ -29,7 +29,7 @@ function UserDemande() {
             <UserNavigation />
             <div className="pt-16 sm:px-20 px-4">
                 <div className="sm:flex block justify-between items-center">
-                    <div className="text-lg font-latobold my-4">LISTE DE VOS DEMANDES D'AUDIENCE</div>
+                    <div className="text-lg font-latobold my-4">Les demandes d'audience</div>
                     <Link to="/user/add/demande" className="flex justify-end">
                         <button className='bg-gray-500 hover:bg-gray-700 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
                             <PlusOutlined />

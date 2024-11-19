@@ -30,7 +30,8 @@ const AdminRequestView: React.FC = () => {
 
         if(reqestId && token) {
             const response = await getRequestById(token,reqestId);
-            setRequest(response)    
+            setRequest(response);
+            console.log("eto", response)
         }
     }
 
@@ -82,7 +83,7 @@ const AdminRequestView: React.FC = () => {
                         <Header />
                     </div>
                     <div className="pl-10 px-5 pt-16 pb-5 w-full">
-                        <div className="font-bold text-lg mb-6">Demande d'audience</div>
+                        <div className="font-latobold text-lg mb-6">Demande d'audience</div>
                         {
                             request && 
                                 <div>
@@ -90,25 +91,25 @@ const AdminRequestView: React.FC = () => {
                                     <div className="w-1/4">
                                         <div className=" border pt-6 rounded text-center bg-white shadow-md">
                                             <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
-                                            <div className="font-bold text-lg">{ request.user_nom } { request.user_prenom }</div>
+                                            <div className="font-latobold text-lg">{ request.user_nom } { request.user_prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
                                             </div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                 <div className="flex gap-4 my-2">
                                                     <EnvironmentOutlined />
-                                                    <div>cni </div>
+                                                    <div>{request.user_cni} </div>
                                                 </div>
                                                 <div className="flex gap-4 my-2">
                                                     <EnvironmentOutlined />
-                                                    <div>user.adresse </div>
+                                                    <div>{request.user_adresse} </div>
                                                 </div>
                                                 <div className="flex gap-4 my-2">
                                                     <MailOutlined />
-                                                    <div> user.email </div>
+                                                    <div> {request.user_email} </div>
                                                 </div>
                                                 <div className="flex gap-4 my-2">
                                                     <PhoneOutlined />
-                                                    <div>+261 user.telephone </div>
+                                                    <div>+261 {request.user_telephone} </div>
                                                 </div>
                                             </div>
 
@@ -117,7 +118,7 @@ const AdminRequestView: React.FC = () => {
                                     <div className="w-2/4" >
                                         <div className="border rounded p-4 bg-white shadow-md">
                                             <div className="mb-3 flex items-center gap-2">
-                                                <div className="text-md font-bold">
+                                                <div className="text-md font-latobold">
                                                     { request.type_request }
                                                 </div>
                                                 <div >
@@ -149,19 +150,19 @@ const AdminRequestView: React.FC = () => {
                                     </div>
                                     <div className="w-1/4">
                                         <div className="border rounded p-5 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Soumission</div>
-                                                <div className="flex justify-between">
+                                            <div className="font-latobold text-md mb-3">Soumission</div>
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">Date de soumission</div>
-                                                    <div className="font-semibold"> { request.request_creation } </div>
+                                                    <div className="font-latobold"> { request.request_creation } </div>
                                                 </div>
                                         </div>
                                         <div className="border rounded my-2 p-5 bg-white shadow-md">
-                                            <div className="font-bold text-md mb-3">Préférence</div>
+                                            <div className="font-latobold text-md mb-3">Préférence</div>
                                             <div className="text-sm text-gray-500">Une audience demandé pour la semaine de :</div>
-                                            <div className="flex justify-between">
-                                                <div className="font-semibold"> { request.date_wanted_debut } </div>
+                                            <div className="flex justify-between items-center">
+                                                <div className="font-latobold"> { request.date_wanted_debut } </div>
                                                 <div className="text-sm text-gray-500">à</div>
-                                                <div className="font-semibold"> { request.date_wanted_end } </div>
+                                                <div className="font-latobold"> { request.date_wanted_end } </div>
                                             </div>
                                         </div>
                                         {

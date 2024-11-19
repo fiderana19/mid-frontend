@@ -31,17 +31,17 @@ function UserAudience() {
         <div className="w-full min-h-screen bg-four">
             <UserNavigation />
             <div className="pt-16 sm:px-20 px-4">
-                <div className="text-lg font-latobold my-4">LISTE DE VOS AUDIENCES</div>
+                <div className="text-lg font-latobold my-4">Les audiences</div>
                 <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
                     {
                         audiences && audiences.map((audience, index) => {
                             return(
                             <div key={index} className="rounded bg-gray-100 w-72  shadow-md">
-                                <div className="flex bg-gray-300 justify-between items-center p-2">
+                                <div className="flex bg-gray-300 justify-between items-center p-2 rounded">
                                     <div>
                                         <div className="flex gap-2">
                                             <div> Date : </div>
-                                            <div className=""> { audience.availability_date } </div>
+                                            <div className="font-latobold"> { audience.availability_date } </div>
                                         </div>
                                         <div className="flex gap-2">
                                             <div> De  </div>
@@ -53,7 +53,7 @@ function UserAudience() {
                                     <div className="flex justify-end">
                                     {
                                         audience.status_audience[0] === "Reporté" ? 
-                                            <div className="rounded bg-blue-500 px-2 flex gap-2 border border-yellow-600 text-xs">
+                                            <div className="rounded bg-blue-500 px-2 flex gap-2 border border-blue-600 text-xs">
                                                 <WarningOutlined />
                                                 <div>{ audience.status_audience }</div>  
                                             </div>
@@ -73,7 +73,7 @@ function UserAudience() {
                                     </div>
                                 </div>
                                 <div className="p-2">
-                                    <div className="text-lg"> { audience.request_type } </div>
+                                    <div className="text-lg font-latobold"> { audience.request_type } </div>
                                     <div>
                                         <span>Objet : </span>
                                         <span className="font-latobold"> { audience.request_object } </span>

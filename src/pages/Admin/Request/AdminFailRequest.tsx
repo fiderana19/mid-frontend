@@ -67,7 +67,7 @@ function AdminFailRequest() {
                     </div>
                     <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center mt-4 mb-6">
-                            <div className="text-lg font-latobold ">LES DEMANDES ACCEPTEES NON ORGANISEES</div>
+                            <div className="text-lg font-latobold ">Les demandes acceptés non oragnisées</div>
                             <div className="flex items-center gap-1">
                                 <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
                             </div>

@@ -21,7 +21,7 @@ function AdminDashboard() {
                     <div className="md:pl-10 sm:pl-24 md:pr-5 sm:pr-10 pl-4 pr-4 pt-16 pb-5 md:w-auto min-w-max ">
                         <div className="md:flex block gap-5">
                             <div className="lg:w-3/4 md:w-1/2 w-full">
-                                <div className="text-xl font-bold mb-3">Dashboard</div>
+                                <div className="text-xl font-latobold mb-3">Dashboard</div>
                                 <div className="lg:flex block justify-between gap-4 w-full">
                                     <div className="lg:w-1/2 w-5/6 md:h-80 md:mx-0 mx-auto">
                                         <RequestChart />
@@ -30,13 +30,13 @@ function AdminDashboard() {
                                         <AudienceChart />
                                     </div>
                                 </div>
-                                <div className="text-md font-bold mt-2">Dernière audience organisée</div>
+                                <div className="text-md font-latobold mt-2">Dernière audience organisée</div>
                                 <div className=" p-5 bg-white shadow-md border">
                                     <AudienceLast />
                                 </div>
                             </div>
                             <div className="lg:w-1/4 md:w-1/2 w-full p-5 md:my-0 my-4 bg-white shadow-md border">
-                                <div className="text-lg font-bold">CITOYENS</div>
+                                <div className="text-lg font-latobold">CITOYENS</div>
                                 <AccountDashboard />
                                 <AccountLast />
                             </div>

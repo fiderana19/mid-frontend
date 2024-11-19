@@ -54,7 +54,7 @@ function UserInfo() {
                                         </div>
                                         <div className="border rounded p-4 my-2 shadow-md bg-white">
                                             <div className="font-latobold text-md mb-3">Info</div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de création</div>
                                                 <div className="font-latobold">{ user.user_creation }</div>
                                             </div>
@@ -63,26 +63,26 @@ function UserInfo() {
                                     <div className="sm:w-2/4 w-full" >
                                         <div className="border rounded p-4 shadow-md bg-white">
                                             <div className="font-latobold text-md mb-3">Naissance</div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de naissance</div>
                                                 <div className="font-latobold">{ user.date_naissance }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Lieu de naissance</div>
                                                 <div className="font-latobold">{ user.lieu_naissance }</div>
                                             </div>
                                         </div>
                                         <div className="border rounded p-4 sm:my-5 my-2 shadow-md bg-white">
                                             <div className="font-latobold text-md mb-3">Identité Nationale</div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">CIN</div>
                                                 <div className="font-latobold">{ user.cni }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de délivrance</div>
                                                 <div className="font-latobold">{ user.date_cni }</div>
                                             </div>
-                                            <div className="flex justify-between">
+                                            <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Lieu</div>
                                                 <div className="font-latobold">{ user.lieu_cni }</div>
                                             </div>

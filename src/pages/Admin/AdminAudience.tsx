@@ -139,7 +139,7 @@ function AdminAudience() {
                     </div>
                     <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center my-4">
-                            <div className="text-lg font-latobold">LISTE DES AUDIENCES</div>
+                            <div className="text-lg font-latobold">Les audiences</div>
                                 <div className="flex items-center gap-1">
                                     <Input name="filter" type="text" className="h-8 py-1 " placeholder="Saisir le ref..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} />
                                     <button 

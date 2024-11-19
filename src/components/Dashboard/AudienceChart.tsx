@@ -41,7 +41,7 @@ const AudienceChart: React.FunctionComponent = () => {
 
     return(
         <div className="rounded border shadow-md bg-white  p-4 h-full">
-            <div className="text-lg font-bold">AUDIENCES</div>
+            <div className="text-lg font-latobold">AUDIENCES</div>
             <ReactApexChart 
                 options={chartData.options}  
                 series={chartData.series}

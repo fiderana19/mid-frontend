@@ -164,11 +164,11 @@ function AdminAudienceReport() {
                                             <div className="border rounded p-5">
                                                 <div className="font-bold text-md mb-3">Organisation</div>
                                                 <div className="text-sm text-gray-500">Cette audience est organisée pour :</div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">Date</div>
                                                     <div className="font-semibold"> { audience.availability_date } </div>
                                                 </div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-between items-center">
                                                     <div className="text-sm text-gray-500">De</div>
                                                     <div className="font-semibold"> { audience.availability_hour_debut } </div>
                                                     <div className="text-sm text-gray-500">à</div>
