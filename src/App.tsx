@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import Signup from "./pages/Signup"
 import UserHome from "./pages/User/UserHome"
-import AdminHome from "./pages/Admin/AdminHome"
 import UserDemande from "./pages/User/UserDemande"
 import UserAudience from "./pages/User/UserAudience"
 import UserInfo from "./pages/User/UserInfo"
@@ -28,6 +27,7 @@ import UserEditDemande from "./pages/User/Demande/EditDemande"
 import AdminAudienceQRCode from "./pages/Admin/Audience/AdminAudienceQRCode"
 import AdminAudienceViewByQrCode from "./pages/Admin/Audience/AdminAudienceViewByQrCode"
 import AdminFailRequest from "./pages/Admin/Request/AdminFailRequest"
+import AdminAudienceSearch from "./pages/Admin/Audience/AdminAudienceSearch"
 
 function App() {
   return (
@@ -50,10 +50,11 @@ function App() {
         </Route>
         {/* Admin routes */}
         <Route path="/admin" element={<RoleBasedRoute allowedRoles={["admin"]} />}>
-            <Route path="home" element={<AdminHome />} />
+            <Route path="home" element={<AdminDashboard />} />
             <Route path="demande/view/:id" element={<AdminRequestView />} />
             <Route path="demande/notorganized" element={<AdminFailRequest />} />
             <Route path="demande" element={<AdminDemande />} />
+            <Route path="audience/search" element={<AdminAudienceSearch />} />
             <Route path="audience/qrcode" element={<AdminAudienceQRCode />} />
             <Route path="audience/scanned/:id" element={<AdminAudienceViewByQrCode />} />
             <Route path="audience/view/:id" element={<AdminAudienceView />} />
@@ -61,7 +62,6 @@ function App() {
             <Route path="audience" element={<AdminAudience />} />
             <Route path="organize/audience/:id" element={<AdminOrganizeAudience />} />
             <Route path="availability" element={<AdminAvailability />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="account/view/:id" element={<AdminAccountView />} />
             <Route path="account" element={<AdminAccount />} />
             <Route path="info" element={<AdminInfo />} />

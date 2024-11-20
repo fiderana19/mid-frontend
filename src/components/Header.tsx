@@ -102,15 +102,6 @@ function Header() {
               </Link>,
     },
     {
-      key: '6',
-      label:  <Link to="/admin/dashboard">
-                  <div className={location.pathname === "/admin/dashboard" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
-                      <HomeOutlined className="" />
-                      <div className="">Dashboard</div>
-                  </div>
-              </Link>,
-    },
-    {
       type: 'divider',
     },
     {

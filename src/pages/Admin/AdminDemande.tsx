@@ -80,6 +80,12 @@ function AdminDemande() {
 
       const filter: MenuProps['items'] = [
         {
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
+                      Tout                    
+                    </div>,
+            key: '3',
+        },
+        {
           label:  <div onClick={() => filterAccounts('En attente')} className="px-4">
                     En attente                    
                     </div>,
@@ -96,15 +102,6 @@ function AdminDemande() {
                       Refusé                    
                     </div>,
             key: '2',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label:  <div onClick={() => setFilterRef(false)} className="px-4">
-                      Normal                    
-                    </div>,
-            key: '3',
         },
       ];
 
@@ -208,7 +205,7 @@ function AdminDemande() {
                                     <th className='px-1 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider'></th>
                                 </tr>
                             </thead> 
-                            <tbody className='bg-white divide-y divide-gray-200'>
+                            <tbody className='bg-white divide-y divide-gray-200 w-full'>
                                 {
                                     filterRef ? 
                                     filteredRequests && filteredRequests.map((request, index) => {
@@ -309,6 +306,17 @@ function AdminDemande() {
                                 }
                             </tbody>
                         </table>
+                        {                          
+                            (requests && requests.length < 1) &&
+                                <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                    <div className="text-center">
+                                        <CloseOutlined className="text-5xl" />
+                                        <div className="my-2">
+                                        Aucune demande
+                                        </div>
+                                    </div>
+                                </div>
+                        }
                     </div>
                 </div>
                 <Modal title="Refus d'une demande" 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckOutlined, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckOutlined, CloseCircleFilled, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
@@ -53,25 +53,34 @@ function AdminAudienceViewByQrCode() {
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4 bg-white shadow-md">
                                                 <div className="flex justify-end">
-                                                    {
-                                                        audience.status_audience[0] === "Reporté" ? 
-                                                            <div className="rounded bg-blue-200 px-2 border border-blue-500 flex gap-2 text-xs">
-                                                                <WarningOutlined />
-                                                                <div>{ audience.status_audience }</div>  
-                                                            </div>
+                                                { audience.status_audience[0] === "Fixé" ? 
+                                                    <div className="flex gap-2 text-blue-500">
+                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                    </div> 
+                                                    : (
+                                                        audience.status_audience[0] === "Reporté" ?
+                                                        <div className="flex gap-2 text-yellow-500">
+                                                            <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                        </div>
                                                         : (
-                                                                audience.status_audience[0] === "Fixé" ?
-                                                            <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
-                                                                <CheckOutlined />
-                                                                <div>{ audience.status_audience }</div>  
-                                                            </div>
-                                                        :
-                                                            <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
-                                                                <CloseOutlined />
-                                                                <div>{ audience.status_audience }</div>  
-                                                            </div>                                                    
+                                                                audience.status_audience[0] === "Classé" ?
+                                                                <div className="flex gap-2 text-green-500">
+                                                                    <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                </div>
+                                                                :
+                                                                (
+                                                                    audience.status_audience[0] === "Absent" ?
+                                                                    <div className="flex gap-2 text-gray-500">
+                                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className="flex gap-2 text-red-500">
+                                                                        <CloseCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                            )
                                                         )
-                                                    } 
+                                                    )
+                                                }     
                                                 </div>
                                                 <div className="mb-3 flex items-center gap-2">
                                                     <div className="text-md font-bold">

@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
-import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CloseCircleFilled, CloseOutlined, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 function AdminAccount() {
@@ -80,6 +80,12 @@ function AdminAccount() {
     
       const filter: MenuProps['items'] = [
         {
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
+                      Tout                    
+                    </div>,
+            key: '2',
+        },
+        {
           label:  <div onClick={() => filterAccounts(true, 'Validé')} className="px-4">
                     Validé                    
                     </div>,
@@ -90,15 +96,6 @@ function AdminAccount() {
                       Non validé                    
                     </div>,
             key: '1',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label:  <div onClick={() => setFilterRef(false)} className="px-4">
-                      Normal                    
-                    </div>,
-            key: '2',
         },
       ];
       
@@ -268,6 +265,17 @@ function AdminAccount() {
 
                             </tbody>
                         </table>
+                        {                          
+                            (accounts && accounts.length < 1) &&
+                                <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                    <div className="text-center">
+                                        <CloseOutlined className="text-5xl" />
+                                        <div className="my-2">
+                                        Aucun compte de citoyen
+                                        </div>
+                                    </div>
+                                </div>
+                        }
                     </div>
                 </div>
             </div>

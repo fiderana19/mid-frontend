@@ -95,6 +95,12 @@ function AdminAvailability() {
 
     const filter: MenuProps['items'] = [
         {
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
+                      Tout                    
+                    </div>,
+            key: '3',
+        },
+        {
           label:  <div onClick={() => filterAvailabilities('Libre')} className="px-4">
                     Libre                    
                     </div>,
@@ -111,15 +117,6 @@ function AdminAvailability() {
                       Annulé                    
                     </div>,
             key: '2',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label:  <div onClick={() => setFilterRef(false)} className="px-4">
-                      Normal                    
-                    </div>,
-            key: '3',
         },
     ];
 
@@ -212,7 +209,7 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                 {
                                                     availability.status_availability[0] === "Occupé" ? 
-                                                    <div className="rounded text-blue-500 flex gap-2 text-xs">
+                                                    <div className="rounded text-gray-500 flex gap-2 text-xs">
                                                         <WarningOutlined />
                                                         <div>{ availability.status_availability }</div>  
                                                     </div>
@@ -254,7 +251,7 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                 {
                                                     availability.status_availability[0] === "Occupé" ? 
-                                                    <div className="rounded text-blue-500 flex gap-2 text-xs">
+                                                    <div className="rounded text-gray-500 flex gap-2 text-xs">
                                                         <WarningOutlined />
                                                         <div>{ availability.status_availability }</div>  
                                                     </div>
@@ -289,6 +286,17 @@ function AdminAvailability() {
                                     }
                                 </tbody>
                                 </table>
+                                {                          
+                                    (availabilities && availabilities.length < 1) &&
+                                        <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                            <div className="text-center">
+                                                <CloseOutlined className="text-5xl" />
+                                                <div className="my-2">
+                                                Aucune disponiblité
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
                             </div>
                         </div>
                     </div>

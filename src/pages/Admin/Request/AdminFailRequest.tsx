@@ -137,6 +137,17 @@ function AdminFailRequest() {
                                 }
                             </tbody>
                         </table>
+                        {                          
+                            (requests && requests.length < 1) &&
+                                <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                    <div className="text-center">
+                                        <CloseOutlined className="text-5xl" />
+                                        <div className="my-2">
+                                        Aucune demande
+                                        </div>
+                                    </div>
+                                </div>
+                        }
                     </div>
                 </div>
             </div>

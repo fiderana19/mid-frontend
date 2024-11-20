@@ -3,7 +3,7 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, WarningFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 
 function AdminAudience() {
@@ -77,6 +77,12 @@ function AdminAudience() {
 
     const filter: MenuProps['items'] = [
         {
+            label:  <div onClick={() => setFilterRef(false)} className="px-4">
+                      Tout                    
+                    </div>,
+            key: '3',
+        },
+        {
           label:  <div onClick={() => filterAudiences('Fixé')} className="px-4">
                     Fixé                    
                     </div>,
@@ -93,15 +99,6 @@ function AdminAudience() {
                       Annulé                    
                     </div>,
             key: '2',
-        },
-        {
-            type: 'divider',
-        },
-        {
-            label:  <div onClick={() => setFilterRef(false)} className="px-4">
-                      Normal                    
-                    </div>,
-            key: '3',
         },
       ];
 
@@ -197,18 +194,31 @@ function AdminAudience() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
                                                 { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="flex gap-2 text-green-500">
+                                                    <div className="flex gap-2 text-blue-500">
                                                         <CheckCircleFilled /><div>{ audience.status_audience }</div>
                                                     </div> 
                                                     : (
                                                         audience.status_audience[0] === "Reporté" ?
-                                                        <div className="flex gap-2 text-blue-500">
+                                                        <div className="flex gap-2 text-yellow-500">
                                                             <CheckCircleFilled /><div>{ audience.status_audience }</div>
                                                         </div>
-                                                        :
-                                                        <div className="flex gap-2 text-red-500">
-                                                            <CloseCircleFilled /><div>{ audience.status_audience }</div>
-                                                        </div>
+                                                        : (
+                                                                audience.status_audience[0] === "Classé" ?
+                                                                <div className="flex gap-2 text-green-500">
+                                                                    <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                </div>
+                                                                :
+                                                                (
+                                                                    audience.status_audience[0] === "Absent" ?
+                                                                    <div className="flex gap-2 text-gray-500">
+                                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className="flex gap-2 text-red-500">
+                                                                        <CloseCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                            )
+                                                        )
                                                     )
                                                 }     
                                             </td>
@@ -241,18 +251,31 @@ function AdminAudience() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
                                                 { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="flex gap-2 text-green-500">
+                                                    <div className="flex gap-2 text-blue-500">
                                                         <CheckCircleFilled /><div>{ audience.status_audience }</div>
                                                     </div> 
                                                     : (
                                                         audience.status_audience[0] === "Reporté" ?
-                                                        <div className="flex gap-2 text-blue-500">
+                                                        <div className="flex gap-2 text-yellow-500">
                                                             <CheckCircleFilled /><div>{ audience.status_audience }</div>
                                                         </div>
-                                                        :
-                                                        <div className="flex gap-2 text-red-500">
-                                                            <CloseCircleFilled /><div>{ audience.status_audience }</div>
-                                                        </div>
+                                                        : (
+                                                                audience.status_audience[0] === "Classé" ?
+                                                                <div className="flex gap-2 text-green-500">
+                                                                    <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                </div>
+                                                                :
+                                                                (
+                                                                    audience.status_audience[0] === "Absent" ?
+                                                                    <div className="flex gap-2 text-gray-500">
+                                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className="flex gap-2 text-red-500">
+                                                                        <CloseCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                            )
+                                                        )
                                                     )
                                                 }     
                                             </td>
@@ -271,6 +294,17 @@ function AdminAudience() {
                                 }
                             </tbody>
                         </table>
+                        {                          
+                            (audiences && audiences.length < 1) &&
+                                <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                    <div className="text-center">
+                                        <CloseOutlined className="text-5xl" />
+                                        <div className="my-2">
+                                        Aucune audience
+                                        </div>
+                                    </div>
+                                </div>
+                        }
                         </div>
                         <Modal title="Annulation de l'audience" 
                             open={isCancelModalVisible}

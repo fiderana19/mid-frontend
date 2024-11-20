@@ -21,7 +21,7 @@ function AdminDashboard() {
                     <div className="md:pl-10 sm:pl-24 md:pr-5 sm:pr-10 pl-4 pr-4 pt-16 pb-5 md:w-auto min-w-max ">
                         <div className="md:flex block gap-5">
                             <div className="lg:w-3/4 md:w-1/2 w-full">
-                                <div className="text-xl font-latobold mb-3">Dashboard</div>
+                                <div className="text-xl font-latobold mb-3">Tableau de bord</div>
                                 <div className="lg:flex block justify-between gap-4 w-full">
                                     <div className="lg:w-1/2 w-5/6 md:h-80 md:mx-0 mx-auto">
                                         <RequestChart />
