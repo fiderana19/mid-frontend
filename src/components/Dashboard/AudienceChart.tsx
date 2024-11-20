@@ -25,17 +25,17 @@ const AudienceChart: React.FunctionComponent = () => {
 
     async function fetchRequestChart() {
         const response = await getAudienceChart(access_token);
-        console.log(response);
+        console.log("123",response.data.total_fixed);
         const newchartData = 
         {
             options: {
-                labels: ['Fixé', 'Annulé', 'Reporté'],
-                colors: ['#2EB872', '#FF5D6E', '#37AFE1']
+                labels: ['Fixé', 'Annulé', 'Reporté', 'Absent', 'Classé'],
+                colors: ['#37AFE1', '#FF5D6E', '#FFEB55', '#A6AEBF', '#73EC8B']
             },
-            series: [response.data.total_fixed, response.data.total_canceled, response.data.total_postponed],
-            labels: ['Fixé', 'Annulé', 'Reporté'],
-            colors: ['#2EB872', '#FF5D6E', '#37AFE1']
-    }
+            series: [response.data.total_fixed, response.data.total_canceled, response.data.total_postponed, response.data.total_missed, response.data.total_closed],
+            labels: ['Fixé', 'Annulé', 'Reporté', 'Absent', 'Classé'],
+            colors: ['#37AFE1', '#FF5D6E', '#FFEB55', '#A6AEBF', '#73EC8B']
+        }
         setChartData(newchartData);
     }
 

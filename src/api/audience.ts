@@ -115,3 +115,35 @@ export const audienceCreate = async (token: string | null, audienceData: any) =>
       console.error("Erreur lors de l'annulation de l'audience :", error)
     }
   }
+
+  export const audienceClose = async (token: string | null, id: string) => {
+    try {
+      const response = await axios({
+        method: 'patch',
+        url: `${AudienceAPIUrl}/close/${id}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la classification de l'audience :", error)
+    }
+  }
+
+  export const audienceMissed = async (token: string | null, id: string) => {
+    try {
+      const response = await axios({
+        method: 'patch',
+        url: `${AudienceAPIUrl}/missed/${id}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de la absentation de l'audience :", error)
+    }
+  }

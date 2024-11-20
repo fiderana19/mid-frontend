@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Photo from '../../assets/image/mid-logo.jpg';
-import { CheckCircleOutlined, CheckOutlined, CloseOutlined, ContactsOutlined, MoreOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleFilled, CloseOutlined, ContactsOutlined, MoreOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import { getAudienceLast, getLatestUser } from "../../api/dashboard";
 import { useState, useEffect } from "react";
 import { Dropdown, MenuProps } from "antd";
@@ -59,25 +59,34 @@ const AudienceLast: React.FunctionComponent = () => {
                                         </div>
                                         <div className="flex gap-2 items-center mt-2">
                                             <div className="font-latobold"> { audience?.request_type } </div>
-                                            {
-                                                audience.status_audience[0] === "Reporté" ? 
-                                                    <div className="rounded bg-blue-200 px-2 border border-blue-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ audience.status_audience }</div>  
-                                                    </div>
-                                                : (
-                                                audience.status_audience[0] === "Fixé" ?
-                                                    <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ audience.status_audience }</div>  
-                                                    </div>
-                                                :
-                                                <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ audience.status_audience }</div>  
-                                                    </div>                                                    
-                                                )
-                                            } 
+                                            { audience.status_audience[0] === "Fixé" ? 
+                                                    <div className="flex gap-2 text-blue-500">
+                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                    </div> 
+                                                    : (
+                                                        audience.status_audience[0] === "Reporté" ?
+                                                        <div className="flex gap-2 text-yellow-500">
+                                                            <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                        </div>
+                                                        : (
+                                                                audience.status_audience[0] === "Classé" ?
+                                                                <div className="flex gap-2 text-green-500">
+                                                                    <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                </div>
+                                                                :
+                                                                (
+                                                                    audience.status_audience[0] === "Absent" ?
+                                                                    <div className="flex gap-2 text-gray-500">
+                                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                                    :
+                                                                    <div className="flex gap-2 text-red-500">
+                                                                        <CloseCircleFilled /><div>{ audience.status_audience }</div>
+                                                                    </div>
+                                                            )
+                                                        )
+                                                    )
+                                                }     
                                         </div>
                                         <div className="whitespace-normal">Organisé pour la date de <span className="font-latobold"> { audience?.availability_date } </span>  de <span className="font-latobold"> { audience?.availability_hour_debut } </span> à <span className="font-latobold"> { audience?.availability_hour_end } </span></div>
                                     </div>

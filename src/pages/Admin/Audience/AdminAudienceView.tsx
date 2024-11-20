@@ -125,20 +125,23 @@ function AdminAudienceView() {
                                                     <div className="font-latobold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
-                                            <div className="border rounded p-5 bg-white shadow-md my-2">
-                                                <div className="font-latobold text-md mb-3">Actions</div>
-                                                <div className="flex justify-between items-center">
-                                                    <div className="text-sm text-gray-500">Reporter</div>
-                                                    <button 
-                                                        onClick={() => {navigate(`/admin/audience/report/${audience._id}`)}}
-                                                        className='bg-yellow-500 hover:bg-yellow-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-yellow-500'
-                                                    >Reporter</button>
+                                            {
+                                                (audience?.status_audience[0] !== "Absent" && audience?.status_audience[0] !== "Classé") &&
+                                                <div className="border rounded p-5 bg-white shadow-md my-2">
+                                                    <div className="font-latobold text-md mb-3">Actions</div>
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="text-sm text-gray-500">Reporter</div>
+                                                        <button 
+                                                            onClick={() => {navigate(`/admin/audience/report/${audience._id}`)}}
+                                                            className='bg-yellow-500 hover:bg-yellow-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                                                        >Reporter</button>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="text-sm text-gray-500">Annuler</div>
+                                                        <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500' onClick={() => setIsCancelModalVisible(true)}>Annuler</button>
+                                                    </div>
                                                 </div>
-                                                <div className="flex justify-between items-center">
-                                                    <div className="text-sm text-gray-500">Annuler</div>
-                                                    <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500' onClick={() => setIsCancelModalVisible(true)}>Annuler</button>
-                                                </div>
-                                            </div>
+                                            }
                                         </div>
                                         <div className="w-1/4">
                                             <div className=" border pt-6 rounded text-center bg-white shadow-md">

@@ -1,17 +1,18 @@
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { audienceCancel, getAllAudience } from '../../api/audience';
+import { audienceCancel, audienceMissed, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, WarningFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopFilled, StopOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
     const [filteredAudiences, setFilteredAudiences] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
-    const [selectedAudience, setSelectedAudience] = useState<string>();
+    const [selectedAudience, setSelectedAudience] = useState<any>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+    const [isMissingModalVisible, setIsMissingModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
@@ -41,7 +42,7 @@ function AdminAudience() {
 
     const items: MenuProps['items'] = [
         {
-            label:  <Link to={`/admin/audience/view/${selectedAudience}`} >
+            label:  <Link to={`/admin/audience/view/${selectedAudience?._id}`} >
                       <div className="flex gap-2">
                           <EyeOutlined  />
                           <div>Voir</div>
@@ -53,24 +54,47 @@ function AdminAudience() {
           type: 'divider',
         },
         {
-          label: <Link to={`/admin/audience/report/${selectedAudience}`}>
-                    <div className="flex gap-2">
-                        <EditFilled  />
-                        <div>Reporter</div>
-                    </div>
-                </Link>
+          label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
+                    { (selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ?
+                        <div className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+                            <EditFilled  />
+                                <div>Reporter</div>
+                        </div>
+                    :            
+                    <Link to={`/admin/audience/report/${selectedAudience?._id}`} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+                        <div className="flex gap-2">
+                            <EditFilled  />
+                            <div>Reporter</div>
+                        </div>
+                    </Link>
+                    }
+                </button>
           ,
           key: '3',
         },
         {
-            label: <div onClick={() => setIsCancelModalVisible(true)}>
-                <div className="flex gap-2">
-                    <CloseCircleOutlined  />
-                    <div>Annuler</div>
-                </div>
-            </div>
+            label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
+                        <div onClick={() => setIsMissingModalVisible(true)} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+                            <div className="flex gap-2">
+                                <StopOutlined  />
+                                <div>Absent</div>
+                            </div>
+                        </div>
+                    </button>
             ,
             key: '4',
+          },
+        {
+            label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
+                        <div onClick={() => setIsCancelModalVisible(true)} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+                            <div className="flex gap-2">
+                            <CloseCircleOutlined  />
+                                <div>Annuler</div>
+                            </div>
+                        </div>
+                    </button>
+            ,
+            key: '5',
           },
   
     ];
@@ -120,6 +144,19 @@ function AdminAudience() {
                 setApiLoading(false);
                 message.success("Audience annulé !")
                 setIsCancelModalVisible(false);    
+            }
+        }
+    }
+
+    const handleMissingAudienceConfirm = async () => {
+        setApiLoading(true);
+        if(selectedAudience) {
+            const response = await audienceMissed(access_token,selectedAudience);
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAllAudience();
+                setApiLoading(false);
+                message.success("Audience absenté !")
+                setIsMissingModalVisible(false);    
             }
         }
     }
@@ -282,7 +319,7 @@ function AdminAudience() {
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                 <div className='flex justify-center'>
                                                     <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAudience(audience._id)}}>
+                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAudience(audience)}}>
                                                             <MenuOutlined />
                                                         </a>
                                                     </Dropdown>
@@ -326,6 +363,33 @@ function AdminAudience() {
                                         onClick={handleCancelAudienceConfirm}
                                         disabled={ apiLoading ? true : false }
                                         className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                    >   
+                                        { apiLoading && <LoadingOutlined /> }
+                                        <div>Confirmer</div>
+                                    </button>
+                                </div>
+                            </div>
+                        </Modal>
+                        <Modal title="Absence pour l'audience" 
+                            open={isMissingModalVisible}
+                            onOk={handleMissingAudienceConfirm}
+                            onCancel={() => {setIsMissingModalVisible(false)}}
+                            footer={null}
+                        >
+                            <div>
+                                <WarningFilled className='mr-2 text-gray-500 text-xl' />  
+                                Êtes-vous sûr que le citoyen est absent pour cette audience ?
+                                <div className='flex justify-end gap-2'>
+                                    <button 
+                                        onClick={() => {setIsMissingModalVisible(false)}}
+                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                    >   
+                                        Annuler
+                                    </button>
+                                    <button 
+                                        onClick={handleMissingAudienceConfirm}
+                                        disabled={ apiLoading ? true : false }
+                                        className= { apiLoading ? "bg-blue-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" : "flex gap-2 items-center border mt-2 bg-blue-500 hover:border-blue-600 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" } 
                                     >   
                                         { apiLoading && <LoadingOutlined /> }
                                         <div>Confirmer</div>

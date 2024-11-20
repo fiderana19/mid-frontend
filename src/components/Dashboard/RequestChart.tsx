@@ -28,11 +28,11 @@ const RequestChart: React.FunctionComponent = () => {
     {
         options: {
             labels: ['Accepté', 'Refusé', 'En attente'],
-            colors: ['#2EB872', '#FF5D6E', '#FBFF00']
+            colors: ['#73EC8B', '#FF5D6E', '#FFEB55']
         },
         series: [response.data.total_accepted, response.data.total_denied, response.data.total_waiting],
         labels: ['Accepté', 'Refusé', 'En attente'],
-        colors: ['#2EB872', '#FF5D6E', '#FBFF00']
+        colors: ['#73EC8B', '#FF5D6E', '#FFEB55']
     }
     setChartData(newchartData);
   }

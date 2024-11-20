@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckOutlined, CloseCircleFilled, CloseOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckOutlined, CloseCircleFilled, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
-import { getAudienceByRef } from "../../../api/audience";
+import { audienceClose, getAudienceByRef } from "../../../api/audience";
+import { message, Modal } from "antd";
 
 function AdminAudienceViewByQrCode() {
     const [audience, setAudience] = useState<any>();
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [isClosedModalVisible, setIsClosedModalVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -28,6 +31,19 @@ function AdminAudienceViewByQrCode() {
             if(response) {
                 console.log(response)
                 setAudience(response.data);
+            }
+        }
+    }
+
+    const handleClosedAudienceConfirm = async () => {
+        setApiLoading(true);
+        if(audience) {
+            const response = await audienceClose(access_token,audience._id);
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAudience();
+                setApiLoading(false);
+                message.success("Audience classé !")
+                setIsClosedModalVisible(false);    
             }
         }
     }
@@ -109,6 +125,20 @@ function AdminAudienceViewByQrCode() {
                                                     <div className="font-semibold"> { audience.availability_hour_end } </div>
                                                 </div>
                                             </div>
+                                            {
+                                                (audience?.status_audience[0] === "Fixé" || audience?.status_audience[0] === "Reporté") &&
+                                                    <div className="border rounded p-5 bg-white shadow-md my-2">
+                                                        <div className="font-latobold text-md mb-3">Actions</div>
+                                                        <div className="flex justify-between items-center">
+                                                            <div className="text-sm text-gray-500">Classer</div>
+                                                            <button 
+                                                                className='bg-green-500 hover:bg-green-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'
+                                                                onClick={() => setIsClosedModalVisible(true)}
+                                                            >Classer</button>
+                                                        </div>
+                                                    </div>
+                                                }
+
                                         </div>
                                         <div className="w-1/4">
                                             <div className=" border pt-6 rounded text-center bg-white shadow-md">
@@ -134,7 +164,6 @@ function AdminAudienceViewByQrCode() {
                                                         <div>+261 { audience.user_telephone } </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -142,6 +171,33 @@ function AdminAudienceViewByQrCode() {
                             }
                         </div>
                     </div>
+                    <Modal title="Classer une audience" 
+                            open={isClosedModalVisible}
+                            onOk={handleClosedAudienceConfirm}
+                            onCancel={() => {setIsClosedModalVisible(false)}}
+                            footer={null}
+                        >
+                            <div>
+                                <WarningFilled className='mr-2 text-green-500 text-xl' />  
+                                Êtes-vous sûr de classer cette audience ?
+                                <div className='flex justify-end gap-2'>
+                                    <button 
+                                        onClick={() => {setIsClosedModalVisible(false)}}
+                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                    >   
+                                        Annuler
+                                    </button>
+                                    <button 
+                                        onClick={handleClosedAudienceConfirm}
+                                        disabled={ apiLoading ? true : false }
+                                        className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                    >   
+                                        { apiLoading && <LoadingOutlined /> }
+                                        <div>Confirmer</div>
+                                    </button>
+                                </div>
+                            </div>
+                        </Modal>
                 </div>
             </div>
         </>
