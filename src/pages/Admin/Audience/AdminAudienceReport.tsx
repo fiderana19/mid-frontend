@@ -128,34 +128,49 @@ function AdminAudienceReport() {
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4">
                                                 <div className="flex justify-end">
-                                                { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="flex gap-2 text-blue-500">
-                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
-                                                    </div> 
-                                                    : (
-                                                        audience.status_audience[0] === "Reporté" ?
-                                                        <div className="flex gap-2 text-yellow-500">
-                                                            <CheckCircleFilled /><div>{ audience.status_audience }</div>
-                                                        </div>
+                                                    { audience.status_audience[0] === "Fixé" ? 
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
+                                                                { audience.status_audience }
+                                                            </div>       
+                                                        </div>                                 
                                                         : (
+                                                            audience.status_audience[0] === "Reporté" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                                    { audience.status_audience }
+                                                                </div>       
+                                                            </div>                                 
+                                                            : (
                                                                 audience.status_audience[0] === "Classé" ?
-                                                                <div className="flex gap-2 text-green-500">
-                                                                    <CheckCircleFilled /><div>{ audience.status_audience }</div>
-                                                                </div>
+                                                                <div className="max-w-max">
+                                                                    <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                        <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                        { audience.status_audience }
+                                                                    </div>       
+                                                                </div>                                 
                                                                 :
                                                                 (
                                                                     audience.status_audience[0] === "Absent" ?
-                                                                    <div className="flex gap-2 text-gray-500">
-                                                                        <CheckCircleFilled /><div>{ audience.status_audience }</div>
-                                                                    </div>
+                                                                    <div className="max-w-max">
+                                                                        <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                            <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+                                                                            { audience.status_audience }
+                                                                        </div>       
+                                                                    </div>                                 
                                                                     :
-                                                                    <div className="flex gap-2 text-red-500">
-                                                                        <CloseCircleFilled /><div>{ audience.status_audience }</div>
-                                                                    </div>
+                                                                    <div className="max-w-max">
+                                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                            { audience.status_audience }
+                                                                        </div>       
+                                                                    </div>                                 
+                                                                )
                                                             )
                                                         )
-                                                    )
-                                                }     
+                                                    }     
                                                 </div>
                                                 <div className="mb-3 flex items-center gap-2">
                                                     <div className="text-md font-bold">

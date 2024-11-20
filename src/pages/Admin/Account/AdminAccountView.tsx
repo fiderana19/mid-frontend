@@ -108,14 +108,20 @@ const AdminAccountView: React.FC = () => {
                                             <div className="font-latobold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
                                                 { user.validation ? 
-                                                    <div className="flex gap-2 text-green-500 border px-2 rounded border-green-500">
-                                                        <CheckCircleFilled /><div>Validé</div>
-                                                    </div> 
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                            Validé
+                                                        </div>        
+                                                    </div>                                                                        
                                                     : 
-                                                    <div className="flex gap-2 text-red-500">
-                                                        <CloseCircleFilled /><div>Non Validé</div>
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                            Non Validé
+                                                        </div>        
                                                     </div>
-                                                } 
+                                                }  
                                             </div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                 <div className="flex gap-4 my-2">

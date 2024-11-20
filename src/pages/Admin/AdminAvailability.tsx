@@ -207,25 +207,31 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                {
-                                                    availability.status_availability[0] === "Occupé" ? 
-                                                    <div className="rounded text-gray-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>
-                                                    : (
-                                                        availability.status_availability[0] === "Libre" ?
-                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>                                                        
-                                                    :
-                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>                                                    
-                                                    )
-                                                }    
+                                                    {
+                                                        availability.status_availability[0] === "Occupé" ? 
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+                                                                { availability.status_availability }
+                                                            </div>    
+                                                        </div>                                    
+                                                        : (
+                                                            availability.status_availability[0] === "Libre" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                    { availability.status_availability }
+                                                                </div> 
+                                                            </div>                                      
+                                                            :
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                    { availability.status_availability }
+                                                                </div> 
+                                                            </div>
+                                                        )
+                                                    }    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
@@ -249,25 +255,31 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                {
-                                                    availability.status_availability[0] === "Occupé" ? 
-                                                    <div className="rounded text-gray-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>
-                                                    : (
-                                                        availability.status_availability[0] === "Libre" ?
-                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>                                                        
-                                                    :
-                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ availability.status_availability }</div>  
-                                                    </div>                                                    
-                                                    )
-                                                }    
+                                                    {
+                                                        availability.status_availability[0] === "Occupé" ? 
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+                                                                { availability.status_availability }
+                                                            </div>    
+                                                        </div>                                    
+                                                        : (
+                                                            availability.status_availability[0] === "Libre" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                    { availability.status_availability }
+                                                                </div> 
+                                                            </div>                                      
+                                                            :
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                    { availability.status_availability }
+                                                                </div> 
+                                                            </div>
+                                                        )
+                                                    }    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {

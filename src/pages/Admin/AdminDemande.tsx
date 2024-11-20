@@ -223,25 +223,31 @@ function AdminDemande() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.request_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.date_wanted_debut } à { request.date_wanted_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                {
-                                                    request.status_request[0] === "En attente" ? 
-                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>
-                                                    : (
-                                                        request.status_request[0] === "Accepté" ?
-                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                        
-                                                    :
-                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                    
-                                                    )
-                                                }    
+                                                    {
+                                                        request.status_request[0] === "En attente" ?
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                                { request.status_request }
+                                                            </div>   
+                                                        </div>                                     
+                                                        : (
+                                                            request.status_request[0] === "Accepté" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                    { request.status_request }
+                                                                </div>        
+                                                            </div>                                                                        
+                                                            :
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                    { request.status_request }
+                                                                </div>     
+                                                            </div>                                                                           
+                                                        )
+                                                    } 
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>
@@ -271,25 +277,31 @@ function AdminDemande() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.request_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.date_wanted_debut } à { request.date_wanted_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                {
-                                                    request.status_request[0] === "En attente" ? 
-                                                    <div className="rounded text-yellow-500 flex gap-2 text-xs">
-                                                        <WarningOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>
-                                                    : (
-                                                        request.status_request[0] === "Accepté" ?
-                                                    <div className="rounded text-green-500 flex gap-2 text-xs">
-                                                        <CheckOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                        
-                                                    :
-                                                    <div className="rounded text-red-500 flex gap-2 text-xs">
-                                                        <CloseOutlined />
-                                                        <div>{ request.status_request }</div>  
-                                                    </div>                                                    
-                                                    )
-                                                }    
+                                                    {
+                                                        request.status_request[0] === "En attente" ?
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                                { request.status_request }
+                                                            </div>   
+                                                        </div>                                     
+                                                        : (
+                                                            request.status_request[0] === "Accepté" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                    { request.status_request }
+                                                                </div>        
+                                                            </div>                                                                        
+                                                            :
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                    { request.status_request }
+                                                                </div>     
+                                                            </div>                                                                           
+                                                        )
+                                                    } 
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>

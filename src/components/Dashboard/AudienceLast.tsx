@@ -59,38 +59,38 @@ const AudienceLast: React.FunctionComponent = () => {
                                         <div className="flex gap-2 items-center mt-2">
                                             <div className="font-latobold"> { audience?.request_type } </div>
                                             { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                        <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
+                                                <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                    <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
+                                                    { audience.status_audience }
+                                                </div>                                        
+                                                : (
+                                                    audience.status_audience[0] === "Reporté" ?
+                                                    <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                        <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
                                                         { audience.status_audience }
                                                     </div>                                        
                                                     : (
-                                                        audience.status_audience[0] === "Reporté" ?
-                                                        <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                        audience.status_audience[0] === "Classé" ?
+                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
                                                             { audience.status_audience }
-                                                        </div>                                        
-                                                    : (
-                                                                audience.status_audience[0] === "Classé" ?
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { audience.status_audience }
-                                                                </div>
-                                                                :
-                                                                (
-                                                                    audience.status_audience[0] === "Absent" ?
-                                                                    <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>
-                                                                    :
-                                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>
-                                                            )
+                                                        </div>
+                                                        :
+                                                        (
+                                                            audience.status_audience[0] === "Absent" ?
+                                                            <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+                                                                { audience.status_audience }
+                                                            </div>
+                                                            :
+                                                            <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                { audience.status_audience }
+                                                            </div>
                                                         )
                                                     )
-                                                }     
+                                                )
+                                            }     
                                         </div>
                                         <div className="whitespace-normal">Organisé pour la date de <span className="font-latobold"> { audience?.availability_date } </span>  de <span className="font-latobold"> { audience?.availability_hour_debut } </span> à <span className="font-latobold"> { audience?.availability_hour_end } </span></div>
                                     </div>

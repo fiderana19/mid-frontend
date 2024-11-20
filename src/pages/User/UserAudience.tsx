@@ -32,12 +32,12 @@ function UserAudience() {
             <UserNavigation />
             <div className="pt-16 sm:px-20 px-4">
                 <div className="text-lg font-latobold my-4">Les audiences</div>
-                <div className='my-7 grid gap-2 justify-center grid-cols-customized'>
+                <div className='my-7 grid gap-4 justify-center grid-cols-customized'>
                     {
                         audiences && audiences.map((audience, index) => {
                             return(
-                            <div key={index} className="rounded bg-gray-100 w-72  shadow-md">
-                                <div className="flex bg-gray-300 justify-between items-center p-2 rounded">
+                            <div key={index} className="rounded bg-white w-72  shadow-md">
+                                <div className="flex bg-gray-400 bg-opacity-80 justify-between items-center p-2 rounded">
                                     <div>
                                         <div className="flex gap-2">
                                             <div> Date : </div>
@@ -51,25 +51,48 @@ function UserAudience() {
                                         </div>
                                     </div> 
                                     <div className="flex justify-end">
-                                    {
-                                        audience.status_audience[0] === "Reporté" ? 
-                                            <div className="rounded bg-blue-500 px-2 flex gap-2 border border-blue-600 text-xs">
-                                                <WarningOutlined />
-                                                <div>{ audience.status_audience }</div>  
-                                            </div>
+                                        { audience.status_audience[0] === "Fixé" ? 
+                                            <div className="max-w-max">
+                                                <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                    <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
+                                                    { audience.status_audience }
+                                                </div>       
+                                            </div>                                 
                                             : (
-                                            audience.status_audience[0] === "Fixé" ?
-                                            <div className="rounded bg-green-500 px-2 flex gap-2 border border-green-600 text-xs">
-                                                <CheckCircleOutlined />
-                                                <div>{ audience.status_audience }</div>  
-                                            </div>                                                
-                                            :
-                                            <div className="rounded bg-red-500 px-2 flex gap-2 border border-red-600 text-xs">
-                                                <CloseCircleOutlined />
-                                                <div>{ audience.status_audience }</div>  
-                                            </div>
-                                        )
-                                    }
+                                                audience.status_audience[0] === "Reporté" ?
+                                                <div className="max-w-max">
+                                                    <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                        <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                        { audience.status_audience }
+                                                    </div>       
+                                                </div>                                 
+                                                : (
+                                                    audience.status_audience[0] === "Classé" ?
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                            { audience.status_audience }
+                                                        </div>       
+                                                    </div>                                 
+                                                    : (
+                                                        audience.status_audience[0] === "Absent" ?
+                                                        <div className="max-w-max">
+                                                           <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+                                                                { audience.status_audience }
+                                                            </div>       
+                                                        </div>                                 
+                                                        :
+                                                        <div className="max-w-max">
+                                                            <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                { audience.status_audience }
+                                                            </div>       
+                                                        </div>                                 
+                                                    )
+                                                )
+                                            )
+                                        }     
                                     </div>
                                 </div>
                                 <div className="p-2">

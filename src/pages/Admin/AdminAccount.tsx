@@ -205,12 +205,18 @@ function AdminAccount() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.user_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     { account.validation ? 
-                                                    <div className="flex gap-2 text-green-500">
-                                                        <CheckCircleFilled /><div>Validé</div>
-                                                    </div> 
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                            Validé
+                                                        </div>        
+                                                    </div>                                                                        
                                                     : 
-                                                    <div className="flex gap-2 text-red-500">
-                                                        <CloseCircleFilled /><div>Non Validé</div>
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                            Non Validé
+                                                        </div>        
                                                     </div>
                                                     }  
                                                 </td>
@@ -242,12 +248,18 @@ function AdminAccount() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.user_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     { account.validation ? 
-                                                    <div className="flex gap-2 text-green-500">
-                                                        <CheckCircleFilled /><div>Validé</div>
-                                                    </div> 
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                            Validé
+                                                        </div>        
+                                                    </div>                                                                        
                                                     : 
-                                                    <div className="flex gap-2 text-red-500">
-                                                        <CloseCircleFilled /><div>Non Validé</div>
+                                                    <div className="max-w-max">
+                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                            Non Validé
+                                                        </div>        
                                                     </div>
                                                     }  
                                                 </td>

@@ -142,22 +142,28 @@ function AdminOrganizeAudience() {
                                                     </div>
                                                     <div >
                                                         {
-                                                            request.status_request[0] === "En attente" ? 
-                                                            <div className="rounded bg-yellow-200 px-2 border border-yellow-500 flex gap-2 text-xs">
-                                                                <WarningOutlined />
-                                                                <div>{ request.status_request }</div>  
-                                                            </div>
+                                                            request.status_request[0] === "En attente" ?
+                                                            <div className="max-w-max">
+                                                                <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                    <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
+                                                                    { request.status_request }
+                                                                </div>   
+                                                            </div>                                     
                                                             : (
                                                                 request.status_request[0] === "Accepté" ?
-                                                            <div className="rounded bg-green-200 px-2 border border-green-500 flex gap-2 text-xs">
-                                                                <CheckOutlined />
-                                                                <div>{ request.status_request }</div>  
-                                                            </div>
-                                                            :
-                                                            <div className="rounded bg-red-200 px-2 border border-red-500 flex gap-2 text-xs">
-                                                                <CloseOutlined />
-                                                                <div>{ request.status_request }</div>  
-                                                            </div>                                                    
+                                                                <div className="max-w-max">
+                                                                    <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                        <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                                                        { request.status_request }
+                                                                    </div>        
+                                                                </div>                                                                        
+                                                                :
+                                                                <div className="max-w-max">
+                                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                                                        { request.status_request }
+                                                                    </div>     
+                                                                </div>                                                                           
                                                             )
                                                         } 
                                                     </div>
