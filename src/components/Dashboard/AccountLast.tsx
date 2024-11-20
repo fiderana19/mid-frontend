@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import Photo from '../../assets/image/mid-logo.jpg';
-import { CheckCircleOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { getLatestUser } from "../../api/dashboard";
 import { useState, useEffect } from "react";
 

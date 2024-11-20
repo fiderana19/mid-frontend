@@ -13,8 +13,6 @@ const AudienceChart: React.FunctionComponent = () => {
         series: [],
         labels: []
     });
-
-
     
     //fetching value for the chart
     useEffect(() => {
@@ -25,7 +23,6 @@ const AudienceChart: React.FunctionComponent = () => {
 
     async function fetchRequestChart() {
         const response = await getAudienceChart(access_token);
-        console.log("123",response.data.total_fixed);
         const newchartData = 
         {
             options: {
