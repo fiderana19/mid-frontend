@@ -1,12 +1,13 @@
 import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import { audienceCancel, getAllAudience } from '../../../api/audience';
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, WarningFilled } from "@ant-design/icons";
-import { DatePicker, Dropdown, Input, MenuProps, message, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { DatePicker, DatePickerProps, Select, Space, TimePicker, TimePickerProps } from "antd";
+import dayjs from "dayjs";
 
 function AdminAudienceSearch() {
+    const [selectedDateType, setSelectedDateType] = useState<string>('week');
+    const [selectedStatus, setSelectedStatus] = useState<string>('');
     const [audiences, setAudiences] = useState<any[]>([]);
     const [filteredAudiences, setFilteredAudiences] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
@@ -28,6 +29,19 @@ function AdminAudienceSearch() {
         }
     }, [])
 
+    const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
+        console.log(dateString);
+    };
+
+    const handleSelectDateChange = (value: string) => {
+        setSelectedDateType(value);
+        console.log(`selected ${value}`);
+    };
+
+    const handleStatusChange = (value: string) => {
+        setSelectedStatus(value);
+        console.log(`selected ${value}`);
+    };
     return(
         <>
             <div className="w-full flex min-h-screen bg-four">
@@ -42,11 +56,58 @@ function AdminAudienceSearch() {
                         <div className="flex justify-between items-center my-4">
                             <div className="text-lg font-latobold">Rechercher des audiences</div>
                         </div>
-                        <div className='w-60 my-4 mx-auto'>
-                        <DatePicker 
-                            className="w-full py-1.5 bg-transparent placeholder:text-slate-400"
-                            placeholder= "Date debut..."  />
-                    </div>
+                        <div className="flex gap-1 justify-center">
+                            <div>
+                                <div className="text-left text-xs font-latobold">
+                                    Statut
+                                </div>
+                                <Select
+                                    defaultValue="Semaine"
+                                    style={{ width: 120 }}
+                                    onChange={handleStatusChange}
+                                    className="bg-transparent"
+                                    options={[
+                                        { value: 'week', label: 'Semaine' },
+                                        { value: 'month', label: 'Mois' },
+                                        { value: 'year', label: 'Année' },
+                                    ]}
+                                />
+                            </div>
+                            <div>
+                                <div className="text-left text-xs font-latobold">
+                                    Date
+                                </div>
+                                <div className="flex gap-1">
+                                    <Select
+                                        defaultValue="Semaine"
+                                        style={{ width: 120 }}
+                                        onChange={handleSelectDateChange}
+                                        className="bg-transparent max-w-max"
+                                        options={[
+                                            { value: 'week', label: 'Semaine' },
+                                            { value: 'month', label: 'Mois' },
+                                            { value: 'year', label: 'Année' },
+                                        ]}
+                                    />
+                                    {
+                                        (selectedDateType && selectedDateType === "week") ?
+                                        <DatePicker onChange={onDateChange} picker="week" /> 
+                                        :
+                                        (
+                                            (selectedDateType && selectedDateType === "month") ?
+                                            <DatePicker onChange={onDateChange} picker="month" />
+                                            :
+                                            (
+                                                <DatePicker onChange={onDateChange} picker="year" />
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </div>
+                            <div>
+                                <button className='bg-blue-500 mt-4 hover:bg-blue-700 text-white font-latobold py-1 px-4 rounded'>RECHERCHER</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
