@@ -252,7 +252,6 @@ function AdminAudienceSearch() {
                                 <button className='bg-green-500 hover:bg-green-700 text-white font-latobold py-1 px-4 rounded'>GENERER UN RAPPORT</button>
                             </div>
                         }
-                       
                     </div>
                 </div>
             </div>
