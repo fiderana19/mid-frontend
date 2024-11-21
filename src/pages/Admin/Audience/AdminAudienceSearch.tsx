@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DatePicker, DatePickerProps, Select, Space, TimePicker, TimePickerProps } from "antd";
 import dayjs from "dayjs";
+import { getWeekDates } from "../../../utils/GetWeek";
+import { getMonthDates } from "../../../utils/GetMonth";
+import { getYearDates } from "../../../utils/GetYear";
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
@@ -30,7 +33,20 @@ function AdminAudienceSearch() {
     }, [])
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(dateString);
+        console.log(`selected ${selectedDateType}`);
+        if(selectedDateType === 'week') {
+            console.log("week" , dateString);
+            const { date_debut, date_end } = getWeekDates(dateString);
+            console.log(date_debut, date_end)
+        } else if(selectedDateType === 'month') {
+            console.log("month" , dateString);
+            const { date_debut, date_end } = getMonthDates(dateString);
+            console.log(date_debut, date_end)
+        } else if(selectedDateType === 'year') {
+            console.log("year" , dateString);
+            const { date_debut, date_end } = getYearDates(dateString);
+            console.log(date_debut, date_end)
+        }
     };
 
     const handleSelectDateChange = (value: string) => {
