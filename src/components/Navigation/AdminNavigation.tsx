@@ -1,4 +1,4 @@
-import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
+import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import MidProfile from "../MidProfile";
 import MidCopyright from "../Midopyright";
@@ -89,8 +89,8 @@ function AdminNavigation() {
                         (isAudienceSearch || (location.pathname === "/admin/audience/search")) &&
                             <Link to="/admin/audience/search">
                                 <div className={location.pathname === "/admin/audience/search" ? "flex gap-2 font-latobold py-2 pl-8 pr-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 pl-8 pr-4 hover:bg-four rounded transition-colors" } >
-                                    {location.pathname === "/admin/audience/search" ? <SearchOutlined className="" /> : <SearchOutlined className="" />}
-                                    <div className="md:block hidden">Rechercher</div>
+                                    {location.pathname === "/admin/audience/search" ? <ContainerFilled className="" /> : <ContainerOutlined className="" />}
+                                    <div className="md:block hidden">Rapport</div>
                                 </div>
                             </Link>
                     }

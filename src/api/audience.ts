@@ -116,6 +116,23 @@ export const audienceCreate = async (token: string | null, audienceData: any) =>
     }
   }
 
+  export const audienceSearch = async (token: string | null, searchData: any) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${AudienceAPIUrl}/search`,
+        data: searchData,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return response;
+    } catch (error) {
+      console.error("Erreur lors de l'annulation de l'audience :", error)
+    }
+  }
+
   export const audienceClose = async (token: string | null, id: string) => {
     try {
       const response = await axios({
