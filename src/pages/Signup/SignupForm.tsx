@@ -7,7 +7,7 @@ import { SignupInterface } from '../../interfaces/User';
 import dayjs from 'dayjs';
 import SignupBirth from './SignupBirth';
 import SignupCNI from './SignupCNI';
-import { CheckCircleFilled } from '@ant-design/icons';
+import { CheckCircleFilled, WarningFilled } from '@ant-design/icons';
 import SignupFile from './SignupFile';
 const {Step} = Steps
 
@@ -15,6 +15,8 @@ const AddForms: FunctionComponent = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', adresse: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', profile_photo: '', cni_photo : ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
+    const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
+    const [signupError, setSignupError] = useState<string>('');
     const [initialPwd, setInitialPwd] = useState<any>();
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -62,10 +64,17 @@ const AddForms: FunctionComponent = () => {
     const handleSignupUser = async () => {
         setApiLoading(true);
         const response = await userSignup(signupCredentials);
-        setInitialPwd(response?.data.initialPwd);
-        if(response?.status === 201) {
-            setApiLoading(false);
-            setIsRegisteredModalVisible(true);
+        if(response) {
+            if(response?.status === 201) {
+                setApiLoading(false);
+                setIsRegisteredModalVisible(true);
+                setInitialPwd(response?.data.initialPwd);
+            }
+            if(response?.status === 401) {
+                setApiLoading(false);
+                setSignupError(response?.response.data.message);
+                setIsErrorModalVisible(true);
+            }    
         }
     }
 
@@ -137,6 +146,20 @@ const AddForms: FunctionComponent = () => {
                         </div>
                     </div>
                 </Modal> 
+                <Modal title="Erreur" 
+                open={isErrorModalVisible}
+                onOk={() => setIsErrorModalVisible(false)}
+                onCancel={() => setIsErrorModalVisible(false)}
+                onClose={() => setIsErrorModalVisible(false)}
+            >
+                <div>
+                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
+                    {
+                        signupError &&
+                        <span> {signupError} </span>
+                    }
+                </div>
+            </Modal>
             </div>
           )}
         </div>

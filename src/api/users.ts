@@ -30,8 +30,8 @@ export const userSignup = async (signinCredentials: SignupInterface) => {
     })
 
     return response;
-  } catch (error) {
-    console.error("Erreur lors de l'inscription :", error)
+  } catch (error: any) {
+    return error;
   }
 }
 
