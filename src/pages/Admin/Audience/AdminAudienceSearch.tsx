@@ -1,27 +1,22 @@
 import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { DatePicker, DatePickerProps, Select, Space, TimePicker, TimePickerProps } from "antd";
-import dayjs from "dayjs";
+import { DatePicker, DatePickerProps, Modal, Select } from "antd";
 import { getWeekDates } from "../../../utils/GetWeek";
 import { getMonthDates } from "../../../utils/GetMonth";
 import { getYearDates } from "../../../utils/GetYear";
 import { audienceSearch } from "../../../api/audience";
+import GeneratePdf from "../../../utils/setPdfGenerate";
+import { CloseOutlined } from "@ant-design/icons";
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
     const [selectDateError, setSelectDateError] = useState<string>('');
+    const [totalAudiences, setTotalAudiences] = useState<number>();
     const [searchCredentials, setSearchCredentials] = useState<any>({status_audience: 'Fixé', date_debut: '', date_end: ''});
     const [audiences, setAudiences] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
-    const [selectedAudience, setSelectedAudience] = useState<string>();
-    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
-    const [filterRef, setFilterRef] = useState<boolean>(false);
-    const [filterText, setFilterText] = useState<string>('');
-    const [searchRef, setSearchRef] = useState<string>('');
-    const navigate = useNavigate();
+    const [isPdfModalVisible, setIsPdfModalVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -35,9 +30,7 @@ function AdminAudienceSearch() {
     }, [])
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(`selected ${selectedDateType}`);
         if(selectedDateType === 'week') {
-            console.log("week" , dateString);
             const { date_debut, date_end } = getWeekDates(dateString);
             setSearchCredentials({
                 ...searchCredentials,
@@ -46,18 +39,14 @@ function AdminAudienceSearch() {
             });
             console.log(date_debut, date_end)
         } else if(selectedDateType === 'month') {
-            console.log("month" , dateString);
             const { date_debut, date_end } = getMonthDates(dateString);
-            console.log(date_debut, date_end);
             setSearchCredentials({
                 ...searchCredentials,
                 date_debut: date_debut,
                 date_end: date_end
             });
         } else if(selectedDateType === 'year') {
-            console.log("year" , dateString);
             const { date_debut, date_end } = getYearDates(dateString);
-            console.log(date_debut, date_end);
             setSearchCredentials({
                 ...searchCredentials,
                 date_debut: date_debut,
@@ -68,7 +57,6 @@ function AdminAudienceSearch() {
 
     const handleSelectDateChange = (value: string) => {
         setSelectedDateType(value);
-        console.log(`selected ${value}`);
     };
 
     const handleStatusChange = (value: string) => {
@@ -89,10 +77,14 @@ function AdminAudienceSearch() {
             const response = await audienceSearch(access_token, searchCredentials);
             setIsSearching(true);
             if(response?.status === 200 || response?.status === 201) {
-                console.log(response.data);
                 setAudiences(response.data);
+                setTotalAudiences(response.data.length);
             }
         }
+    }
+
+    const handleGenerateSubmit = async () => {
+        setIsPdfModalVisible(true);
     }
 
     return(
@@ -244,16 +236,46 @@ function AdminAudienceSearch() {
                                         }
                                     </tbody>
                                 </table>
+                                {
+                                    (audiences && audiences.length) < 1 &&
+                                        <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                            <div className="text-center">
+                                                <CloseOutlined className="text-5xl" />
+                                                <div className="my-2">
+                                                Aucune audience
+                                                </div>
+                                            </div>
+                                        </div>                                
+                                }
                         </div>
                         }
                         {
                             isSearching && audiences &&
                             <div className="fixed bottom-4 right-0 px-4 bg-four">
-                                <button className='bg-green-500 hover:bg-green-700 text-white font-latobold py-1 px-4 rounded'>GENERER UN RAPPORT</button>
+                                <button 
+                                    className='bg-green-500 hover:bg-green-700 text-white font-latobold py-1 px-4 rounded'
+                                    onClick={handleGenerateSubmit}
+                                > GENERER UN RAPPORT</button>
                             </div>
                         }
                     </div>
+                    <div className="mx-auto my-10 w-full bg-red-500">
+                    </div>
                 </div>
+                <Modal 
+                    title="Rapport"
+                    open={isPdfModalVisible}
+                    onCancel={() => setIsPdfModalVisible(false)}
+                    onClose={() => setIsPdfModalVisible(false)}
+                    footer={null}
+                >
+                    <div className="w-full h-3/4">
+                    {
+                        audiences && searchCredentials && totalAudiences &&
+                        <GeneratePdf audiences={audiences} audience_status={searchCredentials.status_audience} date_debut={searchCredentials.date_debut} date_end={searchCredentials.date_end} total={totalAudiences} />
+                    }
+                    </div>
+                </Modal>
             </div>
         </>
     )
