@@ -1,4 +1,4 @@
-import { DatePicker, Dropdown, MenuProps, Modal, TimePicker } from "antd";
+import { DatePicker, Dropdown, MenuProps, message, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { CheckOutlined, CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
@@ -131,11 +131,13 @@ function AdminAvailability() {
     }
 
     const handleAddAvailabilitySubmit = async () => {
-        console.log("reto redential", createAvailabilityCredentials)
+        console.log(createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
-        console.log(response);
-        fetchAvailability();
-        setIsAddAvailabilityModalVisible(false);
+        if(response?.status === 200 || response?.status === 201) {
+            fetchAvailability();
+            message.success("Disponiblité ajoutée !");
+            setIsAddAvailabilityModalVisible(false);    
+        }
     }
 
     const handleCancelClose = async () => {
