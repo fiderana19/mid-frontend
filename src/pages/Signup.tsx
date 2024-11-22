@@ -12,7 +12,7 @@ function Signup() {
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous avez déjà un compte ?</div>
                         <Link to="/">
-                            <div className='text-blue-400 underline'>
+                            <div className='text-white hover:underline'>
                                 Se connecter
                             </div>
                         </Link>

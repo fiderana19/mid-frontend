@@ -93,7 +93,7 @@ function UserInfo() {
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>
                                                 <button 
                                                     onClick={() => {navigate("/user/change/password")}}
-                                                    className='bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'
+                                                    className='bg-gray-500 border border-gray-600 hover:transition-colors hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500'
                                                 >
                                                     Changer le mot de passe</button>
                                             </div>

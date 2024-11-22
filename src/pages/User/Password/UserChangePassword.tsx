@@ -79,12 +79,12 @@ function UserChangePassword() {
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full min-h-screen bg-four">
                 <UserNavigation />
                 <div className="pt-16 px-20">
                     <div className="w-80 mx-auto mt-10 mb-5">
-                        <div className="font-bold text-xl my-4 text-center">Changer mot de passe</div>
-                            <div className="border rounded p-4">
+                        <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
+                            <div className="border rounded p-4 bg-white shadow-md">
                                 {
                                     notMatchedError &&  
                                     <div className="bg-red-300 w-64 transition-opacity mx-auto p-2 border border-red-500 rounded text-xs">
@@ -94,8 +94,8 @@ function UserChangePassword() {
                                 }
                                
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-bold">
-                                            Mot de passe actuel...
+                                    <div className="text-left text-xs font-latobold">
+                                            Mot de passe actuel
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -109,8 +109,8 @@ function UserChangePassword() {
                                     </div>
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-bold">
-                                            Nouveau mot de passe...
+                                    <div className="text-left text-xs font-latobold">
+                                            Nouveau mot de passe
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -125,8 +125,8 @@ function UserChangePassword() {
                                     { newPassordError && <div className="text-xs text-red-500">{ newPassordError }</div> }
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-bold">
-                                            Confirmation nouveau mot de passe...
+                                    <div className="text-left text-xs font-latobold">
+                                            Confirmation nouveau mot de passe
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -143,8 +143,8 @@ function UserChangePassword() {
                                 <div className="flex justify-center">
                                     <button 
                                         onClick={updatePasswordSubmit}
-                                        className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-bold py-2 mt-4 px-4 rounded'
-                                    >CONFIRMER</button>
+                                        className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 mt-2 px-4 rounded'
+                                    >CHANGER</button>
                                 </div>
                             </div>
                     </div>

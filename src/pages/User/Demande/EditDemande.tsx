@@ -1,10 +1,10 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
 import { UserOutlined } from "@ant-design/icons";
-import { DatePicker, DatePickerProps, Select } from "antd";
+import { DatePicker, DatePickerProps, message, Select } from "antd";
 import { getWeekDates } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
-import { getRequestById, requestCreate } from "../../../api/request";
+import { getRequestById, requestEdit } from "../../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
 
 const UserEditDemande: FunctionComponent = () => {
@@ -27,11 +27,15 @@ const UserEditDemande: FunctionComponent = () => {
         const token = localStorage.getItem('token');
 
         if(reqestId && token) {
-            console.log("ito le id", reqestId)
-
             const response = await getRequestById(token,reqestId);
 
-            console.log(response)
+            setRequestCredentials({
+                ...requestCredentials,
+                type_request: response.type_request[0],
+                object: response.object,
+                date_wanted_debut: response.wanted_debut,
+                date_wanted_end: response.wanted_end    
+            });
             setRequest(response)    
         }
     }
@@ -59,10 +63,14 @@ const UserEditDemande: FunctionComponent = () => {
       };
       
     const handleRequestSubmit = async () => {
-        console.log(requestCredentials, access_token);
-        const response = await requestCreate(access_token, requestCredentials);
-        console.log(response);
-        navigate("/user/demande")
+        if(reqestId) {
+            const response = await requestEdit(access_token,reqestId, requestCredentials);
+            if(response?.status === 200 || response?.status === 201) {
+                console.log(response);
+                message.success("Demande d'audience modifié !");
+                navigate("/user/demande");
+            }    
+        }
     }
       
 
@@ -70,68 +78,73 @@ const UserEditDemande: FunctionComponent = () => {
         <div className="w-full bg-four min-h-screen">
             <UserNavigation />
             <div className="py-16 px-10 text-center">
-                <div className="font-bold text-2xl mt-10">MODIFIER UNE DEMANDE </div>
-                <div className="mx-auto my-5 p-4 bg-white shadow-sm rounded w-80">
-                    <div className="mx-auto flex w-60 items-center gap-2">
-                        <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-11 h-11 rounded-full object-cover border" />
-                       <div className="">
-                            <span>Soumise le </span>
-                            { request.request_creation }
+                <div className="font-latobold text-2xl mt-10">MODIFIER UNE DEMANDE </div>
+                {
+                    request &&
+                    <div className="mx-auto my-5 p-4 bg-white shadow-md rounded w-80">
+                        <div className="mx-auto flex w-60 items-center gap-2">
+                            <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-11 h-11 rounded-full object-cover border" />
+                        <div className="">
+                                <span>Soumise le </span>
+                                <span className="font-latobold">
+                                    { request.request_creation }
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div className='w-60 my-4 mx-auto shadow-sm focus:shadow'>
-                        <div className="text-left text-xs font-bold">
-                            Type de la demande
-                        </div>
-                        <Select
-                            className="w-full text-left"
-                            placeholder="Selectionner le type de la requête"
-                            onChange={handleSelectChange}
-                            defaultValue={request.type_request}
-                            options={[
-                            {
-                                value: "Demande d'information",
-                                label: "Demande d'information",
-                            },
-                            {
-                                value: 'Requête',
-                                label: 'Requête',
-                            },
-                            {
-                                value: 'Proposition',
-                                label: 'Proposition',
-                            },
-                            ]}
-                        />
-                    </div>
-                    <div className='w-60 my-4 mx-auto'>
-                        <div className="text-left text-xs font-bold">
-                            Date souhaitée
-                        </div>
-                        <DatePicker 
-                            className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
-                            placeholder="Date souhaitée..."
-                            onChange={handleDateChange} 
-                            picker="week" 
-                        />
-                    </div>
-                    <div className='w-60 my-4 mx-auto'>
-                        <div className="text-left text-xs font-bold">
-                            Motif du demande
-                        </div>
-                        <div className="relative">
-                            <input 
-                                name="object" 
-                                value={request.object}
-                                onChange={handleChange}
-                                placeholder="Saisir le motif..."
-                                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                        <div className='w-60 my-4 mx-auto shadow-sm focus:shadow'>
+                            <div className="text-left text-xs font-latobold">
+                                Type de la demande
+                            </div>
+                            <Select
+                                className="w-full text-left"
+                                placeholder="Selectionner le type de la requête"
+                                onChange={handleSelectChange}
+                                defaultValue={requestCredentials.type_request}
+                                options={[
+                                {
+                                    value: "Demande d'information",
+                                    label: "Demande d'information",
+                                },
+                                {
+                                    value: 'Requête',
+                                    label: 'Requête',
+                                },
+                                {
+                                    value: 'Proposition',
+                                    label: 'Proposition',
+                                },
+                                ]}
                             />
-                            <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                         </div>
+                        <div className='w-60 my-4 mx-auto'>
+                            <div className="text-left text-xs font-latobold">
+                                Date souhaitée
+                            </div>
+                            <DatePicker 
+                                className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
+                                placeholder={requestCredentials.date_wanted_debut}
+                                onChange={handleDateChange} 
+                                picker="week" 
+                            />
+                        </div>
+                        <div className='w-60 my-4 mx-auto'>
+                            <div className="text-left text-xs font-latobold">
+                                Motif de la demande
+                            </div>
+                            <div className="relative">
+                                <input 
+                                    name="object" 
+                                    value={requestCredentials.object}
+                                    onChange={handleChange}
+                                    placeholder="Saisir le motif..."
+                                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                                />
+                                <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
+                            </div>
+                        </div>
+                        <button onClick={handleRequestSubmit} className='bg-blue-500 hover:bg-blue-700 text-white font-latobold py-2 px-4 rounded'>MODIFIER</button>
                     </div>
-                    <button onClick={handleRequestSubmit} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>MODIFIER</button>
-                </div>
+                }
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
 import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { DatePicker, DatePickerProps, Select } from "antd";
+import { DatePicker, DatePickerProps, message, Select } from "antd";
 import { getWeekDates } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
 import { requestCreate } from "../../../api/request";
@@ -42,10 +42,12 @@ const UserAddDemande: FunctionComponent = () => {
       };
       
     const handleRequestSubmit = async () => {
-        console.log(requestCredentials, access_token);
         const response = await requestCreate(access_token, requestCredentials);
-        console.log(response);
-        navigate("/user/demande")
+        if(response?.status === 201 || response?.status === 200) {
+            console.log(response);
+            message.success("Demande d'audience soumise !")
+            navigate("/user/demande")    
+        }
     }
       
 
@@ -104,7 +106,7 @@ const UserAddDemande: FunctionComponent = () => {
                             <InfoCircleOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                         </div>
                     </div>
-                    <button onClick={handleRequestSubmit} className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>SOUMETTRE</button>
+                    <button onClick={handleRequestSubmit} className='bg-green-500 border border-green-600 hover:transition-colors hover:bg-green-700 text-white font-latobold py-2 px-4 rounded'>SOUMETTRE</button>
                 </div>
             </div>
         </div>

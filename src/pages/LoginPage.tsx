@@ -97,7 +97,7 @@ function LoginPage() {
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous n'avez pas encore un compte ?</div>
                         <Link to="/signup">
-                            <div className='text-blue-400 font-latobold'>
+                            <div className='text-white font-latobold hover:underline'>
                                 S'inscrire
                             </div>
                         </Link>

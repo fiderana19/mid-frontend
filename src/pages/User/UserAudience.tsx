@@ -10,7 +10,6 @@ function UserAudience() {
     )
 
     useEffect(() => {
-        
         fetchUserRequest()
     }, [])
 
@@ -21,7 +20,7 @@ function UserAudience() {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getAudienceByUser(access_token, decodedToken.id);
             if(response) {
-                console.log(response)
+                console.log("1234567",response)
                 setAudiences(response.data);
             }
         }
@@ -37,7 +36,8 @@ function UserAudience() {
                         audiences && audiences.map((audience, index) => {
                             return(
                             <div key={index} className="rounded bg-white w-72  shadow-md">
-                                <div className="flex bg-gray-400 bg-opacity-80 justify-between items-center p-2 rounded">
+                                <div className="flex bg-gray-400 bg-opacity-80 gap-2 items-center p-2 rounded">
+                                    <img src={`data:image/png;base64,${audience.user_profile_photo}`} className="w-9 h-9 rounded-full object-cover border" />
                                     <div>
                                         <div className="flex gap-2">
                                             <div> Date : </div>
@@ -50,6 +50,10 @@ function UserAudience() {
                                             <div className="font-latobold"> { audience.availability_hour_end } </div>
                                         </div>
                                     </div> 
+                                    
+                                </div>
+                                
+                                <div className="p-2">
                                     <div className="flex justify-end">
                                         { audience.status_audience[0] === "Fixé" ? 
                                             <div className="max-w-max">
@@ -94,9 +98,7 @@ function UserAudience() {
                                             )
                                         }     
                                     </div>
-                                </div>
-                                <div className="p-2">
-                                    <div className="text-lg font-latobold"> { audience.request_type } </div>
+                                    <div className="text-md font-latobold"> { audience.request_type } </div>
                                     <div>
                                         <span>Objet : </span>
                                         <span className="font-latobold"> { audience.request_object } </span>

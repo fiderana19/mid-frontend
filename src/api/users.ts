@@ -148,6 +148,22 @@ export const checkEmailExistisAPI = async (email: string) => {
   }
 }
 
+export const checkUserFirstLogin = async (token: string | null, id: string) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${UserAPIUrl}/firstlogin/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response;
+  } catch (error) {
+    console.error("Erreur  :", error)
+    return false;
+  }
+}
+
 export const getAllUser = async (token: string | null) => {
   try {
     const response = await axios({

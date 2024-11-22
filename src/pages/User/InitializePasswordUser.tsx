@@ -1,7 +1,7 @@
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { InitializeUserPassword } from '../../interfaces/User';
-import { getUserById, initializePassword } from '../../api/users';
+import { checkUserFirstLogin, getUserById, initializePassword } from '../../api/users';
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,20 +16,38 @@ function InitializePasswordUser() {
     )
 
     useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(token,decodedToken.id);
-            if(response) {
-                setUser(response)
-            }
-            setAccessToken(token);
-          }
-        }
+        fetchUserFirstLogin()
         fetchUser()
     }, [])
+
+    async function fetchUser() {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+          const decodedToken = JSON.parse(atob(token.split('.')[1]));
+          const response = await getUserById(token,decodedToken.id);
+          if(response) {
+            setUser(response)
+          }
+          setAccessToken(token);
+        }
+      }
+
+    async function fetchUserFirstLogin() {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+          const decodedToken = JSON.parse(atob(token.split('.')[1]));
+          const response = await checkUserFirstLogin(token,decodedToken.id);
+          if(response) {
+            const first:boolean = response.data.first_login;
+            if (first === true) {
+                navigate("/user/home");
+            }
+          }
+          setAccessToken(token);
+        }
+      }
 
     const handleChangePasswordSubmit = async () => {
         setNewPasswordError('');
@@ -40,7 +58,6 @@ function InitializePasswordUser() {
 
         if(updatePasswordCredentials.password.length > 6) {
             const response = await initializePassword(access_token, user._id, updatePasswordCredentials);
-            console.log(response);
             if(response?.status === 200) {
                 navigate("/user/home");
             }
@@ -67,20 +84,20 @@ function InitializePasswordUser() {
                 <div className='w-80 mx-auto'>
                     <div className='text-center'>
                         <img src={MidLogo} className='h-36 w-36 object-cover mx-auto' alt="Logo du ministere" />
-                        <div className='text-lg font-bold'>MINITER: Audience</div>
+                        <div className='text-lg font-latobold'>MININTER: Audience</div>
                     </div>
-                    <div className='text-xl font-bold my-4 text-center'>Veuillez initialiser votre mot de passe</div>
+                    <div className='text-xl font-latobold my-4 text-center'>Veuillez initialiser votre mot de passe</div>
                     <div className='border border-gray-300 p-2 rounded bg-white'>
                         {
                             user &&
                             <div className='w-64 p-2 mx-auto flex items-center gap-2'>
                                 <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-10 h-10 rounded-full  object-cover border" />
-                                <div className='font-bold'>{ user.nom }  {user.prenom} </div>
+                                <div className='font-latobold'>{ user.nom }  {user.prenom} </div>
                             </div>
                         }
                         
                         <div className='w-64 my-2 mx-auto'>
-                            <div className="text-left text-xs font-bold">
+                            <div className="text-left text-xs font-latobold">
                                 Mot de passe
                             </div>
                             <div className="relative">
@@ -106,7 +123,7 @@ function InitializePasswordUser() {
                             { newPasswordError && <div className="text-xs text-red-500">{ newPasswordError }</div> }
                         </div>
                         <div className='flex justify-center'>
-                            <button className=' bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-4 px-4 rounded w-64' onClick={handleChangePasswordSubmit}>CONFIRMER</button>
+                            <button className=' bg-blue-500 hover:bg-blue-700 text-white font-latobold py-2 my-4 px-4 rounded w-64' onClick={handleChangePasswordSubmit}>CONFIRMER</button>
                         </div>
                     </div>
                 </div>

@@ -78,9 +78,42 @@ export const requestCreate = async (token: string | null, requestData: any) => {
       }
     })
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la creation de la demande :", error)
+  }
+}
+
+export const requestEdit = async (token: string | null, id: string | null,  requestData: any) => {
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${RequestAPUrl}/update/${id}`,
+      data: requestData, 
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la modification de la demande :", error)
+  }
+}
+
+export const requestDelete = async (token: string | null, id: string) => {
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${RequestAPUrl}/delete/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la demande :", error)
   }
 }
 
