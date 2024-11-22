@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { Dropdown, MenuProps } from "antd";
-import { UserOutlined, LogoutOutlined, DownOutlined, MenuOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, DownOutlined, MenuOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { getUserById } from "../../api/users";
 import { useAuth } from "../../context/AuthContext";
@@ -10,6 +10,7 @@ function UserNavigation() {
     const location = useLocation();
     const { logout } = useAuth();
     const [user, setUser] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => { 
         async function fetchUser() {
@@ -18,7 +19,7 @@ function UserNavigation() {
           if(token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getUserById(token,decodedToken.id);
-  
+            setIsLoading(false);
             setUser(response)
           }
         }
@@ -115,6 +116,12 @@ function UserNavigation() {
                                     { user.email }
                                 <DownOutlined className="text-xs ml-2" />
                             </button>
+                        }
+                        {
+                            isLoading &&
+                                <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
+                                    <LoadingOutlined />
+                                </button>
                         }
                         </a>
                     </Dropdown>

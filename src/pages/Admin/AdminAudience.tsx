@@ -10,6 +10,7 @@ function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
     const [filteredAudiences, setFilteredAudiences] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAudience, setSelectedAudience] = useState<any>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [isMissingModalVisible, setIsMissingModalVisible] = useState(false);
@@ -35,6 +36,7 @@ function AdminAudience() {
         if(token) {
             const response = await getAllAudience(token);
             if(response) {
+                setIsLoading(false);
                 setAudiences(response.data);
             }
         }
@@ -374,7 +376,7 @@ function AdminAudience() {
                             </tbody>
                         </table>
                         {                          
-                            (audiences && audiences.length < 1) &&
+                            (!isLoading && audiences && audiences.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                     <div className="text-center">
                                         <CloseOutlined className="text-5xl" />
@@ -384,6 +386,7 @@ function AdminAudience() {
                                     </div>
                                 </div>
                         }
+                        {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                         </div>
                         <Modal title="Annulation de l'audience" 
                             open={isCancelModalVisible}

@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import Photo from '../../assets/image/mid-logo.jpg';
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleFilled, CloseOutlined, ContactsOutlined, MoreOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleFilled, CloseOutlined, ContactsOutlined, LoadingOutlined, MoreOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import { getAudienceLast, getLatestUser } from "../../api/dashboard";
 import { useState, useEffect } from "react";
 import { Dropdown, MenuProps } from "antd";
 
 const AudienceLast: React.FunctionComponent = () => {
     const [audience, setAudience] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     )
@@ -20,7 +21,8 @@ const AudienceLast: React.FunctionComponent = () => {
     async function getStat() {
         const response = await getAudienceLast(access_token);
         if(response?.status === 200 || response?.status === 201) {
-            setAudience(response.data)
+            setIsLoading(false);
+            setAudience(response.data);
         }
     }
 
@@ -34,6 +36,7 @@ const AudienceLast: React.FunctionComponent = () => {
     return(
             <div className="">
                 <div className="">
+                    {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     {
                         audience && 
                                 <div className="flex justify-between items-center">

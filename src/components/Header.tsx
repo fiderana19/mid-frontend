@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined } from '@ant-design/icons'
+import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined, LoadingOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
@@ -9,6 +9,7 @@ import MidLogo from '../assets/image/mid-logo.jpg';
 function Header() {
   const { logout } = useAuth();
   const [user, setUser] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => { 
       async function fetchUser() {
@@ -17,8 +18,8 @@ function Header() {
         if(token) {
           const decodedToken = JSON.parse(atob(token.split('.')[1]));
           const response = await getUserById(token,decodedToken.id);
-
-          setUser(response)
+          setIsLoading(false);
+          setUser(response);
         }
       }
       fetchUser()
@@ -121,6 +122,13 @@ function Header() {
                       <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
                       <div className="sm:block hidden font-latobold">{ user.email }</div>
                       <DownOutlined className="text-xs ml-2" />
+                      {isLoading && <LoadingOutlined />}
+                    </button>
+                }
+                {
+                  isLoading &&
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
+                        <LoadingOutlined />
                     </button>
                 }
               </a>
@@ -134,6 +142,12 @@ function Header() {
                   user &&
                     <button className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded items-center'>
                       <MenuOutlined className="text-md"/>
+                    </button>
+                }
+                {
+                  isLoading &&
+                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
+                        <LoadingOutlined />
                     </button>
                 }
               </a>

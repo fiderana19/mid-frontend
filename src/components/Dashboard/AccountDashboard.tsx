@@ -1,4 +1,4 @@
-import { UserOutlined, MoreOutlined } from "@ant-design/icons";
+import { UserOutlined, MoreOutlined, LoadingOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown } from "antd";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { getUserStat } from "../../api/dashboard";
 
 const AccountDashboard: React.FunctionComponent = () => {
     const [stat, setStat] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     )
@@ -20,7 +21,8 @@ const AccountDashboard: React.FunctionComponent = () => {
         const response = await getUserStat(access_token);
         if(response) {
             console.log("user stats", response.data)
-            setStat(response.data)
+            setStat(response.data);
+            setIsLoading(false);
         }
     }
     const items: MenuProps['items'] = [
@@ -32,6 +34,7 @@ const AccountDashboard: React.FunctionComponent = () => {
 
     return(
         <>
+            {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
             {
                 stat && 
                 <div className="rounded border border-red-400 p-4 my-4">
@@ -59,7 +62,6 @@ const AccountDashboard: React.FunctionComponent = () => {
                 </div>
             </div>
             }      
-            
             </>
     )
 }

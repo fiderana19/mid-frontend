@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
     const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [filteredRequests, setFilteredRequests] = useState<any[]>([]);
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
@@ -31,11 +32,10 @@ function AdminDemande() {
 
     async function fetchUserRequest () {
         const token = localStorage.getItem('token');
-        const req = getNotOrganizedRequest(token);
-
         if(token) {
             const response = await getAllRequest(token);
             if(response) {
+                setIsLoading(false);
                 setRequests(response);
             }
         }
@@ -319,7 +319,7 @@ function AdminDemande() {
                             </tbody>
                         </table>
                         {                          
-                            (requests && requests.length < 1) &&
+                            (!isLoading && requests && requests.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                     <div className="text-center">
                                         <CloseOutlined className="text-5xl" />
@@ -329,6 +329,7 @@ function AdminDemande() {
                                     </div>
                                 </div>
                         }
+                        {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     </div>
                 </div>
                 <Modal title="Refus d'une demande" 

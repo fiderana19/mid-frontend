@@ -1,7 +1,7 @@
 import { DatePicker, Dropdown, MenuProps, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckOutlined, CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
@@ -12,6 +12,7 @@ import { okConfirmStyle, okDeleteStyle } from "../../utils/ModalStyle";
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
     const [filteredAvailabilities, setFilteredAvailabilities] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [createAvailabilityCredentials, setCreateAvailabilityCredentials] = useState<CreateAvailabilityInterface>({date_availability: '', hour_debut: '', hour_end: ''});
     const [isAddAvailabilityModalVisible, setIsAddAvailabilityModalVisible] = useState<boolean>(false);
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
@@ -36,6 +37,7 @@ function AdminAvailability() {
         const response = await getAllAvailability(access_token);
         console.log(response)
         if(response?.status === 200) {
+            setIsLoading(false);
             setAvailabilities(response.data);
         }
     }
@@ -299,7 +301,7 @@ function AdminAvailability() {
                                 </tbody>
                                 </table>
                                 {                          
-                                    (availabilities && availabilities.length < 1) &&
+                                    (!isLoading && availabilities && availabilities.length < 1) &&
                                         <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                             <div className="text-center">
                                                 <CloseOutlined className="text-5xl" />
@@ -309,6 +311,7 @@ function AdminAvailability() {
                                             </div>
                                         </div>
                                 }
+                                {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                             </div>
                         </div>
                     </div>

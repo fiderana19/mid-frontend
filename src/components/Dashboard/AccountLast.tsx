@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import { getLatestUser } from "../../api/dashboard";
 import { useState, useEffect } from "react";
 
 const AccountLast: React.FunctionComponent = () => {
     const [users, setUsers] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     )
@@ -18,7 +19,8 @@ const AccountLast: React.FunctionComponent = () => {
     async function getStat() {
         const response = await getLatestUser(access_token);
         if(response) {
-            setUsers(response.data)
+            setUsers(response.data);
+            setIsLoading(false);
         }
     }
 
@@ -34,6 +36,7 @@ const AccountLast: React.FunctionComponent = () => {
 
                 </div>
                 <div className="">
+                    {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     {
                         users && users.map((user, index) => {
                             return(

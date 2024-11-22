@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getNotOrganizedRequest } from "../../../api/request";
 import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import { CarryOutOutlined, CheckOutlined, CloseOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
+import { CarryOutOutlined, CheckOutlined, CloseOutlined, LoadingOutlined, MenuOutlined, WarningOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown, Input } from "antd";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ function AdminFailRequest() {
     const [requests, setRequests] = useState<any[]>([]);
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const [searchRef, setSearchRef] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -28,6 +29,7 @@ function AdminFailRequest() {
         if(token) {
             const response = await getNotOrganizedRequest(token);
             if(response) {
+                setIsLoading(false);
                 setRequests(response);
             }
         }
@@ -144,7 +146,7 @@ function AdminFailRequest() {
                             </tbody>
                         </table>
                         {                          
-                            (requests && requests.length < 1) &&
+                            (!isLoading && requests && requests.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                     <div className="text-center">
                                         <CloseOutlined className="text-5xl" />
@@ -154,6 +156,7 @@ function AdminFailRequest() {
                                     </div>
                                 </div>
                         }
+                        {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     </div>
                 </div>
             </div>

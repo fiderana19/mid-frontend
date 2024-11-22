@@ -10,6 +10,7 @@ function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
     const [filteredAccounts, setFilteredAccounts] = useState<any[]>([]);
     const [access_token, setAccessToken] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAcount, setSelectedAccount] = useState<any>()
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -30,6 +31,7 @@ function AdminAccount() {
     async function fetchAccount () {
         const response = await getAllUser(access_token);
         if(response) {
+            setIsLoading(false);
             setAccounts(response.data)
         }
     }
@@ -278,7 +280,7 @@ function AdminAccount() {
                             </tbody>
                         </table>
                         {                          
-                            (accounts && accounts.length < 1) &&
+                            (!isLoading && accounts && accounts.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                     <div className="text-center">
                                         <CloseOutlined className="text-5xl" />
@@ -288,6 +290,7 @@ function AdminAccount() {
                                     </div>
                                 </div>
                         }
+                        {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     </div>
                 </div>
             </div>
