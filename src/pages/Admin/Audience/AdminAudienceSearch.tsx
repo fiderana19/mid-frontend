@@ -7,7 +7,7 @@ import { getMonthDates } from "../../../utils/GetMonth";
 import { getYearDates } from "../../../utils/GetYear";
 import { audienceSearch } from "../../../api/audience";
 import GeneratePdf from "../../../utils/setPdfGenerate";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
@@ -15,6 +15,7 @@ function AdminAudienceSearch() {
     const [totalAudiences, setTotalAudiences] = useState<number>();
     const [searchCredentials, setSearchCredentials] = useState<any>({status_audience: 'Fixé', date_debut: '', date_end: ''});
     const [audiences, setAudiences] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [isPdfModalVisible, setIsPdfModalVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
@@ -74,11 +75,13 @@ function AdminAudienceSearch() {
         }
         if(searchCredentials.date_end !== '' && searchCredentials.date_end !== '') {
             console.log(searchCredentials, access_token);
+            setIsLoading(true);
             const response = await audienceSearch(access_token, searchCredentials);
             setIsSearching(true);
             if(response?.status === 200 || response?.status === 201) {
                 setAudiences(response.data);
                 setTotalAudiences(response.data.length);
+                setIsLoading(false);
             }
         }
     }
@@ -156,6 +159,7 @@ function AdminAudienceSearch() {
                                 <button className='bg-blue-500 mt-4 hover:bg-blue-700 text-white font-latobold py-1 px-4 rounded' onClick={handleSearchSubmit}>RECHERCHER</button>
                             </div>
                         </div>
+                        {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                         {
                             isSearching && 
                             <div className="">
