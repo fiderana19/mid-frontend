@@ -10,16 +10,30 @@ function LoginPage() {
     const [loginCredentials, setLoginCredentials] = useState<LoginInterface>({ email: '', password: '' });
     const { login } = useAuth();
     const [loginError, setLoginError] = useState<string>('');
+    const [emailError, setEmailError] = useState<string>('');
+    const [passwordError, setPasswordError] = useState<string>('');
     const [isNotValidModalVisible, setIsNotValidModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     useEffect(() => {
     }, [])
 
     const handleLoginUser = async () => {
-        const response = await login(loginCredentials.email, loginCredentials.password);
-        if(response) {
-            setLoginError(response?.message)
-            setIsNotValidModalVisible(true);
+        setEmailError('');
+        setPasswordError('');
+
+        if(loginCredentials.email === '') {
+            setEmailError("Le champ email ne peut pas être vide !");
+        }
+        if(loginCredentials.password === '') {
+            setPasswordError("Mot de passe vide !");
+        }
+
+        if(loginCredentials.email !== "" && loginCredentials.password!== "") {
+            const response = await login(loginCredentials.email, loginCredentials.password);
+            if(response) {
+                setLoginError(response?.message)
+                setIsNotValidModalVisible(true);
+            }
         }
     }
 
@@ -63,10 +77,11 @@ function LoginPage() {
                                 onChange={handleChange}
                                 name="email"
                                 placeholder="Saisir votre mail..."
-                                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                            />
+                                className={emailError ? "border-red-500 w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
+                                />
                             <MailOutlined className="absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm" />
                         </div>
+                        {emailError && <div className="text-left text-red-500 text-xs">{emailError}</div>}
                     </div>
                     <div className='w-64 my-2 mx-auto'>
                         <div className="text-left text-xs font-latobold">
@@ -78,7 +93,7 @@ function LoginPage() {
                                 type={!!(isPasswordVisible) ? 'text' : 'password'}
                                 name='password'
                                 placeholder='Saisir votre mot de passe...'
-                                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                                className={passwordError ? "border-red-500 w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
                             />
                             <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                             {
@@ -92,6 +107,7 @@ function LoginPage() {
                                 className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
                             }
                         </div>
+                        {passwordError && <div className="text-left text-red-500 text-xs">{passwordError}</div>}
                     </div>
                     <button className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64' onClick={handleLoginUser}>SE CONNECTER</button>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>

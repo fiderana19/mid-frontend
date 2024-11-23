@@ -96,7 +96,7 @@ function AdminFailRequest() {
                                         return(
                                             <tr key={index}>
                                                 <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
-                                                    <img src={`data:image/png;base64,${request.profile_photo}`} className="rounded-full border border-slate-400 w-9 h-9 object-cover" />
+                                                    <img src={`data:image/png;base64,${request.profile_photo}`} className="min-w-max rounded-full border border-slate-400 w-9 h-9 object-cover" />
                                                 </td>
                                                 <td className='md:px-6 pr-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.user_nom } { request.user_prenom }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.user_cni }  </td>
