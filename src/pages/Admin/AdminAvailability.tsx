@@ -34,8 +34,8 @@ function AdminAvailability() {
     }, [])
 
     const fetchAvailability = async () => {
-        const response = await getAllAvailability(access_token);
-        console.log(response)
+        const token = localStorage.getItem('token');
+        const response = await getAllAvailability(token);
         if(response?.status === 200) {
             setIsLoading(false);
             setAvailabilities(response.data);
@@ -50,7 +50,6 @@ function AdminAvailability() {
     const handleDateChange = (date: dayjs.Dayjs | null) => {
         if (date) {
             const isoDate = ToLocalISOString(date);
-            console.log(isoDate)
             setDay(isoDate)
             setCreateAvailabilityCredentials((prev) => ({
                 ...prev,
@@ -126,12 +125,10 @@ function AdminAvailability() {
         setFilterRef(true);
         setFilterText(filter);
         const acc = availabilities.filter((availability: any) => availability.status_availability[0] === filter);
-        console.log(acc)
         setFilteredAvailabilities(acc);
     }
 
     const handleAddAvailabilitySubmit = async () => {
-        console.log(createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
         if(response?.status === 200 || response?.status === 201) {
             fetchAvailability();
@@ -145,10 +142,8 @@ function AdminAvailability() {
     }
 
     const handleCancelOk = async () => {
-        console.log(selectedAvailability);
         if(selectedAvailability) {
             const response = await cancelAvailability(access_token,selectedAvailability);
-            console.log(response);
             fetchAvailability();
             setIsCancelModalVisible(false);    
         }

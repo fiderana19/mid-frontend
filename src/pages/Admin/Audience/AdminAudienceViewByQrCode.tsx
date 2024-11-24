@@ -27,7 +27,7 @@ function AdminAudienceViewByQrCode() {
     const fetchAudience = async () => {
         const token = localStorage.getItem('token');
         if(audienceId && token) {
-            const response = await getAudienceByRef(access_token,audienceId);
+            const response = await getAudienceByRef(token,audienceId);
             if(response) {
                 console.log(response)
                 setAudience(response.data);

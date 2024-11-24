@@ -31,7 +31,6 @@ const AdminAccountView: React.FC = () => {
         if(userId && token) {
             const response = await getUserById(token,userId);
 
-            console.log(response)
             setUser(response)    
         }
     }

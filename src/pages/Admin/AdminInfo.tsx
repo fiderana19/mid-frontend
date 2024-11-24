@@ -3,9 +3,11 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../api/users";
 import { EnvironmentOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 function AdminInfo() {
     const [user, setUser] = useState<any>();
+    const navigate = useNavigate();
 
     useEffect(() => { 
         async function fetchUser() {
@@ -95,7 +97,11 @@ function AdminInfo() {
                                             <div className="font-latobold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>
-                                                <button className='bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>Changer le mot de passe</button>
+                                                <button 
+                                                    onClick={() => {navigate("/admin/change/password")}}
+                                                    className='bg-gray-500 border border-gray-600 hover:transition-colors hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500'
+                                                >
+                                                    Changer le mot de passe</button>
                                             </div>
                                         </div>
                                     </div>

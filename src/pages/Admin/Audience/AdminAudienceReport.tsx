@@ -35,7 +35,7 @@ function AdminAudienceReport() {
     const fetchAudience = async () => {
         const token = localStorage.getItem('token');
         if(audienceId && token) {
-            const response = await getAudienceById(access_token,audienceId);
+            const response = await getAudienceById(token,audienceId);
             if(response) {
                 setAudience(response.data);
                 setReportCredentials((prev: any) => ({...prev, old_availability: response?.data.availability}));

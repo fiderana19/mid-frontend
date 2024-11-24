@@ -27,8 +27,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     const data = response?.data.token;
                     const isNotFirstLogin = response?.data.is_not_first_login;
 
-                    console.log("g888", response.data)
-
                     setToken(data);
                     localStorage.setItem("token", data);
 

@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
     const [filteredAccounts, setFilteredAccounts] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string>('');
+    const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAcount, setSelectedAccount] = useState<any>()
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
@@ -29,7 +29,8 @@ function AdminAccount() {
     }, [])
 
     async function fetchAccount () {
-        const response = await getAllUser(access_token);
+        const token = localStorage.getItem('token');
+        const response = await getAllUser(token);
         if(response) {
             setIsLoading(false);
             setAccounts(response.data)

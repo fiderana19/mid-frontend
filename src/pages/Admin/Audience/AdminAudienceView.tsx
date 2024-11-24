@@ -28,7 +28,7 @@ function AdminAudienceView() {
     const fetchAudience = async () => {
         const token = localStorage.getItem('token');
         if(audienceId && token) {
-            const response = await getAudienceById(access_token,audienceId);
+            const response = await getAudienceById(token,audienceId);
             if(response) {
                 setAudience(response.data);
             }

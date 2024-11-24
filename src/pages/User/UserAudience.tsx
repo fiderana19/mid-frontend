@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAudienceByUser } from "../../api/audience";
 import UserNavigation from "../../components/Navigation/UserNavigation";
-import { WarningOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 function UserAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -18,9 +17,8 @@ function UserAudience() {
         if(token) {
             setAccessToken(token)
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getAudienceByUser(access_token, decodedToken.id);
+            const response = await getAudienceByUser(token, decodedToken.id);
             if(response) {
-                console.log("1234567",response)
                 setAudiences(response.data);
             }
         }

@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const UserEditDemande: FunctionComponent = () => {
     const [request, setRequest] = useState<any>();
     const [requestCredentials, setRequestCredentials] = useState<RequestAddInterface>({type_request: '', object: '', date_wanted_debut: '', date_wanted_end: ''});
-    const [access_token, setAccessToken] = useState<string>('');
+    const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
     const navigate = useNavigate();
     let req = useParams();
     let reqestId = req.id;

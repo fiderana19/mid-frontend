@@ -3,10 +3,12 @@ import UserNavigation from "../../../components/Navigation/UserNavigation";
 import { useEffect, useState } from "react";
 import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
-import { message } from 'antd';
 import { useNavigate } from "react-router-dom";
+import AdminNavigation from "../../../components/Navigation/AdminNavigation";
+import Header from "../../../components/Header";
+import { message } from "antd";
 
-function UserChangePassword() {
+function AdminChangePassword() {
     const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [user, setUser] = useState<any>();
@@ -52,7 +54,7 @@ function UserChangePassword() {
             }
             if(response.status === 200) {
                 message.success("Mot de passe changé !");
-                navigate("/user/info");
+                navigate("/admin/info");
             }
         }
     }
@@ -77,9 +79,15 @@ function UserChangePassword() {
 
     return (
         <>
-            <div className="w-full min-h-screen bg-four">
-                <UserNavigation />
-                <div className="pt-16 px-20">
+            <div className="w-full flex min-h-screen bg-four">
+                <div className="md:w-52 sm:block hidden">
+                    <AdminNavigation />
+                </div>
+                <div className="w-full">
+                    <div className="z-40 fixed top-0 right-0 w-full">
+                        <Header />
+                    </div>
+                    <div className="pl-10 pr-5 py-16">
                     <div className="w-80 mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
                             <div className="border rounded p-4 bg-white shadow-md">
@@ -90,10 +98,9 @@ function UserChangePassword() {
                                         <span className="ml-2"> { notMatchedError } </span>
                                     </div>
                                 }
-                               
                                 <div className='w-64 my-2 mx-auto'>
                                     <div className="text-left text-xs font-latobold">
-                                            Mot de passe actuel
+                                        Mot de passe actuel
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -108,7 +115,7 @@ function UserChangePassword() {
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
                                     <div className="text-left text-xs font-latobold">
-                                            Nouveau mot de passe
+                                        Nouveau mot de passe
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -124,7 +131,7 @@ function UserChangePassword() {
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
                                     <div className="text-left text-xs font-latobold">
-                                            Confirmation nouveau mot de passe
+                                        Confirmation nouveau mot de passe
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -145,6 +152,7 @@ function UserChangePassword() {
                                     >CHANGER</button>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -152,4 +160,4 @@ function UserChangePassword() {
     )
 }
 
-export default UserChangePassword;
+export default AdminChangePassword;

@@ -28,6 +28,7 @@ import AdminAudienceQRCode from "./pages/Admin/Audience/AdminAudienceQRCode"
 import AdminAudienceViewByQrCode from "./pages/Admin/Audience/AdminAudienceViewByQrCode"
 import AdminFailRequest from "./pages/Admin/Request/AdminFailRequest"
 import AdminAudienceSearch from "./pages/Admin/Audience/AdminAudienceSearch"
+import AdminChangePassword from "./pages/Admin/Password/AdminChangePassword"
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
             <Route path="account" element={<AdminAccount />} />
             <Route path="info" element={<AdminInfo />} />
             <Route path="password" element={<InitializePasswordAdmin />} />
+            <Route path="change/password" element={<AdminChangePassword />} />
           </Route>
       </Routes>
   )

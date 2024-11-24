@@ -44,7 +44,6 @@ const UserAddDemande: FunctionComponent = () => {
     const handleRequestSubmit = async () => {
         const response = await requestCreate(access_token, requestCredentials);
         if(response?.status === 201 || response?.status === 200) {
-            console.log(response);
             message.success("Demande d'audience soumise !")
             navigate("/user/demande")    
         }

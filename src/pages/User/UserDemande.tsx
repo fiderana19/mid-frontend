@@ -7,7 +7,7 @@ import { message, Modal } from "antd";
 
 function UserDemande() {
     const [requests, setRequests] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string>('');
+    const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<any>()
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ function UserDemande() {
         if(token) {
             setAccessToken(token)
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getAllRequestByUser(access_token, decodedToken.id);
+            const response = await getAllRequestByUser(token, decodedToken.id);
             if(response) {
                 setRequests(response);
             }

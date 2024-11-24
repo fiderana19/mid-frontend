@@ -20,7 +20,6 @@ const AccountDashboard: React.FunctionComponent = () => {
     async function getStat() {
         const response = await getUserStat(access_token);
         if(response) {
-            console.log("user stats", response.data)
             setStat(response.data);
             setIsLoading(false);
         }
