@@ -62,8 +62,9 @@ export const createAvailability = async (token: string | null, data: any) => {
       })
   
       return response;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de la creation d'une disponibilité :", error)
+      return error;
     }
 }
 

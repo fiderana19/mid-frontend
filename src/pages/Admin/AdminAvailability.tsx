@@ -18,6 +18,7 @@ function AdminAvailability() {
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [day, setDay] = useState<any>();
+    const [dateError, setDateError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [access_token, setAccessToken] = useState<string | null>(
@@ -129,10 +130,16 @@ function AdminAvailability() {
     }
 
     const handleAddAvailabilitySubmit = async () => {
+        console.log(createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
         if(response?.status === 200 || response?.status === 201) {
             fetchAvailability();
             message.success("Disponiblité ajoutée !");
+            setIsAddAvailabilityModalVisible(false);    
+        }
+        if(response?.status === 401) {
+            setDateError(response?.response.data.message);
+            message.error("Disponibilité déjà existante !");
             setIsAddAvailabilityModalVisible(false);    
         }
     }
