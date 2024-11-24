@@ -2,7 +2,7 @@ import Header from "../../../components/Header";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import { useState, useEffect } from "react";
 import { DatePicker, DatePickerProps, Modal, Select } from "antd";
-import { getWeekDates } from "../../../utils/GetWeek";
+import { getWeekStartAndEnd } from "../../../utils/GetWeek";
 import { getMonthDates } from "../../../utils/GetMonth";
 import { getYearDates } from "../../../utils/GetYear";
 import { audienceSearch } from "../../../api/audience";
@@ -32,7 +32,7 @@ function AdminAudienceSearch() {
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
         if(selectedDateType === 'week') {
-            const { date_debut, date_end } = getWeekDates(dateString);
+            const { date_debut, date_end } = getWeekStartAndEnd(date);
             setSearchCredentials({
                 ...searchCredentials,
                 date_debut: date_debut,
