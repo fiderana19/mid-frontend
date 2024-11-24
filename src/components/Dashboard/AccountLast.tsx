@@ -12,12 +12,15 @@ const AccountLast: React.FunctionComponent = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setAccessToken(token);
+        if(token) {
+            setAccessToken(token);
+        }
         getStat()
     }, [])
 
     async function getStat() {
-        const response = await getLatestUser(access_token);
+        const token = localStorage.getItem('token');
+        const response = await getLatestUser(token);
         if(response) {
             setUsers(response.data);
             setIsLoading(false);

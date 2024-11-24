@@ -14,12 +14,15 @@ const AudienceLast: React.FunctionComponent = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setAccessToken(token);
+        if(token) {
+            setAccessToken(token);
+        }
         getStat()
     }, [])
 
     async function getStat() {
-        const response = await getAudienceLast(access_token);
+        const token = localStorage.getItem('token');
+        const response = await getAudienceLast(token);
         if(response?.status === 200 || response?.status === 201) {
             setIsLoading(false);
             setAudience(response.data);

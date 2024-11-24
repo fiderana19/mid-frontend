@@ -19,12 +19,15 @@ const AudienceChart: React.FunctionComponent = () => {
     //fetching value for the chart
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setAccessToken(token);
+        if(token) {
+            setAccessToken(token);
+        }
         fetchRequestChart();        
     }, []);
 
     async function fetchRequestChart() {
-        const response = await getAudienceChart(access_token);
+        const token = localStorage.getItem('token');
+        const response = await getAudienceChart(token);
         const newchartData = 
         {
             options: {

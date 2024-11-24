@@ -19,12 +19,15 @@ const RequestChart: React.FunctionComponent = () => {
       //fetching value for the chart
   useEffect(() => {
     const token = localStorage.getItem('token');
-    setAccessToken(token);
+    if(token) {
+        setAccessToken(token);
+    }
     fetchRequestChart();        
   }, []);
 
   async function fetchRequestChart() {
-    const response = await getRequestChart(access_token);
+    const token = localStorage.getItem('token');
+    const response = await getRequestChart(token);
     
     const newchartData = 
     {
