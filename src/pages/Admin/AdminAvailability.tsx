@@ -1,13 +1,13 @@
 import { DatePicker, Dropdown, MenuProps, message, Modal, TimePicker } from "antd";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckOutlined, CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
-import { okConfirmStyle, okDeleteStyle } from "../../utils/ModalStyle";
+import { okConfirmStyle } from "../../utils/ModalStyle";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
@@ -141,9 +141,9 @@ function AdminAvailability() {
             setIsAddAvailabilityModalVisible(false);    
         }
         if(response?.status === 401) {
-            setDateError(response?.response.data.message);
-            message.error("Disponibilité déjà existante !");
-            setIsAddAvailabilityModalVisible(false);    
+            setCancelError(response?.response.data.message); 
+            setIsAddAvailabilityModalVisible(false);   
+            setIsErrorModalVisible(true);           
         }
     }
 

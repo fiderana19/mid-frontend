@@ -3,7 +3,7 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { message, Modal } from "antd";
-import { CheckOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
 
 const AdminRequestView: React.FC = () => {
@@ -31,7 +31,6 @@ const AdminRequestView: React.FC = () => {
         if(reqestId && token) {
             const response = await getRequestById(token,reqestId);
             setRequest(response);
-            console.log("eto", response)
         }
     }
 

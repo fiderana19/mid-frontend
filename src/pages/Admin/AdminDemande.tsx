@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { denyRequest, getAllRequest, getNotOrganizedRequest, validateRequest } from "../../api/request";
+import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
 import Header from "../../components/Header";
 import AdminNavigation from "../../components/Navigation/AdminNavigation";
-import { CheckCircleOutlined, CheckOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -109,7 +109,6 @@ function AdminDemande() {
         setFilterRef(true);
         setFilterText(filter);
         const acc = requests.filter(requests => requests.status_request[0] === filter);
-        console.log(acc)
         setFilteredRequests(acc);
     }
       

@@ -3,7 +3,7 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { audienceCancel, audienceMissed, getAllAudience } from '../../api/audience';
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CheckCircleFilled, CloseCircleFilled, CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopFilled, StopOutlined, WarningFilled } from "@ant-design/icons";
+import { CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 
 function AdminAudience() {
@@ -145,7 +145,6 @@ function AdminAudience() {
         setFilterRef(true);
         setFilterText(filter);
         const acc = audiences.filter(requests => requests.status_audience[0] === filter);
-        console.log(acc)
         setFilteredAudiences(acc);
     }
 
@@ -156,7 +155,7 @@ function AdminAudience() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchAllAudience();
                 setApiLoading(false);
-                message.success("Audience annulé !")
+                message.success("Audience annulée !")
                 setIsCancelModalVisible(false);    
             }
         }
@@ -169,7 +168,7 @@ function AdminAudience() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchAllAudience();
                 setApiLoading(false);
-                message.success("Audience absenté !")
+                message.success("Audience absentée !")
                 setIsMissingModalVisible(false);    
             }
         }

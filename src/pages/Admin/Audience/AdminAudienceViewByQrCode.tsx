@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckOutlined, CloseCircleFilled, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled, WarningOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
+import { useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { audienceClose, getAudienceByRef } from "../../../api/audience";
@@ -42,7 +42,7 @@ function AdminAudienceViewByQrCode() {
             if(response?.status === 200 || response?.status === 201) {
                 fetchAudience();
                 setApiLoading(false);
-                message.success("Audience classé !")
+                message.success("Audience classée !")
                 setIsClosedModalVisible(false);    
             }
         }

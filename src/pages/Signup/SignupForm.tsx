@@ -147,19 +147,19 @@ const AddForms: FunctionComponent = () => {
                     </div>
                 </Modal> 
                 <Modal title="Erreur" 
-                open={isErrorModalVisible}
-                onOk={() => setIsErrorModalVisible(false)}
-                onCancel={() => setIsErrorModalVisible(false)}
-                onClose={() => setIsErrorModalVisible(false)}
-            >
-                <div>
-                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
-                    {
-                        signupError &&
-                        <span> {signupError} </span>
-                    }
-                </div>
-            </Modal>
+                    open={isErrorModalVisible}
+                    onOk={() => setIsErrorModalVisible(false)}
+                    onCancel={() => setIsErrorModalVisible(false)}
+                    onClose={() => setIsErrorModalVisible(false)}
+                >
+                    <div>
+                        <WarningFilled className='mr-2 text-red-500 text-lg' /> 
+                        {
+                            signupError &&
+                            <span> {signupError} </span>
+                        }
+                    </div>
+                </Modal>
             </div>
           )}
         </div>

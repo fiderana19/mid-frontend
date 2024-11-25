@@ -28,6 +28,7 @@ function AdminChangePassword() {
         const token = localStorage.getItem("token");
 
         if(token) {
+        setAccessToken(token);
           const decodedToken = JSON.parse(atob(token.split('.')[1]));
           const response = await getUserById(token,decodedToken.id);
 
