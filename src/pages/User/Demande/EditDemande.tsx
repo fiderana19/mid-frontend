@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
 import { UserOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, message, Select } from "antd";
-import { getWeekDates } from "../../../utils/GetWeek";
+import { getWeekStartAndEnd } from '../../../utils/GetWeek';
 import { RequestAddInterface } from "../../../interfaces/Request";
 import { getRequestById, requestEdit } from "../../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
@@ -54,7 +54,7 @@ const UserEditDemande: FunctionComponent = () => {
       
 
     const handleDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-        const {date_debut, date_end } = getWeekDates(dateString);
+        const {date_debut, date_end } = getWeekStartAndEnd(date);
         setRequestCredentials({
             ...requestCredentials,
             date_wanted_debut: date_debut,
