@@ -188,6 +188,7 @@ const AdminAccountView: React.FC = () => {
                 <Modal title="Validation du compte" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
+                    onCancel={handleValidateCancel}
                     onClose={handleValidateCancel}
                     footer={null}
                 >
@@ -216,6 +217,7 @@ const AdminAccountView: React.FC = () => {
                     open={isDeleteModalVisible}
                     onOk={handleDeleteConfirm}
                     onCancel={handleDeleteCancel}
+                    onClose={handleDeleteCancel}
                     footer={null}
                 >
                     <div>

@@ -298,6 +298,7 @@ function AdminAccount() {
             <Modal title="Validation du compte" 
                 open={isValidateModalVisible}
                 onOk={handleValidateConfirm}
+                onCancel={handleValidateCancel}
                 onClose={handleValidateCancel}
                 footer={null}
             >
@@ -326,6 +327,7 @@ function AdminAccount() {
                 open={isDeleteModalVisible}
                 onOk={handleDeleteConfirm}
                 onCancel={handleDeleteCancel}
+                onClose={handleDeleteCancel}
                 footer={null}
             >
                 <div>

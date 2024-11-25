@@ -195,6 +195,7 @@ function AdminAudienceView() {
                     open={isCancelModalVisible}
                     onOk={handleCancelAudienceConfirm}
                     onCancel={() => {setIsCancelModalVisible(false)}}
+                    onClose={() => {setIsCancelModalVisible(false)}}
                     footer={null}
                 >
                     <div>

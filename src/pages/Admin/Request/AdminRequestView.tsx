@@ -194,6 +194,7 @@ const AdminRequestView: React.FC = () => {
                     open={isDenyModalVisible}
                     onOk={handleDenyConfirm}
                     onCancel={handleDenyCancel}
+                    onClose={handleDenyCancel}
                     footer={null}
                 >
                     <div>
@@ -220,6 +221,7 @@ const AdminRequestView: React.FC = () => {
                 <Modal title="Approbation d'une demande" 
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
+                    onClose={handleValidateCancel}
                     onCancel={handleValidateCancel}
                     footer={null}
                 >

@@ -392,6 +392,7 @@ function AdminAudience() {
                             open={isCancelModalVisible}
                             onOk={handleCancelAudienceConfirm}
                             onCancel={() => {setIsCancelModalVisible(false)}}
+                            onClose={() => {setIsCancelModalVisible(false)}}
                             footer={null}
                         >
                             <div>
@@ -419,6 +420,7 @@ function AdminAudience() {
                             open={isMissingModalVisible}
                             onOk={handleMissingAudienceConfirm}
                             onCancel={() => {setIsMissingModalVisible(false)}}
+                            onClose={() => {setIsMissingModalVisible(false)}}
                             footer={null}
                         >
                             <div>

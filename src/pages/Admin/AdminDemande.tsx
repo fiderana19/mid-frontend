@@ -336,6 +336,7 @@ function AdminDemande() {
                     open={isDenyModalVisible}
                     onOk={handleDenyConfirm}
                     onCancel={handleDenyCancel}
+                    onClose={handleDenyCancel}
                     footer={null}
                 >
                     <div>
@@ -363,6 +364,7 @@ function AdminDemande() {
                     open={isValidateModalVisible}
                     onOk={handleValidateConfirm}
                     onCancel={handleValidateCancel}
+                    onClose={handleValidateCancel}
                     footer={null}
                 >
                     <div>

@@ -359,8 +359,9 @@ function AdminAvailability() {
             </Modal>    
             <Modal title="Annuler une disponibilité" 
                 open={isCancelModalVisible}
-                footer={null}
+                onCancel={handleCancelClose}
                 onClose={handleCancelClose}
+                footer={null}
             >
                 <div>
                 <WarningFilled className='mr-2 text-red-500 text-xl' />  

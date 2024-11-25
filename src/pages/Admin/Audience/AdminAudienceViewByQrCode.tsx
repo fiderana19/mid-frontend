@@ -190,6 +190,7 @@ function AdminAudienceViewByQrCode() {
                             open={isClosedModalVisible}
                             onOk={handleClosedAudienceConfirm}
                             onCancel={() => {setIsClosedModalVisible(false)}}
+                            onClose={() => {setIsClosedModalVisible(false)}}
                             footer={null}
                         >
                             <div>
