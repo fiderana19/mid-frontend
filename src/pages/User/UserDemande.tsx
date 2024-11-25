@@ -127,30 +127,31 @@ function UserDemande() {
                     })}
                 </div>
                 <Modal title="Suppression de la demande" 
-                open={isDeleteModalVisible}
-                onOk={handleDeleteConfirm}
-                onCancel={() => setIsDeleteModalVisible(false)}
-                footer={null}
-            >
-                <div>
-                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
-                    Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
-                    <div className='flex justify-end gap-2'>
-                        <button 
-                            onClick={() => setIsDeleteModalVisible(false)}
-                            className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        >   
-                            Annuler
-                        </button>
-                        <button 
-                            onClick={handleDeleteConfirm}
-                            className= "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                        >   
-                            <div>Supprimer</div>
-                        </button>
+                    open={isDeleteModalVisible}
+                    onOk={handleDeleteConfirm}
+                    onCancel={() => setIsDeleteModalVisible(false)}
+                    onClose={() => setIsDeleteModalVisible(false)}
+                    footer={null}
+                >
+                    <div>
+                        <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                        Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
+                        <div className='flex justify-end gap-2'>
+                            <button 
+                                onClick={() => setIsDeleteModalVisible(false)}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleDeleteConfirm}
+                                className= "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                            >   
+                                <div>Supprimer</div>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </Modal>
+                </Modal>
             </div>
         </div>
     )
