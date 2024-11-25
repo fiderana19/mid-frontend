@@ -18,6 +18,9 @@ function AdminAvailability() {
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [day, setDay] = useState<any>();
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
+    const [cancelError, setCancelError] = useState<string>('');
     const [dateError, setDateError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
@@ -150,13 +153,19 @@ function AdminAvailability() {
 
     const handleCancelOk = async () => {
         if(selectedAvailability) {
+            setApiLoading(true);
             const response = await cancelAvailability(access_token,selectedAvailability);
             if(response?.status === 200 || response?.status === 201) {
                 fetchAvailability();
-                setIsCancelModalVisible(false);        
+                setApiLoading(false);
+                message.success("Disponibilité annulée !");
+                setIsCancelModalVisible(false);  
             }
             if(response?.status === 401) {
-                console.log("401")       
+                setCancelError(response?.response.data.message); 
+                setApiLoading(false);       
+                setIsCancelModalVisible(false); 
+                setIsErrorModalVisible(true);          
             }
         }
     }
@@ -247,11 +256,11 @@ function AdminAvailability() {
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Annulé" ?
-                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                         :
-                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                     }
@@ -295,11 +304,11 @@ function AdminAvailability() {
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Annulé" ?
-                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                         :
-                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>
+                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
                                                             <CloseCircleFilled /> Annuler 
                                                         </button>
                                                     }
@@ -350,15 +359,42 @@ function AdminAvailability() {
             </Modal>    
             <Modal title="Annuler une disponibilité" 
                 open={isCancelModalVisible}
-                onOk={handleCancelOk}
-                onCancel={handleCancelClose}
-                okButtonProps={{style: okDeleteStyle}}
-                okText="Confirmer"
-                cancelText="Annuler"
+                footer={null}
+                onClose={handleCancelClose}
             >
                 <div>
                 <WarningFilled className='mr-2 text-red-500 text-xl' />  
                 Êtes-vous sûr de vouloir annuler cette disponibilité ?
+                <div className='flex justify-end gap-2'>
+                    <button 
+                        onClick={handleCancelClose}
+                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            >   
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={handleCancelOk}
+                                disabled={ apiLoading ? true : false }
+                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                            >   
+                                { apiLoading && <LoadingOutlined /> }
+                                <div>Confirmer</div>
+                            </button>
+                        </div>
+                </div>
+            </Modal>
+            <Modal title="Erreur" 
+                open={isErrorModalVisible}
+                onOk={() => setIsErrorModalVisible(false)}
+                onCancel={() => setIsErrorModalVisible(false)}
+                onClose={() => setIsErrorModalVisible(false)}
+            >
+                <div>
+                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
+                    {
+                        cancelError &&
+                        <span> {cancelError} </span>
+                    }
                 </div>
             </Modal>
         </>
