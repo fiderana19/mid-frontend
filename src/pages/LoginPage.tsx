@@ -124,6 +124,7 @@ function LoginPage() {
                 open={isNotValidModalVisible}
                 onOk={handleModalOk}
                 onCancel={handleModalOk}
+                onClose={handleModalOk}
             >
                 <div>
                     <WarningFilled className='mr-2 text-red-500 text-lg' /> 
