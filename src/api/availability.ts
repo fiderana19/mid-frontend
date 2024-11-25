@@ -80,8 +80,9 @@ export const cancelAvailability = async (token: string | null, id: string) => {
       })
   
       return response;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de la modification de la disponbilité :", error)
+      return error;
     }
 }
 

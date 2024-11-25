@@ -151,8 +151,13 @@ function AdminAvailability() {
     const handleCancelOk = async () => {
         if(selectedAvailability) {
             const response = await cancelAvailability(access_token,selectedAvailability);
-            fetchAvailability();
-            setIsCancelModalVisible(false);    
+            if(response?.status === 200 || response?.status === 201) {
+                fetchAvailability();
+                setIsCancelModalVisible(false);        
+            }
+            if(response?.status === 401) {
+                console.log("401")       
+            }
         }
     }
 
