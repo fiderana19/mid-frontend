@@ -32,7 +32,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
         if(formData.lieu_naissance === "") {
             setLieuNaissError("Veuillez remplir votre lieu de naissance !")
         }
-        if(formData.telephone.lenght !== 9) {
+        if(formData.telephone.length !== 9) {
             setTelephoneError("Le numero de telephone doit être 9 chiffres !")
         }
 
