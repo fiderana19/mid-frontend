@@ -11,6 +11,7 @@ const AdminAccountView: React.FC = () => {
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
+    const [isCniVisible, setIsCniVisible] = useState(false);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     );
@@ -177,7 +178,16 @@ const AdminAccountView: React.FC = () => {
                                     <div className="w-2/4">
                                         <div className="border rounded p-5 bg-white shadow-md">
                                             <div className="font-latobold text-md mb-3">Carte d'identité nationale</div>
-                                            <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover" />
+                                            <img onClick={() => {setIsCniVisible(true)}} src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full h-80 object-cover cursor-pointer" />
+                                            <Modal title="CIN" 
+                                                open={isCniVisible}
+                                                onOk={() => {setIsCniVisible(false)}}
+                                                onCancel={() => {setIsCniVisible(false)}}
+                                                onClose={() => {setIsCniVisible(false)}}
+                                                footer={null}
+                                            >
+                                                <img src={`data:image/png;base64,${user.cni_photo}`} alt="Scan CIN" className="w-full object-cover" />
+                                            </Modal>
                                         </div>                                        
                                     </div>
                                 </div>
