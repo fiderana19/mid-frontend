@@ -54,18 +54,21 @@ function LoginPage() {
     }
 
     return (
-        <div className='h-screen flex flex-col justify-center'>
-            <div className='flex justify-between '>
-                <div className="bg-[url('src/assets/image/bg-login.jpeg')] bg-cover w-2/3">
+        <div className='min-h-screen flex flex-col justify-center'>
+            <div className='sm:flex block justify-between'>
+                <div className="bg-[url('src/assets/image/bg-login.jpeg')] bg-cover lg:w-2/3 sm:w-1/2 w-full">
                     <div className='flex flex-col justify-center h-screen bg-black bg-opacity-45'>
-                        <div className='text-white px-20'>
+                        <div className='text-white lg:px-20 sm:px-10 px-4'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />
                             <div className='text-4xl font-latobold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
                             <div>Demander une audience avec le ministre en ligne </div>
+                            <a href="#login" className='transition-transform'>
+                            <button className='sm:hidden block bg-gray-500 hover:bg-gray-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64'>SE CONNECTER</button>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div className='w-1/3 bg-second h-screen text-center py-5 px-10 flex flex-col justify-center'>
+                <div id='login' className='lg:w-1/3 sm:w-1/2 w-full bg-second h-screen text-center py-5 sm:px-10 px-4 flex flex-col justify-center'>
                     <div className='text-2xl font-latobold my-4'>Connexion à votre compte</div>
                     <div className='w-64 my-2 mx-auto'>
                         <div className="text-left text-xs font-latobold">

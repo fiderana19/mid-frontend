@@ -59,7 +59,7 @@ function InitializePasswordAdmin() {
     }
 
     return (
-        <div className=' h-screen flex flex-col justify-center'>
+        <div className='min-h-screen flex flex-col justify-center'>
                 <div className='w-80 mx-auto'>
                     <div className='text-center'>
                         <img src={MidLogo} className='h-36 w-36 object-cover mx-auto' alt="Logo du ministere" />

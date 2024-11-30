@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined, LoadingOutlined } from '@ant-design/icons'
+import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined, LoadingOutlined, SnippetsOutlined, ContactsOutlined, CalendarOutlined, ContainerOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
@@ -60,7 +60,7 @@ function Header() {
       key: '2',
       label: <Link to="/admin/demande">
                   <div className={location.pathname === "/admin/demande" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
-                      <HomeOutlined className="" />
+                      <SnippetsOutlined className="" />
                       <div className="">Demande</div>
                   </div>
               </Link>,
@@ -79,16 +79,26 @@ function Header() {
       key: '3',
       label:   <Link to="/admin/audience">
                   <div className={location.pathname === "/admin/audience" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
-                      <HomeOutlined className="" />
+                      <ContactsOutlined className="" />
                       <div className="">Audience</div>
                   </div>
               </Link>,
+       children: [
+        { key: '10', label: 
+          <Link to="/admin/audience/search">
+            <div className={location.pathname === "/admin/audience/search" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
+              <ContainerOutlined className="" />
+              <div className="">Rapport</div>
+            </div>
+          </Link>
+         },
+      ],
     },
     {
       key: '4',
       label:  <Link to="/admin/availability">
                   <div className={location.pathname === "/admin/availability" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
-                      <HomeOutlined className="" />
+                      <CalendarOutlined className="" />
                       <div className="">Disponibilite</div>
                   </div>
               </Link>,
@@ -97,7 +107,7 @@ function Header() {
       key: '5',
       label:  <Link to="/admin/account">
                   <div className={location.pathname === "/admin/account" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
-                      <HomeOutlined className="" />
+                      <UserOutlined className="" />
                       <div className="">Citoyen</div>
                   </div>
               </Link>,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAudienceByUser } from "../../api/audience";
 import UserNavigation from "../../components/Navigation/UserNavigation";
-import { LoadingOutlined } from "@ant-design/icons";
+import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 
 function UserAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -109,6 +109,17 @@ function UserAudience() {
                             )
                         })
                     }
+                    {                          
+                        (!isLoading && audiences && audiences.length < 1) &&
+                        <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                            <div className="text-center">
+                                <CloseOutlined className="text-5xl" />
+                                <div className="my-2">
+                                    Aucune audience
+                                </div>
+                            </div>
+                        </div>
+                    }                    
                     {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                 </div>
             </div>
