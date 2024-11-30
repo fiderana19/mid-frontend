@@ -79,8 +79,8 @@ function UserChangePassword() {
         <>
             <div className="w-full min-h-screen bg-four">
                 <UserNavigation />
-                <div className="pt-16 px-20">
-                    <div className="w-80 mx-auto mt-10 mb-5">
+                <div className="pt-16 sm:px-20 px-4">
+                    <div className="sm:w-80 w-full mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
                             <div className="border rounded p-4 bg-white shadow-md">
                                 {
