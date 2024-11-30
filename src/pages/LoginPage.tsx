@@ -38,6 +38,9 @@ function LoginPage() {
     }
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmailError('');
+        setPasswordError('');
+
         const {name, value} = e.target;
         setLoginCredentials((prevLogin) => ({...prevLogin, [name]: value}));
     }
@@ -47,11 +50,7 @@ function LoginPage() {
     }
 
     const handlePasswordVisible = async () => {
-        if(isPasswordVisible) {
-            setIsPasswordVisible(false);
-        } else {
-            setIsPasswordVisible(true);
-        }
+        setIsPasswordVisible(!isPasswordVisible);
     }
 
     return (

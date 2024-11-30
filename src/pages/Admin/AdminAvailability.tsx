@@ -21,7 +21,6 @@ function AdminAvailability() {
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
     const [cancelError, setCancelError] = useState<string>('');
-    const [dateError, setDateError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [access_token, setAccessToken] = useState<string | null>(

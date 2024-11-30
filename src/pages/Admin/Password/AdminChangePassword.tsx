@@ -1,5 +1,4 @@
 import { LockOutlined, WarningOutlined } from "@ant-design/icons";
-import UserNavigation from "../../../components/Navigation/UserNavigation";
 import { useEffect, useState } from "react";
 import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
@@ -48,7 +47,7 @@ function AdminChangePassword() {
             setMatchPassordError('Confirmation mot de passe incorrecte !')
         }
 
-        if(updatePasswordData.new_password.length > 6 && updatePasswordData.new_password === confirmPassword) {
+        if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword) {
             const response = await updatePassword(access_token,user._id,updatePasswordData);
             if(response.status === 401) {
                 setNotMatchedPasswordError(response.response.data.message);

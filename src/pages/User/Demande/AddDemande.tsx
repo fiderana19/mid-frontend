@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
-import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, message, Select } from "antd";
 import { getWeekStartAndEnd } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";

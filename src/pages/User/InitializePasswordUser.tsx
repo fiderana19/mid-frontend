@@ -72,11 +72,7 @@ function InitializePasswordUser() {
     }
 
     const handlePasswordVisible = async () => {
-        if(isPasswordVisible) {
-            setIsPasswordVisible(false);
-        } else {
-            setIsPasswordVisible(true);
-        }
+        setIsPasswordVisible(!isPasswordVisible);
     }
 
     return (

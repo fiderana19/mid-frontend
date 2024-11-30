@@ -38,7 +38,7 @@ function InitializePasswordAdmin() {
             setNewPasswordError('Le mot doit comporter au moins 6 caractères !')
         }
 
-        if(updatePasswordCredentials.password.length > 6) {
+        if(updatePasswordCredentials.password.length >= 6) {
             const response = await initializePassword(access_token, user._id, updatePasswordCredentials);
             console.log(response);
             if(response?.status === 200) {
@@ -55,11 +55,7 @@ function InitializePasswordAdmin() {
     }
 
     const handlePasswordVisible = async () => {
-        if(isPasswordVisible) {
-            setIsPasswordVisible(false);
-        } else {
-            setIsPasswordVisible(true);
-        }
+        setIsPasswordVisible(!isPasswordVisible);
     }
 
     return (

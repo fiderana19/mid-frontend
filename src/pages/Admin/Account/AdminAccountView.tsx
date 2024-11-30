@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { message, Modal } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
+import { CheckCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 
 const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
