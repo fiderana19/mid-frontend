@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import UserNavigation from "../../components/Navigation/UserNavigation";
-import { DeleteOutlined, EditOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { getAllRequestByUser, requestDelete } from "../../api/request";
 import { message, Modal } from "antd";
@@ -9,7 +9,8 @@ function UserDemande() {
     const [requests, setRequests] = useState<any[]>([]);
     const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-    const [selectedRequest, setSelectedRequest] = useState<any>()
+    const [selectedRequest, setSelectedRequest] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,6 +23,7 @@ function UserDemande() {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getAllRequestByUser(token, decodedToken.id);
             if(response) {
+                setIsLoading(false);
                 setRequests(response);
             }
         }
@@ -125,6 +127,7 @@ function UserDemande() {
                             </div>
                         )
                     })}
+                    {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                 </div>
                 <Modal title="Suppression de la demande" 
                     open={isDeleteModalVisible}

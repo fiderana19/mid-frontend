@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import UserNavigation from "../../../components/Navigation/UserNavigation";
-import { UserOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UserOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, message, Select } from "antd";
 import { getWeekStartAndEnd } from '../../../utils/GetWeek';
 import { RequestAddInterface } from "../../../interfaces/Request";
@@ -12,6 +12,7 @@ const UserEditDemande: FunctionComponent = () => {
     const [requestCredentials, setRequestCredentials] = useState<RequestAddInterface>({type_request: '', object: '', date_wanted_debut: '', date_wanted_end: ''});
     const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     let req = useParams();
     let reqestId = req.id;
 
@@ -36,6 +37,7 @@ const UserEditDemande: FunctionComponent = () => {
                 date_wanted_debut: response.wanted_debut,
                 date_wanted_end: response.wanted_end    
             });
+            setIsLoading(false);
             setRequest(response)    
         }
     }
@@ -145,6 +147,7 @@ const UserEditDemande: FunctionComponent = () => {
                         <button onClick={handleRequestSubmit} className='bg-blue-500 hover:bg-blue-700 text-white font-latobold py-2 px-4 rounded'>MODIFIER</button>
                     </div>
                 }
+                {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
             </div>
         </div>
     )

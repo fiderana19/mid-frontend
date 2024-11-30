@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { getAudienceByUser } from "../../api/audience";
 import UserNavigation from "../../components/Navigation/UserNavigation";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function UserAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')
     )
@@ -19,6 +21,7 @@ function UserAudience() {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getAudienceByUser(token, decodedToken.id);
             if(response) {
+                setIsLoading(false);
                 setAudiences(response.data);
             }
         }
@@ -105,10 +108,8 @@ function UserAudience() {
                             </div>
                             )
                         })
-
                     }
-                    
-               
+                    {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                 </div>
             </div>
         </div>

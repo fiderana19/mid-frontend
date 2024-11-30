@@ -10,6 +10,7 @@ function UserChangePassword() {
     const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [user, setUser] = useState<any>();
+    const [emptyPasswordError, setEmptyPasswordError] = useState<string>('');
     const [newPassordError, setNewPassordError] = useState<string>('');
     const [matchPassordError, setMatchPassordError] = useState<string>('');
     const [notMatchedError, setNotMatchedPasswordError] = useState<string>('');
@@ -19,6 +20,10 @@ function UserChangePassword() {
     )
 
     useEffect(() => { 
+        const token = localStorage.getItem("token");
+        if(token) {
+            setAccessToken(token);
+        }
         fetchUser()
     }, [])
 
@@ -37,7 +42,11 @@ function UserChangePassword() {
         setNewPassordError('');
         setMatchPassordError('');
         setNotMatchedPasswordError('');
+        setEmptyPasswordError('');
 
+        if(updatePasswordData.old_password === "") {
+            setEmptyPasswordError("Veuiller saisir l'ancien mot de passe !")
+        }
         if(updatePasswordData.new_password.length < 6) {
             setNewPassordError('Le mot doit comporter au moins 6 caractères !')
         }
@@ -61,6 +70,7 @@ function UserChangePassword() {
         setNewPassordError('');
         setMatchPassordError('');
         setNotMatchedPasswordError('');
+        setEmptyPasswordError('');
 
         const {name, value} = e.target;
         setUpdatePasswordData((prev) => ({...prev, [name]: value}));
@@ -70,6 +80,7 @@ function UserChangePassword() {
         setNewPassordError('');
         setMatchPassordError('');
         setNotMatchedPasswordError('');
+        setEmptyPasswordError('');
 
         const {value} = e.target;
         setConfirmPassword(value);
@@ -105,6 +116,7 @@ function UserChangePassword() {
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
+                                    { emptyPasswordError && <div className="text-xs text-red-500">{ emptyPasswordError }</div> }
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
                                     <div className="text-left text-xs font-latobold">

@@ -4,9 +4,11 @@ import { getUserById } from "../../api/users";
 import Typewriter from "../../components/TypeWritter";
 import Ministre from '../../assets/image/ministre.jpg';
 import { ministre } from "../../constants/Ministre";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const UserHome: FunctionComponent = () => {
     const [user, setUser] = useState<any>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => { 
         async function fetchUser() {
@@ -15,7 +17,7 @@ const UserHome: FunctionComponent = () => {
           if(token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getUserById(token,decodedToken.id);
-  
+            setIsLoading(false);
             setUser(response)
           }
         }
@@ -49,6 +51,7 @@ const UserHome: FunctionComponent = () => {
                         </div>
                     </div>
                 }
+                {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
             </div>
         </div>
     )

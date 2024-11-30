@@ -1,13 +1,13 @@
 import UserNavigation from "../../components/Navigation/UserNavigation";
-import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useState, useEffect } from "react";
 import { getUserById } from "../../api/users";
-import { EnvironmentOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 function UserInfo() {
     const [user, setUser] = useState<any>();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => { 
         async function fetchUser() {
@@ -16,7 +16,7 @@ function UserInfo() {
           if(token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const response = await getUserById(token,decodedToken.id);
-  
+            setIsLoading(false);
             setUser(response)
           }
         }
@@ -101,7 +101,8 @@ function UserInfo() {
                                     </div>
                                 </div>
                         </div>
-                        }
+                    }
+                    {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
             </div>
         </div>
     )
