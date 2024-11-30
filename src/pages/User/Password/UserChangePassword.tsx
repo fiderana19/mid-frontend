@@ -54,7 +54,7 @@ function UserChangePassword() {
             setMatchPassordError('Confirmation mot de passe incorrecte !')
         }
 
-        if(updatePasswordData.new_password.length > 6 && updatePasswordData.new_password === confirmPassword) {
+        if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword && updatePasswordData.old_password !== "") {
             const response = await updatePassword(access_token,user._id,updatePasswordData);
             if(response.status === 401) {
                 setNotMatchedPasswordError(response.response.data.message);
@@ -112,7 +112,7 @@ function UserChangePassword() {
                                             onChange={handleChange}
                                             name='old_password'
                                             placeholder='Saisir votre mot de passe actuel...'
-                                            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                                            className={ emptyPasswordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
