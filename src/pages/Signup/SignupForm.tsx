@@ -74,7 +74,7 @@ const AddForms: FunctionComponent = () => {
                 setApiLoading(false);
                 setSignupError(response?.response.data.message);
                 setIsErrorModalVisible(true);
-            }    
+            }     
         }
     }
 

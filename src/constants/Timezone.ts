@@ -1,4 +1,4 @@
 export const local = {
     zone : "Moscou",
-    gmt : 3
+    gmt : 0
 }

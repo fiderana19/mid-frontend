@@ -151,7 +151,7 @@ function AdminAudience() {
     const handleCancelAudienceConfirm = async () => {
         setApiLoading(true);
         if(selectedAudience) {
-            const response = await audienceCancel(access_token,selectedAudience);
+            const response = await audienceCancel(access_token,selectedAudience?._id);
             if(response?.status === 200 || response?.status === 201) {
                 fetchAllAudience();
                 setApiLoading(false);
@@ -164,7 +164,8 @@ function AdminAudience() {
     const handleMissingAudienceConfirm = async () => {
         setApiLoading(true);
         if(selectedAudience) {
-            const response = await audienceMissed(access_token,selectedAudience);
+            console.log(selectedAudience)
+            const response = await audienceMissed(access_token,selectedAudience?._id);
             if(response?.status === 200 || response?.status === 201) {
                 fetchAllAudience();
                 setApiLoading(false);
