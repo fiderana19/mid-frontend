@@ -5,6 +5,7 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { audienceClose, getAudienceByRef } from "../../../api/audience";
 import { message, Modal } from "antd";
+import { HttpStatus } from "../../../constants/Http_status";
 
 function AdminAudienceViewByQrCode() {
     const [audience, setAudience] = useState<any>();
@@ -39,7 +40,7 @@ function AdminAudienceViewByQrCode() {
         setApiLoading(true);
         if(audience) {
             const response = await audienceClose(access_token,audience._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAudience();
                 setApiLoading(false);
                 message.success("Audience classée !")

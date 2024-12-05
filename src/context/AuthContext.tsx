@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { checkEmailExistisAPI, userLogin } from "../api/users";
 import { useNavigate } from "react-router-dom";
+import { HttpStatus } from "../constants/Http_status";
 
 type AuthContextProps = {
     token?: string | null;
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = async (email: string, password: string) => {
         try {
             const response: any = await userLogin(email, password)
-            if(response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 if(response) {
                     const data = response?.data.token;
                     const isNotFirstLogin = response?.data.is_not_first_login;
@@ -55,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 }
                 return { status: 201 }
             } 
-            if(response?.status === 400 ||response?.status === 401) {
+            if(response?.status === HttpStatus.BAD_REQUEST ||response?.status === HttpStatus.UNAUTHORIZED) {
                 return { status: 401, message: response?.response.data.message }
             }
         } catch (error) {

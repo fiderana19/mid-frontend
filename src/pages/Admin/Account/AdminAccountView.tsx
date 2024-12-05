@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { message, Modal } from "antd";
 import { CheckCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
+import { HttpStatus } from "../../../constants/Http_status";
 
 const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
@@ -39,7 +40,7 @@ const AdminAccountView: React.FC = () => {
     const handleDeleteConfirm = async () => {
         setApiLoading(true);
         const response = await deleteUser(access_token,user._id);
-        if(response?.status === 200 || response?.status === 201) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             setApiLoading(false);
             message.success("Compte supprimé !");
             navigate("/admin/account");
@@ -56,7 +57,7 @@ const AdminAccountView: React.FC = () => {
     const handleValidateConfirm = async () => {
         setApiLoading(true);
         const response = await validateUser(access_token,user._id);
-        if(response?.status === 200 || response?.status === 201) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             fetchUser();
             setApiLoading(false);
             message.success("Compte validé !");

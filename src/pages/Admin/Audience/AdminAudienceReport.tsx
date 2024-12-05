@@ -7,6 +7,7 @@ import { audienceReport, getAudienceById } from "../../../api/audience";
 import { getAllFreeAvailability } from "../../../api/availability";
 import dayjs from "dayjs";
 import { message, Select } from "antd";
+import { HttpStatus } from "../../../constants/Http_status";
 const { Option } = Select;
 
 function AdminAudienceReport() {
@@ -72,7 +73,7 @@ function AdminAudienceReport() {
         if(audienceId && selectedAvailabilityId) {
             setApiLoading(true);
             const response = await audienceReport(access_token,audienceId,reportCredentials);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 setApiLoading(false);
                 message.success("Audience reportée !");
                 navigate("/admin/audience");    

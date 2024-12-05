@@ -8,6 +8,7 @@ import { getRequestById } from "../../../api/request";
 import { getAllFreeAvailability } from '../../../api/availability';
 import { audienceCreate } from "../../../api/audience";
 import dayjs from "dayjs";
+import { HttpStatus } from "../../../constants/Http_status";
 
 const { Option } = Select;
 
@@ -82,7 +83,7 @@ function AdminOrganizeAudience() {
         if(selectedAvailabilityId) {
             setApiLoading(true);
             const response = await audienceCreate(access_token,audienceCredentials);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 setApiLoading(false);
                 message.success("Audience organisée !");
                 navigate("/admin/audience");

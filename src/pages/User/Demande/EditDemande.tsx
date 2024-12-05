@@ -6,6 +6,7 @@ import { getWeekStartAndEnd } from '../../../utils/GetWeek';
 import { RequestAddInterface } from "../../../interfaces/Request";
 import { getRequestById, requestEdit } from "../../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
+import { HttpStatus } from "../../../constants/Http_status";
 
 const UserEditDemande: FunctionComponent = () => {
     const [request, setRequest] = useState<any>();
@@ -67,7 +68,7 @@ const UserEditDemande: FunctionComponent = () => {
     const handleRequestSubmit = async () => {
         if(reqestId) {
             const response = await requestEdit(access_token,reqestId, requestCredentials);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 console.log(response);
                 message.success("Demande d'audience modifiée !");
                 navigate("/user/demande");

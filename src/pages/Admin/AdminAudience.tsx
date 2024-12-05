@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
+import { HttpStatus } from "../../constants/Http_status";
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -152,7 +153,7 @@ function AdminAudience() {
         setApiLoading(true);
         if(selectedAudience) {
             const response = await audienceCancel(access_token,selectedAudience?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAllAudience();
                 setApiLoading(false);
                 message.success("Audience annulée !")
@@ -166,7 +167,7 @@ function AdminAudience() {
         if(selectedAudience) {
             console.log(selectedAudience)
             const response = await audienceMissed(access_token,selectedAudience?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAllAudience();
                 setApiLoading(false);
                 message.success("Audience absentée !")

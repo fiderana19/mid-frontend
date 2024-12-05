@@ -5,6 +5,7 @@ import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
 import { message } from 'antd';
 import { useNavigate } from "react-router-dom";
+import { HttpStatus } from "../../../constants/Http_status";
 
 function UserChangePassword() {
     const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
@@ -56,10 +57,10 @@ function UserChangePassword() {
 
         if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword && updatePasswordData.old_password !== "") {
             const response = await updatePassword(access_token,user._id,updatePasswordData);
-            if(response.status === 401) {
+            if(response.status === HttpStatus.UNAUTHORIZED) {
                 setNotMatchedPasswordError(response.response.data.message);
             }
-            if(response.status === 200) {
+            if(response.status === HttpStatus.OK) {
                 message.success("Mot de passe changé !");
                 navigate("/user/info");
             }

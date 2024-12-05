@@ -6,6 +6,7 @@ import { getWeekStartAndEnd } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
 import { requestCreate } from "../../../api/request";
 import { useNavigate } from "react-router-dom";
+import { HttpStatus } from "../../../constants/Http_status";
 
 const UserAddDemande: FunctionComponent = () => {
     const [requestCredentials, setRequestCredentials] = useState<RequestAddInterface>({type_request: '', object: '', date_wanted_debut: '', date_wanted_end: ''});
@@ -43,7 +44,7 @@ const UserAddDemande: FunctionComponent = () => {
       
     const handleRequestSubmit = async () => {
         const response = await requestCreate(access_token, requestCredentials);
-        if(response?.status === 201 || response?.status === 200) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             message.success("Demande d'audience soumise !")
             navigate("/user/demande")    
         }

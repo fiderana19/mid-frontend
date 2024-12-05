@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { message } from "antd";
+import { HttpStatus } from "../../../constants/Http_status";
 
 function AdminChangePassword() {
     const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
@@ -49,10 +50,10 @@ function AdminChangePassword() {
 
         if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword) {
             const response = await updatePassword(access_token,user._id,updatePasswordData);
-            if(response.status === 401) {
+            if(response.status === HttpStatus.UNAUTHORIZED) {
                 setNotMatchedPasswordError(response.response.data.message);
             }
-            if(response.status === 200) {
+            if(response.status === HttpStatus.OK) {
                 message.success("Mot de passe changé !");
                 navigate("/admin/info");
             }

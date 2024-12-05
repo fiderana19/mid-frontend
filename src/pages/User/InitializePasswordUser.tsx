@@ -4,6 +4,7 @@ import { InitializeUserPassword } from '../../interfaces/User';
 import { checkUserFirstLogin, getUserById, initializePassword } from '../../api/users';
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useNavigate } from 'react-router-dom';
+import { HttpStatus } from '../../constants/Http_status';
 
 function InitializePasswordUser() {
     const [updatePasswordCredentials, setUpdatePasswordCredentials] = useState<InitializeUserPassword>({ password: '' });
@@ -58,7 +59,7 @@ function InitializePasswordUser() {
 
         if(updatePasswordCredentials.password.length > 6) {
             const response = await initializePassword(access_token, user._id, updatePasswordCredentials);
-            if(response?.status === 200) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 navigate("/user/home");
             }
         }

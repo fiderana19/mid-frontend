@@ -8,6 +8,7 @@ import { getYearDates } from "../../../utils/GetYear";
 import { audienceSearch } from "../../../api/audience";
 import GeneratePdf from "../../../utils/setPdfGenerate";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
+import { HttpStatus } from "../../../constants/Http_status";
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
@@ -78,7 +79,7 @@ function AdminAudienceSearch() {
             setIsLoading(true);
             const response = await audienceSearch(access_token, searchCredentials);
             setIsSearching(true);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 setAudiences(response.data);
                 setTotalAudiences(response.data.length);
                 setIsLoading(false);

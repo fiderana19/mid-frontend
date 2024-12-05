@@ -5,6 +5,7 @@ import AdminNavigation from "../../components/Navigation/AdminNavigation";
 import { CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import { HttpStatus } from "../../constants/Http_status";
 
 function AdminDemande() {
     const [requests, setRequests] = useState<any[]>([]);
@@ -117,7 +118,7 @@ function AdminDemande() {
         setApiLoading(true);
         if(selectedRequest) {
             const response = await denyRequest(access_token,selectedRequest?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchUserRequest();        
                 setApiLoading(false);
                 message.success("Demande refusée !")
@@ -137,7 +138,7 @@ function AdminDemande() {
         setApiLoading(true);
         if(selectedRequest) {
             const response = await validateRequest(access_token,selectedRequest?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchUserRequest();
                 setApiLoading(false);
                 message.success("Demande approuvée !");

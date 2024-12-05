@@ -8,6 +8,7 @@ import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
 import { okConfirmStyle } from "../../utils/ModalStyle";
+import { HttpStatus } from "../../constants/Http_status";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
@@ -134,7 +135,7 @@ function AdminAvailability() {
     const handleAddAvailabilitySubmit = async () => {
         console.log(createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
-        if(response?.status === 200 || response?.status === 201) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             fetchAvailability();
             message.success("Disponiblité ajoutée !");
             setIsAddAvailabilityModalVisible(false);    
@@ -154,7 +155,7 @@ function AdminAvailability() {
         if(selectedAvailability) {
             setApiLoading(true);
             const response = await cancelAvailability(access_token,selectedAvailability);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAvailability();
                 setApiLoading(false);
                 message.success("Disponibilité annulée !");

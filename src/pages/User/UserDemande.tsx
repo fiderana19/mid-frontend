@@ -4,6 +4,7 @@ import { CloseOutlined, DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutli
 import { useEffect, useState } from "react";
 import { getAllRequestByUser, requestDelete } from "../../api/request";
 import { message, Modal } from "antd";
+import { HttpStatus } from "../../constants/Http_status";
 
 function UserDemande() {
     const [requests, setRequests] = useState<any[]>([]);
@@ -32,7 +33,7 @@ function UserDemande() {
     const handleDeleteConfirm = async () => {
         if(selectedRequest) {
             const response = await requestDelete(access_token,selectedRequest);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchUserRequest();
                 message.success("Demande d'audience supprimée !")
                 setIsDeleteModalVisible(false);    

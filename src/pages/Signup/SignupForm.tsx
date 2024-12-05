@@ -9,6 +9,7 @@ import SignupBirth from './SignupBirth';
 import SignupCNI from './SignupCNI';
 import { CheckCircleFilled, WarningFilled } from '@ant-design/icons';
 import SignupFile from './SignupFile';
+import { HttpStatus } from '../../constants/Http_status';
 const {Step} = Steps
 
 const AddForms: FunctionComponent = () => {
@@ -65,12 +66,12 @@ const AddForms: FunctionComponent = () => {
         setApiLoading(true);
         const response = await userSignup(signupCredentials);
         if(response) {
-            if(response?.status === 201) {
+            if(response?.status === HttpStatus.CREATED) {
                 setApiLoading(false);
                 setIsRegisteredModalVisible(true);
                 setInitialPwd(response?.data.initialPwd);
             }
-            if(response?.status === 401) {
+            if(response?.status === HttpStatus.UNAUTHORIZED) {
                 setApiLoading(false);
                 setSignupError(response?.response.data.message);
                 setIsErrorModalVisible(true);

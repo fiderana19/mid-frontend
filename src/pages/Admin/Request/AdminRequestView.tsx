@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { message, Modal } from "antd";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
+import { HttpStatus } from "../../../constants/Http_status";
 
 const AdminRequestView: React.FC = () => {
     const [request, setRequest] = useState<any>();
@@ -37,7 +38,7 @@ const AdminRequestView: React.FC = () => {
     const handleDenyConfirm = async () => {
         setApiLoading(true);
         const response = await denyRequest(access_token,request._id);
-        if(response?.status === 200 || response?.status === 201) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             fetchRequest();
             setApiLoading(false);
             message.success("Demande refusée !");
@@ -55,7 +56,7 @@ const AdminRequestView: React.FC = () => {
     const handleValidateConfirm = async () => {
         setApiLoading(true);
         const response = await validateRequest(access_token,request._id);
-        if(response?.status === 200 || response?.status === 201) {
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             fetchRequest();
             setApiLoading(false);
             message.success("Demande approuvée !");

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
 import { CheckCircleOutlined, CloseOutlined, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { HttpStatus } from "../../constants/Http_status";
 
 function AdminAccount() {
     const [accounts, setAccounts] = useState<any[]>([]);
@@ -106,7 +107,7 @@ function AdminAccount() {
         setApiLoading(true);
         if(selectedAcount) {
             const response = await validateUser(access_token,selectedAcount?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 setApiLoading(false);
                 setIsValidateModalVisible(false);
                 message.success("Compte validé !")
@@ -123,7 +124,7 @@ function AdminAccount() {
         setApiLoading(true);
         if(selectedAcount) {
             const response = await deleteUser(access_token,selectedAcount?._id);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAccount();
                 setApiLoading(false);
                 message.success("Compte supprimé !")

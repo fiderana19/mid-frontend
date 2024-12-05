@@ -5,6 +5,7 @@ import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
 import { audienceCancel, getAudienceById } from "../../../api/audience";
 import { message, Modal } from "antd";
+import { HttpStatus } from "../../../constants/Http_status";
 
 function AdminAudienceView() {
     const [audience, setAudience] = useState<any>();
@@ -39,7 +40,7 @@ function AdminAudienceView() {
         setApiLoading(true);
         if(audience) {
             const response = await audienceCancel(access_token,audience);
-            if(response?.status === 200 || response?.status === 201) {
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAudience();
                 setApiLoading(false);
                 message.success("Audience annulée !");
