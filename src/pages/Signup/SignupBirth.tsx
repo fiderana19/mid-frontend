@@ -2,6 +2,7 @@ import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import { FunctionComponent, useState } from "react";
 import dayjs from 'dayjs';
+import { formatDateForPlaceholder } from '../../utils/dateFixation';
 
 interface StepsProp {
     handlePrev: () => void;
@@ -50,7 +51,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
                 <DatePicker 
                     onChange={handleDateNaissanceChange} 
                     className= {birthError ? "border-red-500 w-full py-1.5 bg-transparent placeholder:text-slate-400" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" }  
-                    placeholder= { formData.date_naissance ? formData.date_naissance : "Date de naissance..." } />
+                    placeholder= { formData.date_naissance ? formatDateForPlaceholder(formData.date_naissance) : "Date de naissance..." } />
                     {birthError && <div className="text-left text-red-500 text-xs">{birthError}</div>}
             </div>
             <div className='w-60 my-4 mx-auto'>

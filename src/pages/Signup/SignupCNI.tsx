@@ -2,6 +2,7 @@ import { ContactsOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { FunctionComponent, useState } from 'react';
+import { formatDateForPlaceholder } from '../../utils/dateFixation';
 
 interface StepsProp {
     handlePrev: () => void;
@@ -59,14 +60,15 @@ const SignupCNI: FunctionComponent<StepsProp> = ({handleDateCNIChange, handleKey
                 </div>
                 {cniError && <div className="text-left text-red-500 text-xs">{cniError}</div>}
             </div>
-            <div className='w-60 my-4 mx-auto'>
+            <div className='w-60 my-4 mx-auto relative'>
                 <div className="text-left text-xs font-bold">
                     Date du CIN
                 </div>
                 <DatePicker 
-                    onChange={handleDateCNIChange} 
-                    className= {dateError ? "border-red-500 w-full py-1.5 bg-transparent placeholder:text-slate-400" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" }  
-                    placeholder= { formData.date_cni ? formData.date_cni : "Date CNI..." }   />
+                    onChange={handleDateCNIChange}
+                    popupStyle={{position: 'absolute', top: 100,}}
+                    className= {dateError ? "relative border-red-500 w-full py-1.5 bg-transparent placeholder:text-slate-400" : "relative w-full py-1.5 bg-transparent placeholder:text-slate-400" }  
+                    placeholder= { formData.date_cni ? formatDateForPlaceholder(formData.date_cni) : "Date CNI..." }   />
                     {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
             </div>
             <div className='w-60 my-4 mx-auto'>
