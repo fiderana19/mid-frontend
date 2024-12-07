@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleFilled, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNavigation from "../../../components/Navigation/AdminNavigation";
 import Header from "../../../components/Header";
@@ -8,6 +8,7 @@ import { getAllFreeAvailability } from "../../../api/availability";
 import dayjs from "dayjs";
 import { message, Select } from "antd";
 import { HttpStatus } from "../../../constants/Http_status";
+import { ReportAudienceInterface } from "../../../interfaces/Audience";
 const { Option } = Select;
 
 function AdminAudienceReport() {
@@ -15,7 +16,7 @@ function AdminAudienceReport() {
     let [apiLoading, setApiLoading] = useState<boolean>(false);
     let [selectError, setSelectError] = useState<string>('');
     let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
-    const [reportCredentials, setReportCredentials] = useState<any>({ new_availability: '', old_availability: '' });
+    const [reportCredentials, setReportCredentials] = useState<ReportAudienceInterface>({ new_availability: '', old_availability: '' });
     const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
     const [access_token, setAccessToken] = useState<string | null>(
         localStorage.getItem('token')

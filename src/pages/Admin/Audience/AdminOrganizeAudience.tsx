@@ -9,12 +9,13 @@ import { getAllFreeAvailability } from '../../../api/availability';
 import { audienceCreate } from "../../../api/audience";
 import dayjs from "dayjs";
 import { HttpStatus } from "../../../constants/Http_status";
+import { CreateAudienceInterface } from "../../../interfaces/Audience";
 
 const { Option } = Select;
 
 function AdminOrganizeAudience() {
     const [request, setRequest] = useState<any>();
-    const [audienceCredentials, setAudienceCredentials] = useState<any>({ user: '', availability: '', request: '' });
+    const [audienceCredentials, setAudienceCredentials] = useState<CreateAudienceInterface>({ user: '', availability: '', request: '' });
     let [apiLoading, setApiLoading] = useState<boolean>(false);
     let [selectError, setSelectError] = useState<string>('');
     let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);

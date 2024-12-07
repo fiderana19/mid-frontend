@@ -9,12 +9,13 @@ import { audienceSearch } from "../../../api/audience";
 import GeneratePdf from "../../../utils/setPdfGenerate";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import { HttpStatus } from "../../../constants/Http_status";
+import { SearchAudienceDto } from '../../../../../mid-backend/src/dto/search-audience.dto';
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
     const [selectDateError, setSelectDateError] = useState<string>('');
     const [totalAudiences, setTotalAudiences] = useState<number>();
-    const [searchCredentials, setSearchCredentials] = useState<any>({status_audience: 'Fixé', date_debut: '', date_end: ''});
+    const [searchCredentials, setSearchCredentials] = useState<SearchAudienceDto>({status_audience: 'Fixé', date_debut: '', date_end: ''});
     const [audiences, setAudiences] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSearching, setIsSearching] = useState<boolean>(false);
