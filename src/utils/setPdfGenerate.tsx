@@ -75,7 +75,6 @@ interface PdfProps {
 }
 
 const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_status, date_debut, date_end }) => {
-  console.log("kindy eh", String(audience_status).toUpperCase())
   
   return (
     <div className="bg-gray-500">

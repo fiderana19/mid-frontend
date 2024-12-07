@@ -39,7 +39,6 @@ function AdminAudienceSearch() {
                 date_debut: date_debut,
                 date_end: date_end
             });
-            console.log(date_debut, date_end)
         } else if(selectedDateType === 'month') {
             const { date_debut, date_end } = getMonthDates(dateString);
             setSearchCredentials({
@@ -75,7 +74,6 @@ function AdminAudienceSearch() {
             setSelectDateError("Veuillez selectionner un date !");
         }
         if(searchCredentials.date_end !== '' && searchCredentials.date_end !== '') {
-            console.log(searchCredentials, access_token);
             setIsLoading(true);
             const response = await audienceSearch(access_token, searchCredentials);
             setIsSearching(true);
