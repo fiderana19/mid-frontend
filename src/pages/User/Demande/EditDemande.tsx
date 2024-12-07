@@ -7,6 +7,7 @@ import { RequestAddInterface } from "../../../interfaces/Request";
 import { getRequestById, requestEdit } from "../../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
 import { HttpStatus } from "../../../constants/Http_status";
+import { formatDateForPlaceholder } from '../../../utils/dateFixation';
 
 const UserEditDemande: FunctionComponent = () => {
     const [request, setRequest] = useState<any>();
@@ -125,7 +126,7 @@ const UserEditDemande: FunctionComponent = () => {
                             </div>
                             <DatePicker 
                                 className="w-full py-1.5 bg-transparent placeholder:text-slate-400" 
-                                placeholder={requestCredentials.date_wanted_debut}
+                                placeholder={formatDateForPlaceholder(requestCredentials.date_wanted_debut) +' à '+ formatDateForPlaceholder(requestCredentials.date_wanted_end)}
                                 onChange={handleDateChange} 
                                 picker="week" 
                             />
