@@ -14,7 +14,6 @@ interface StepsProp {
 const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, setApiLoading, handlePrev, handleSignupUser, handleChangeFile, handleChange}) => {
 
     async function handleSubmit () {
-        console.log(formData);
         handleSignupUser();
     }
     

@@ -70,7 +70,6 @@ const UserEditDemande: FunctionComponent = () => {
         if(reqestId) {
             const response = await requestEdit(access_token,reqestId, requestCredentials);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                console.log(response);
                 message.success("Demande d'audience modifiée !");
                 navigate("/user/demande");
             }    

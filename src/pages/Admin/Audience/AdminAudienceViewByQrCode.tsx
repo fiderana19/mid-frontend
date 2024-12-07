@@ -30,7 +30,6 @@ function AdminAudienceViewByQrCode() {
         if(audienceId && token) {
             const response = await getAudienceByRef(token,audienceId);
             if(response) {
-                console.log(response)
                 setAudience(response.data);
             }
         }

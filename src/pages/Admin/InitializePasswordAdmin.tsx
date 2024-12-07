@@ -41,7 +41,6 @@ function InitializePasswordAdmin() {
 
         if(updatePasswordCredentials.password.length >= 6) {
             const response = await initializePassword(access_token, user._id, updatePasswordCredentials);
-            console.log(response);
             if(response?.status === HttpStatus.OK) {
                 navigate("/admin/home");
             }

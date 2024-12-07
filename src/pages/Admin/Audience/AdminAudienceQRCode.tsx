@@ -33,7 +33,6 @@ function AdminAudienceQRCode() {
                                 constraints={{ facingMode: 'user' }}
                                 onResult={(result:any, error) => {
                                     if (!!result) {
-                                        console.log(result?.text)
                                         handleScan(result?.text);
                                     }
                         

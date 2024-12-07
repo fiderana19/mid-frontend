@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { checkEmailExistisAPI, userLogin } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import { HttpStatus } from "../constants/Http_status";
+import { message } from "antd";
 
 type AuthContextProps = {
     token?: string | null;
@@ -40,11 +41,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                         }
                     } else if(decodedToken.role[0] === "user" && !decodedToken.id) {
                         const user = await checkEmailExistisAPI(email);
-                        console.log(user);
                         if(user) {
                             navigate("/");
                         } else {
-                            console.error("User not found.", user);
+                            message.error("User not found !")
                         }
                     } else {
                         if(!isNotFirstLogin) {

@@ -165,7 +165,6 @@ function AdminAudience() {
     const handleMissingAudienceConfirm = async () => {
         setApiLoading(true);
         if(selectedAudience) {
-            console.log(selectedAudience)
             const response = await audienceMissed(access_token,selectedAudience?._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAllAudience();

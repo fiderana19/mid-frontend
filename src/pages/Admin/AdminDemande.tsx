@@ -306,7 +306,7 @@ function AdminDemande() {
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>
                                                         <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request); console.log(selectedRequest)}}>
+                                                            <a onClick={(e) => {e.preventDefault(); setSelectedRequest(request);}}>
                                                                 <MenuOutlined />
                                                             </a>
                                                         </Dropdown>

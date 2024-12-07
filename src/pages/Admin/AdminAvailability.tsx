@@ -133,7 +133,6 @@ function AdminAvailability() {
     }
 
     const handleAddAvailabilitySubmit = async () => {
-        console.log(createAvailabilityCredentials)
         const response = await createAvailability(access_token,createAvailabilityCredentials);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             fetchAvailability();
