@@ -22,6 +22,9 @@ function AdminAvailability() {
     const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
     const [cancelError, setCancelError] = useState<string>('');
+    const [dateError, setDateError] = useState<string>('');
+    const [hdebutError, setHDebutError] = useState<string>('');
+    const [hendError, setHEndError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [access_token, setAccessToken] = useState<string | null>(
@@ -133,16 +136,31 @@ function AdminAvailability() {
     }
 
     const handleAddAvailabilitySubmit = async () => {
-        const response = await createAvailability(access_token,createAvailabilityCredentials);
-        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-            fetchAvailability();
-            message.success("Disponiblité ajoutée !");
-            setIsAddAvailabilityModalVisible(false);    
+        setDateError('');
+        setHDebutError('');
+        setHEndError('');
+
+        if(createAvailabilityCredentials.date_availability === '') {
+            setDateError("Veuillez selectionner un date !");
         }
-        if(response?.status === 401) {
-            setCancelError(response?.response.data.message); 
-            setIsAddAvailabilityModalVisible(false);   
-            setIsErrorModalVisible(true);           
+        if(createAvailabilityCredentials.hour_debut === '') {
+            setHDebutError("Veuillez selectionner l'heure debut !");
+        }
+        if(createAvailabilityCredentials.hour_end === '') {
+            setHEndError("Veuillez selectionner l'heure fin !")
+        }
+        if(createAvailabilityCredentials.date_availability !== '' && createAvailabilityCredentials.hour_debut !== '' && createAvailabilityCredentials.hour_end !== '') {
+            const response = await createAvailability(access_token,createAvailabilityCredentials);
+            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
+                fetchAvailability();
+                message.success("Disponiblité ajoutée !");
+                setIsAddAvailabilityModalVisible(false);    
+            }
+            if(response?.status === 401) {
+                setCancelError(response?.response.data.message); 
+                setIsAddAvailabilityModalVisible(false);   
+                setIsErrorModalVisible(true);           
+            }
         }
     }
 
@@ -345,14 +363,16 @@ function AdminAvailability() {
                  >
                     <div>
                         <div className='w-60 my-4 mx-auto'>
-                            <DatePicker name="date_availability" onChange={handleDateChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Date de la disponibilité..."  />
-                        </div>                    
-                    
+                            <DatePicker name="date_availability" onChange={handleDateChange} className={dateError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Date de la disponibilité..."  />
+                            {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
+                        </div>                                        
                         <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_debut" format="HH:mm" onChange={handleDebutTimeChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Début de la disponibilité..."  />
+                            <TimePicker name="hour_debut" format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
+                            {hdebutError && <div className="text-left text-red-500 text-xs">{hdebutError}</div>}                        
                         </div>     
                         <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_end" format="HH:mm" onChange={handleEndTimeChange} className="w-full py-1.5 bg-transparent placeholder:text-slate-400" placeholder="Fin de la disponibilité..."  />
+                            <TimePicker name="hour_end" format="HH:mm" onChange={handleEndTimeChange} className={hendError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Fin de la disponibilité..."  />
+                            {hendError && <div className="text-left text-red-500 text-xs">{hendError}</div>}                        
                         </div>                                  
                     </div>
             </Modal>    
