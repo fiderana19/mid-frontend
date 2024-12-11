@@ -22,6 +22,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
         setLieuNaissError('');
         setTelephoneError('');
         setBirthError('');
+
         const now = dayjs(new Date()).toISOString();
         const major = dayjs(formData.date_naissance);
         const mj = major.add(18, 'year')
