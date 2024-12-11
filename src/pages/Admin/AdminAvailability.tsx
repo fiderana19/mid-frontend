@@ -9,6 +9,7 @@ import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
 import { okConfirmStyle } from "../../utils/ModalStyle";
 import { HttpStatus } from "../../constants/Http_status";
+import moment from "moment";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
@@ -187,6 +188,16 @@ function AdminAvailability() {
         }
     }
 
+    const disabledHours = () => {
+        const hours = [];
+        const currentHour = moment().hour();
+      
+        for (let i = currentHour + 1; i <= 24; i++) {
+          hours.push(i);
+        }
+      
+        return hours;
+    };
 
     return(
         <>
@@ -367,7 +378,7 @@ function AdminAvailability() {
                             {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
                         </div>                                        
                         <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_debut" format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
+                            <TimePicker name="hour_debut" disabledHours={disabledHours} format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
                             {hdebutError && <div className="text-left text-red-500 text-xs">{hdebutError}</div>}                        
                         </div>     
                         <div className='w-60 my-4 mx-auto'>
