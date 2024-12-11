@@ -23,6 +23,7 @@ function AdminAvailability() {
     const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
     const [cancelError, setCancelError] = useState<string>('');
     const [dateError, setDateError] = useState<string>('');
+    const [weekendError, setWeekendError] = useState<string>('');
     const [hdebutError, setHDebutError] = useState<string>('');
     const [hendError, setHEndError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
@@ -55,6 +56,11 @@ function AdminAvailability() {
 
 
     const handleDateChange = (date: dayjs.Dayjs | null) => {
+        setDateError('');
+        setHDebutError('');
+        setHEndError('');
+        setWeekendError('');
+
         if (date) {
             const isoDate = ToLocalISOString(date);
             setDay(isoDate)
@@ -80,6 +86,11 @@ function AdminAvailability() {
     };
 
     const handleDebutTimeChange = (date: dayjs.Dayjs | null) => {
+        setDateError('');
+        setHDebutError('');
+        setHEndError('');
+        setWeekendError('');
+
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
@@ -91,6 +102,11 @@ function AdminAvailability() {
     };
     
     const handleEndTimeChange = (date: dayjs.Dayjs | null) => {
+        setDateError('');
+        setHDebutError('');
+        setHEndError('');
+        setWeekendError('');
+
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
@@ -139,9 +155,14 @@ function AdminAvailability() {
         setDateError('');
         setHDebutError('');
         setHEndError('');
+        setWeekendError('');
+        const dayToVerify = new Date(createAvailabilityCredentials.date_availability);
 
         if(createAvailabilityCredentials.date_availability === '') {
             setDateError("Veuillez selectionner un date !");
+        }
+        if(dayToVerify.getDay() === 0 || dayToVerify.getDay() === 6) {
+            setWeekendError("Impossible d'ajouter un jour de weekend !");
         }
         if(createAvailabilityCredentials.hour_debut === '') {
             setHDebutError("Veuillez selectionner l'heure debut !");
@@ -149,7 +170,7 @@ function AdminAvailability() {
         if(createAvailabilityCredentials.hour_end === '') {
             setHEndError("Veuillez selectionner l'heure fin !")
         }
-        if(createAvailabilityCredentials.date_availability !== '' && createAvailabilityCredentials.hour_debut !== '' && createAvailabilityCredentials.hour_end !== '') {
+        if(createAvailabilityCredentials.date_availability !== '' && createAvailabilityCredentials.hour_debut !== '' && createAvailabilityCredentials.hour_end !== '' && dayToVerify.getDay() !== 0 && dayToVerify.getDay() !== 6) {
             const response = await createAvailability(access_token,createAvailabilityCredentials);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 fetchAvailability();
@@ -193,7 +214,7 @@ function AdminAvailability() {
       
         return hours;
     };
-    
+
     // Disabled hour end for creating availability
     const disabledEndHours = () => {
         const hours = [0,1,2,3,4,5,6,7,13,16,17,18,19,20,21,22,23];
@@ -376,8 +397,9 @@ function AdminAvailability() {
                  >
                     <div>
                         <div className='w-60 my-4 mx-auto'>
-                            <DatePicker name="date_availability" onChange={handleDateChange} className={dateError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Date de la disponibilité..."  />
+                            <DatePicker name="date_availability" onChange={handleDateChange} className={(dateError || weekendError) ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Date de la disponibilité..."  />
                             {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
+                            {weekendError && <div className="text-left text-red-500 text-xs">{weekendError}</div>}
                         </div>                                        
                         <div className='w-60 my-4 mx-auto'>
                             <TimePicker name="hour_debut" disabledHours={disabledDebutHours} format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
