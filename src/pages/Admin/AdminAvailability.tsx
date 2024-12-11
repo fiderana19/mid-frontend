@@ -9,7 +9,6 @@ import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
 import { okConfirmStyle } from "../../utils/ModalStyle";
 import { HttpStatus } from "../../constants/Http_status";
-import moment from "moment";
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);
@@ -188,13 +187,14 @@ function AdminAvailability() {
         }
     }
 
+    // Disabled hour for creating availability
     const disabledHours = () => {
-        const hours = [];
-        const currentHour = moment().hour();
+        const hours = [0,1,2,3,4,5,6,12,13,17,18,19,20,21,22,23];
+        // const currentHour = moment().hour();
       
-        for (let i = currentHour + 1; i <= 24; i++) {
-          hours.push(i);
-        }
+        // for (let i = Number(currentHour); i <= 24; i++) {
+        //   hours.push(i);
+        // }
       
         return hours;
     };
