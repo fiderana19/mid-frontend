@@ -187,14 +187,16 @@ function AdminAvailability() {
         }
     }
 
-    // Disabled hour for creating availability
-    const disabledHours = () => {
-        const hours = [0,1,2,3,4,5,6,12,13,17,18,19,20,21,22,23];
-        // const currentHour = moment().hour();
+    // Disabled hour debut for creating availability
+    const disabledDebutHours = () => {
+        const hours = [0,1,2,3,4,5,6,7,12,13,16,17,18,19,20,21,22,23];
       
-        // for (let i = Number(currentHour); i <= 24; i++) {
-        //   hours.push(i);
-        // }
+        return hours;
+    };
+    
+    // Disabled hour end for creating availability
+    const disabledEndHours = () => {
+        const hours = [0,1,2,3,4,5,6,7,13,16,17,18,19,20,21,22,23];
       
         return hours;
     };
@@ -378,11 +380,11 @@ function AdminAvailability() {
                             {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
                         </div>                                        
                         <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_debut" disabledHours={disabledHours} format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
+                            <TimePicker name="hour_debut" disabledHours={disabledDebutHours} format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
                             {hdebutError && <div className="text-left text-red-500 text-xs">{hdebutError}</div>}                        
                         </div>     
                         <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_end" format="HH:mm" onChange={handleEndTimeChange} className={hendError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Fin de la disponibilité..."  />
+                            <TimePicker name="hour_end" disabledHours={disabledEndHours} format="HH:mm" onChange={handleEndTimeChange} className={hendError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Fin de la disponibilité..."  />
                             {hendError && <div className="text-left text-red-500 text-xs">{hendError}</div>}                        
                         </div>                                  
                     </div>
