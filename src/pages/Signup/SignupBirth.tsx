@@ -17,15 +17,18 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
     const [lieuNaissError, setLieuNaissError] = useState<string>('');
     const [telephoneError, setTelephoneError] = useState<string>('');
     const [birthError, setBirthError] = useState<string>('');
+    const [telephoneRegexError, setTelephoneRegexError] = useState<string>('');
+    const telephoneRegex = new RegExp("^3(2|3|4|6|8|9).{7}");
 
     async function handleSubmit () {
         setLieuNaissError('');
         setTelephoneError('');
         setBirthError('');
+        setTelephoneRegexError('');
 
         const now = dayjs(new Date()).toISOString();
         const major = dayjs(formData.date_naissance);
-        const mj = major.add(18, 'year')
+        const mj = major.add(18, 'year');
     
         if(dayjs(now) < mj || formData.date_naissance === '') {
             setBirthError("Vous devez au moins avoir 18 ans !")
@@ -34,11 +37,15 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
         if(formData.lieu_naissance === "") {
             setLieuNaissError("Veuillez remplir votre lieu de naissance !")
         }
-        if(formData.telephone.length !== 9) {
-            setTelephoneError("Le numero de telephone doit être 9 chiffres !")
+        if(formData.telephone === "") {
+            setTelephoneError("Veuillez remplir votre telephone !")
         }
 
-        if(formData.lieu_naissance !== "" && formData.telephone.length === 9 && dayjs(now) >= mj) {
+        if(!telephoneRegex.test(formData.telephone) && formData.telephone !== "") {
+            setTelephoneRegexError("Numero de telephone invalide !");
+        }
+
+        if(formData.lieu_naissance !== "" && formData.telephone !== "" && dayjs(now) >= mj && telephoneRegex.test(formData.telephone)) {
             handleNext();
         }
     }
@@ -82,7 +89,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
                         onKeyPress={handleKeyPress} 
                         name="telephone"
                         placeholder="Saisir votre telephone..."
-                        className={telephoneError ? "border-red-500 peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-20 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
+                        className={(telephoneError || telephoneRegexError) ? "border-red-500 peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-20 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
                     />
                     <label className="absolute top-1.5 left-9 bg-gray-700 text-white p-0.5 rounded text-sm">
                         +261
@@ -90,6 +97,7 @@ const SignupBirth: FunctionComponent<StepsProp> = ({handleDateNaissanceChange, h
                     <PhoneOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                 </div>
                 {telephoneError && <div className="text-left text-red-500 text-xs">{telephoneError}</div>}
+                {telephoneRegexError && <div className="text-left text-red-500 text-xs">{telephoneRegexError}</div>}
             </div>
             <div className="flex justify-end gap-2">
                 <button onClick={handlePrev} className="border hover:border-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500">Précédent</button>
