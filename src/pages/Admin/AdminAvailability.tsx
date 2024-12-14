@@ -380,6 +380,17 @@ function AdminAvailability() {
                                             </div>
                                         </div>
                                 }
+                                {                          
+                                    (!isLoading && filterRef && filteredAvailabilities.length < 1) &&
+                                        <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                            <div className="text-center">
+                                                <CloseOutlined className="text-5xl" />
+                                                <div className="my-2">
+                                                Aucune disponiblité
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
                                 {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                             </div>
                         </div>

@@ -238,7 +238,7 @@ function AdminAudience() {
                                                 <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
                                                     <img src={`data:image/png;base64,${audience.user_profile_photo}`} className="min-w-max rounded-full border border-slate-400 w-9 h-9 object-cover" />
                                                 </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
+                                            <td className='md:px-6 px-2 py-4 whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_cni }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.ref_audience }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_type }  </td>
@@ -310,7 +310,7 @@ function AdminAudience() {
                                                 <td className='md:px-6 py-1 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>
                                                     <img src={`data:image/png;base64,${audience.user_profile_photo}`} className="min-w-max rounded-full border border-slate-400 w-9 h-9 object-cover" />
                                                 </td>
-                                            <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
+                                            <td className='md:px-6 px-2 py-4 whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_nom } { audience.user_prenom }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.user_cni }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.ref_audience }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_type }  </td>
@@ -377,6 +377,17 @@ function AdminAudience() {
                         </table>
                         {                          
                             (!isLoading && audiences && audiences.length < 1) &&
+                                <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
+                                    <div className="text-center">
+                                        <CloseOutlined className="text-5xl" />
+                                        <div className="my-2">
+                                        Aucune audience
+                                        </div>
+                                    </div>
+                                </div>
+                        }
+                        {                          
+                            (!isLoading && filterRef && filteredAudiences.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
                                     <div className="text-center">
                                         <CloseOutlined className="text-5xl" />

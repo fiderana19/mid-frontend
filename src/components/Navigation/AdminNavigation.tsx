@@ -98,7 +98,7 @@ function AdminNavigation() {
                 <Link to="/admin/availability">
                     <div className={location.pathname === "/admin/availability" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/availability" ? <CalendarFilled className="" /> : <CalendarOutlined className="" />}
-                        <div className="md:block hidden">Disponibilite</div>
+                        <div className="md:block hidden">Disponibilité</div>
                     </div>
                 </Link>
                 <Link to="/admin/account">
