@@ -8,6 +8,15 @@ const mininterInfo = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
   },
+  sg: {
+    textAlign: 'left',
+    fontSize: 12,
+    marginTop: 10
+  },
+  liner: {
+    textDecoration: 'underline',
+    width: 25
+  },
   republic: {
     marginHorizontal: 'auto',
     width: 150,
@@ -58,17 +67,23 @@ const audience = StyleSheet.create({
     fontSize: 10,
     marginTop: 5,
   },
+  fsize: {
+    fontSize: 10,
+    textAlign: 'left',
+    paddingLeft: 5
+  },
   signature: {
     fontSize: 12,
     textAlign: 'right',
-    marginRight: 5,
+    marginRight: 70,
     marginTop: 15,
     marginBottom: 100,
   },
   date: {
     fontSize: 12,
     textAlign: 'right',
-    marginVertical: 5
+    marginVertical: 5,
+    marginRight: 100
   }
 });
 
@@ -94,6 +109,7 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
                   <Text style={mininterInfo.header}>SECRETARIAT GENERAL</Text>
                   <Text style={mininterInfo.header}>-------------</Text>
                   <Text style={mininterInfo.header}>AUDIENCE AVEC LE MINISTRE</Text>
+                  <Text style={mininterInfo.sg}>N°  <Text style={mininterInfo.liner}>                     </Text>  -  MININTER/SG</Text>
                   <View>
                     <Text style={mininterInfo.title}>AUDIENCE { String(audience_status).toUpperCase() } DU { formatDateForPdf(new Date(date_debut)) } AU { formatDateForPdf(new Date(date_end)) }</Text>
                   </View>
@@ -115,16 +131,16 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
                     {audiences.length > 0 && audiences.map((audi: any, index: any) => (
                       <View style={audience.row} key={index}>
                         <View style={audience.cell}>
-                          <Text>{ audi.user_nom } { audi.user_prenom }</Text>
+                          <Text style={audience.fsize}>{ audi.user_nom } { audi.user_prenom }</Text>
                         </View>
                         <View style={audience.cell}>
-                          <Text>{ audi.user_cni }</Text>
+                          <Text style={audience.fsize}>{ audi.user_cni }</Text>
                         </View>
                         <View style={audience.cell}>
-                          <Text>{ audi.request_type }</Text>
+                          <Text style={audience.fsize}>{ audi.request_type }</Text>
                         </View>
                         <View style={audience.cell}>
-                          <Text>{ audi.availability_date } de { audi.availability_hour_debut } à { audi.availability_hour_end } </Text>
+                          <Text style={audience.fsize}>{ audi.availability_date } de { audi.availability_hour_debut } à { audi.availability_hour_end } </Text>
                         </View>
                       </View>
                     ))}
@@ -146,8 +162,8 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
                     }
                   </View>
                   <Text style={audience.total}>Arreté au nombre total de { total } audience(s) .</Text>
-                  <Text style={audience.date}>Antananarivo, le ....................................... </Text>
-                  <Text style={audience.signature}>SECRETARIAT GENERAL</Text>
+                  <Text style={audience.date}>Antananarivo, le</Text>
+                  <Text style={audience.signature}>LE SECRETAIRE GENERAL</Text>
                 </View>
               </Page>
             </Document>
