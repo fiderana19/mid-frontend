@@ -1,11 +1,18 @@
-import { PDFViewer, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { PDFViewer, Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { FunctionComponent } from "react";
 import { formatDateForPdf } from './dateFixation';
+import Republic from '../assets/image/republique.jpg';
 
 const mininterInfo = StyleSheet.create({
   header: {
     textAlign: 'center',
     fontSize: 12,
+  },
+  republic: {
+    marginHorizontal: 'auto',
+    width: 150,
+    objectFit: 'cover',
+    marginBottom: 5
   },
   title: {
     fontSize: 14,
@@ -48,7 +55,7 @@ const audience = StyleSheet.create({
     padding: 5,
   },
   total: {
-    fontSize: 7,
+    fontSize: 10,
     marginTop: 5,
   },
   signature: {
@@ -61,7 +68,6 @@ const audience = StyleSheet.create({
   date: {
     fontSize: 12,
     textAlign: 'right',
-    marginRight: 105,
     marginVertical: 5
   }
 });
@@ -82,13 +88,14 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
             <Document>
               <Page size="A4" style={mininterInfo.page}>
                 <View style={mininterInfo.section}>
+                  <Image style={mininterInfo.republic} src={Republic} cache={false} />
                   <Text style={mininterInfo.header}>MINISTERE DE L'INTERIEUR</Text>
                   <Text style={mininterInfo.header}>------------------------</Text>
                   <Text style={mininterInfo.header}>SECRETARIAT GENERAL</Text>
                   <Text style={mininterInfo.header}>-------------</Text>
                   <Text style={mininterInfo.header}>AUDIENCE AVEC LE MINISTRE</Text>
                   <View>
-                    <Text style={mininterInfo.title}>LISTE DES AUDIENCES { String(audience_status).toUpperCase() } DU { formatDateForPdf(new Date(date_debut)) } AU { formatDateForPdf(new Date(date_end)) }</Text>
+                    <Text style={mininterInfo.title}>AUDIENCE { String(audience_status).toUpperCase() } DU { formatDateForPdf(new Date(date_debut)) } AU { formatDateForPdf(new Date(date_end)) }</Text>
                   </View>
                   <View style={audience.table}>
                     <View style={audience.rowhead}>
@@ -105,7 +112,7 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
                         <Text>DATE</Text>
                       </View>
                     </View>
-                    {audiences.map((audi: any, index: any) => (
+                    {audiences.length > 0 && audiences.map((audi: any, index: any) => (
                       <View style={audience.row} key={index}>
                         <View style={audience.cell}>
                           <Text>{ audi.user_nom } { audi.user_prenom }</Text>
@@ -121,9 +128,25 @@ const GeneratePdf: FunctionComponent<PdfProps> = ({ audiences, total, audience_s
                         </View>
                       </View>
                     ))}
+                    {audiences.length < 1 &&
+                      <View style={audience.row}>
+                        <View style={audience.cell}>
+                          <Text>NEANT</Text>
+                        </View>
+                        <View style={audience.cell}>
+                          <Text>-</Text>
+                        </View>
+                        <View style={audience.cell}>
+                          <Text>-</Text>
+                        </View>
+                        <View style={audience.cell}>
+                          <Text>-</Text>
+                        </View>
+                      </View>
+                    }
                   </View>
-                  <Text style={audience.total}>Arreté au nombre total de { total }.</Text>
-                  <Text style={audience.date}>Antananarivo, le </Text>
+                  <Text style={audience.total}>Arreté au nombre total de { total } audience(s) .</Text>
+                  <Text style={audience.date}>Antananarivo, le ....................................... </Text>
                   <Text style={audience.signature}>SECRETARIAT GENERAL</Text>
                 </View>
               </Page>
