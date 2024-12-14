@@ -52,7 +52,7 @@ function Header() {
       label: <Link to="/admin/home">
                   <div className={location.pathname === "/admin/home" ? "flex gap-2 text-blue-500 font-latobold" : "flex gap-2" } >
                       <HomeOutlined className="" />
-                      <div className="">Acceuil</div>
+                      <div className="">Accueil</div>
                   </div>
               </Link>,
     },

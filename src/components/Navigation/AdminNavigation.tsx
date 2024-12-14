@@ -36,7 +36,7 @@ function AdminNavigation() {
                 <Link to="/admin/home">
                     <div className={location.pathname === "/admin/home" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
                         {location.pathname === "/admin/home" ? <HomeFilled className="" /> : <HomeOutlined className="" />}
-                        <div className="md:block hidden">Acceuil</div>
+                        <div className="md:block hidden">Accueil</div>
                     </div>
                 </Link>
                 <Link to="/admin/demande">
