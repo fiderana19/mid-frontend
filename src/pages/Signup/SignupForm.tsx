@@ -42,6 +42,14 @@ const AddForms: FunctionComponent = () => {
         }
     }
 
+    const handleLetterKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        const charCode = e.which || e.keyCode;
+
+        if(!((charCode >= 97 && charCode <= 122) || (charCode >= 65 && charCode <= 90) || (charCode >= 224 && charCode <= 246) || (charCode >= 249 && charCode <= 252))) {
+            e.preventDefault();
+        }
+    }
+
     const handleDateNaissanceChange = (date: dayjs.Dayjs | null) => {
         if (date) {
         const isoDate = date.toISOString();
@@ -111,7 +119,7 @@ const AddForms: FunctionComponent = () => {
             </div>
             {currentStep === 0 && (
                 <div>
-                    <SignupPersonnal formData={signupCredentials} handleChange={handleChange} handleNext={handleNextPage} />
+                    <SignupPersonnal formData={signupCredentials} handleLetterKeyPress={handleLetterKeyPress} handleChange={handleChange} handleNext={handleNextPage} />
                 </div>
             )}
             {currentStep === 1 && (

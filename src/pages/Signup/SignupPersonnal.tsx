@@ -4,10 +4,11 @@ import { FunctionComponent, useState } from 'react';
 interface StepsProp {
     handleNext: () => void;
     handleChange: (e: any) => void;
+    handleLetterKeyPress: (e: any) => void;
     formData: any;
 }
 
-const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, handleChange}) => {
+const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, handleLetterKeyPress, handleChange}) => {
     const [nomError, setNomError] = useState<string>('');
     const [adresseError, setAdresseError] = useState<string>('');
 
@@ -37,6 +38,7 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
                     <input 
                         value={formData.nom} 
                         onChange={handleChange} 
+                        onKeyPress={handleLetterKeyPress}
                         name="nom"
                         placeholder="Saisir votre nom..."
                         className={nomError ? "border-red-500 w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
@@ -53,6 +55,7 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
                     <input 
                         value={formData.prenom} 
                         onChange={handleChange} 
+                        onKeyPress={handleLetterKeyPress}
                         name="prenom"
                         placeholder="Saisir votre prenom..."
                         className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
