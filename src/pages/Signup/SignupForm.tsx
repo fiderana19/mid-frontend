@@ -49,7 +49,7 @@ const AddForms: FunctionComponent = () => {
             e.preventDefault();
         }
     }
-
+ 
     const handleDateNaissanceChange = (date: dayjs.Dayjs | null) => {
         if (date) {
         const isoDate = date.toISOString();
