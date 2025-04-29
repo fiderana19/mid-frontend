@@ -1,14 +1,14 @@
 import { Steps ,Button, Modal  } from 'antd'
-import { FunctionComponent, useEffect, useState } from 'react'
-import SignupPersonnal from './SignupPersonnal';
+import { FunctionComponent, lazy, Suspense, useEffect, useState } from 'react'
 import { userSignup } from '../../api/users';
 import { useNavigate } from 'react-router-dom';
 import { SignupInterface } from '../../interfaces/User';
 import dayjs from 'dayjs';
-import SignupBirth from './SignupBirth';
-import SignupCNI from './SignupCNI';
-import { CheckCircleFilled, WarningFilled } from '@ant-design/icons';
-import SignupFile from './SignupFile';
+const SignupBirth = lazy(() => import('./SignupBirth'));
+const SignupCNI = lazy(() => import('./SignupCNI'));
+const SignupPersonnal = lazy(() => import('./SignupPersonnal'));
+const SignupFile = lazy(() => import('./SignupFile'));
+import { CheckCircleFilled, LoadingOutlined, WarningFilled } from '@ant-design/icons';
 import { HttpStatus } from '../../constants/Http_status';
 const {Step} = Steps
 
@@ -119,22 +119,30 @@ const AddForms: FunctionComponent = () => {
             </div>
             {currentStep === 0 && (
                 <div>
-                    <SignupPersonnal formData={signupCredentials} handleLetterKeyPress={handleLetterKeyPress} handleChange={handleChange} handleNext={handleNextPage} />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <SignupPersonnal formData={signupCredentials} handleLetterKeyPress={handleLetterKeyPress} handleChange={handleChange} handleNext={handleNextPage} />
+                    </Suspense>
                 </div>
             )}
             {currentStep === 1 && (
                 <div>
-                    <SignupBirth formData={signupCredentials} handleChange={handleChange} handleDateNaissanceChange={handleDateNaissanceChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <SignupBirth formData={signupCredentials} handleChange={handleChange} handleDateNaissanceChange={handleDateNaissanceChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                    </Suspense>
                 </div>
             )}
             {currentStep === 2 && (
                 <div>
-                    <SignupCNI formData={signupCredentials}  handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <SignupCNI formData={signupCredentials}  handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                    </Suspense>
                 </div>
             )}
             {currentStep === 3 && (
                 <div>
-                    <SignupFile formData={signupCredentials} apiLoading={apiLoading} setApiLoading={setApiLoading} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <SignupFile formData={signupCredentials} apiLoading={apiLoading} setApiLoading={setApiLoading} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
+                    </Suspense>
                     <Modal title="Inscription réussie" 
                         open={isRegisteredModalVisible}
                         onOk={handleModalOk}
