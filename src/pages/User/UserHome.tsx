@@ -1,7 +1,7 @@
-import { FunctionComponent, useEffect, useState } from "react";
-import UserNavigation from "../../components/Navigation/UserNavigation";
+import { FunctionComponent, lazy, Suspense, useEffect, useState } from "react";
 import { getUserById } from "../../api/users";
-import Typewriter from "../../components/TypeWritter";
+const Typewriter = lazy(() => import("../../components/TypeWritter"));
+const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 import Ministre from '../../assets/image/ministre.jpg';
 import { ministre } from "../../constants/Ministre";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -27,7 +27,9 @@ const UserHome: FunctionComponent = () => {
 
     return(
         <div className="w-full flex flex-col justify-center bg-four min-h-screen">
-            <UserNavigation />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <UserNavigation />
+            </Suspense>
             <div className="pt-16 lg:px-20 px-4">
                 {
                 user && 
@@ -37,7 +39,9 @@ const UserHome: FunctionComponent = () => {
                         </div>
                         <div className="md:w-2/4 w-full md:text-left text-center md:my-0 my-4">
                             <div className="sm:text-5xl text-2xl font-bold whitespace-normal">
-                                <Typewriter text={`Bonjour, ${user.nom} ${user.prenom}`} />
+                                <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                                    <Typewriter text={`Bonjour, ${user.nom} ${user.prenom}`} />
+                                </Suspense>
                             </div>
                         </div>
                         <div className="md:w-1/4 w-full">

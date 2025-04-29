@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import UserNavigation from "../../components/Navigation/UserNavigation";
 import { CloseOutlined, DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { getAllRequestByUser, requestDelete } from "../../api/request";
 import { message, Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
+const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserDemande() {
     const [requests, setRequests] = useState<any[]>([]);
@@ -43,7 +43,9 @@ function UserDemande() {
     
     return(
         <div className="w-full min-h-screen bg-four">
-            <UserNavigation />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <UserNavigation />
+            </Suspense>
             <div className="pt-16 sm:px-20 px-4">
                 <div className="sm:flex block justify-between items-center">
                     <div className="text-lg font-latobold my-4">Les demandes d'audience</div>

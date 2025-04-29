@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import Bg from '../assets/image/bg-login.jpeg';
-import SignupForm from './Signup/SignupForm';
+import { lazy, Suspense } from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
+const SignupForm = lazy(() => import('./Signup/SignupForm'));
 
 function Signup() {
 
@@ -9,7 +11,9 @@ function Signup() {
         <div className='min-h-screen flex flex-col justify-center'>
             <div className='sm:flex block justify-between '>
                 <div className='lg:w-1/3 sm:w-1/2 w-full flex flex-col bg-second h-screen text-center py-5 sm:px-10 px-4 justify-center'>
-                    <SignupForm />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <SignupForm />
+                    </Suspense>
                     <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
                         <div>Vous avez déjà un compte ?</div>
                         <Link to="/">

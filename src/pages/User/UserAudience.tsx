@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { getAudienceByUser } from "../../api/audience";
-import UserNavigation from "../../components/Navigation/UserNavigation";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
+const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);
@@ -29,7 +29,9 @@ function UserAudience() {
 
     return(
         <div className="w-full min-h-screen bg-four">
-            <UserNavigation />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <UserNavigation />
+            </Suspense>
             <div className="pt-16 sm:px-20 px-4">
                 <div className="text-lg font-latobold my-4">Les audiences</div>
                 <div className='my-7 grid gap-4 justify-center grid-cols-customized'>

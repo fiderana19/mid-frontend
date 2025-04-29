@@ -1,6 +1,6 @@
-import { FunctionComponent, useEffect, useState } from "react";
-import UserNavigation from "../../../components/Navigation/UserNavigation";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { FunctionComponent, lazy, Suspense, useEffect, useState } from "react";
+const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
+import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { DatePicker, DatePickerProps, message, Select } from "antd";
 import { getWeekStartAndEnd } from "../../../utils/GetWeek";
 import { RequestAddInterface } from "../../../interfaces/Request";
@@ -84,7 +84,9 @@ const UserAddDemande: FunctionComponent = () => {
 
     return(
         <div className="w-full bg-four min-h-screen">
-            <UserNavigation />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <UserNavigation />
+            </Suspense>
             <div className="py-16 sm:px-10 px-4 text-center">
                 <div className="font-bold text-2xl mt-10">NOUVELLE DEMANDE D'AUDIENCE</div>
                 <div className="mx-auto my-5 p-4 bg-white shadow-md rounded sm:w-80 w-full">

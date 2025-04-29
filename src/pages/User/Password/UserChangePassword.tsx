@@ -1,6 +1,6 @@
-import { LockOutlined, WarningOutlined } from "@ant-design/icons";
-import UserNavigation from "../../../components/Navigation/UserNavigation";
-import { useEffect, useState } from "react";
+import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
+const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
+import { lazy, Suspense, useEffect, useState } from "react";
 import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
 import { message } from 'antd';
@@ -90,7 +90,9 @@ function UserChangePassword() {
     return (
         <>
             <div className="w-full min-h-screen bg-four">
-                <UserNavigation />
+                <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                    <UserNavigation />
+                </Suspense>
                 <div className="pt-16 sm:px-20 px-4">
                     <div className="sm:w-80 w-full mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>

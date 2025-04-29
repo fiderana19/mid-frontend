@@ -1,8 +1,8 @@
-import UserNavigation from "../../components/Navigation/UserNavigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { getUserById } from "../../api/users";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserInfo() {
     const [user, setUser] = useState<any>();
@@ -26,7 +26,9 @@ function UserInfo() {
 
     return(
         <div className="w-full min-h-screen bg-four">
-            <UserNavigation />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <UserNavigation />
+            </Suspense>
             <div className="sm:px-10 px-4 pt-16 pb-5 w-full">
                     <div className="font-latobold text-lg mb-6">Votre profile</div>
                         {
