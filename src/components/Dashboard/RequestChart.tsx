@@ -5,9 +5,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 const RequestChart: React.FunctionComponent = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
     const [chartData, setChartData] = useState<{ options: any; series: any[], labels: any[] }>({
         options: {
             labels: []
@@ -16,12 +13,7 @@ const RequestChart: React.FunctionComponent = () => {
         labels: []
     });
 
-      //fetching value for the chart
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if(token) {
-        setAccessToken(token);
-    }
     fetchRequestChart();        
   }, []);
 

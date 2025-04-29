@@ -1,22 +1,14 @@
 import { Link } from "react-router-dom";
-import Photo from '../../assets/image/mid-logo.jpg';
-import { CheckCircleFilled, CheckCircleOutlined, CheckOutlined, CloseCircleFilled, CloseOutlined, ContactsOutlined, LoadingOutlined, MoreOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
-import { getAudienceLast, getLatestUser } from "../../api/dashboard";
+import { ContactsOutlined, LoadingOutlined, MoreOutlined } from "@ant-design/icons";
+import { getAudienceLast } from "../../api/dashboard";
 import { useState, useEffect } from "react";
 import { Dropdown, MenuProps } from "antd";
 
 const AudienceLast: React.FunctionComponent = () => {
     const [audience, setAudience] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
         getStat()
     }, [])
 

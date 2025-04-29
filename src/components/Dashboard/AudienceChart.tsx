@@ -5,9 +5,6 @@ import ReactApexChart from 'react-apexcharts';
 
 const AudienceChart: React.FunctionComponent = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
     const [chartData, setChartData] = useState<{ options: any; series: any[], labels: any[] }>({
         options: {
             labels: []
@@ -18,10 +15,6 @@ const AudienceChart: React.FunctionComponent = () => {
     
     //fetching value for the chart
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
         fetchRequestChart();        
     }, []);
 

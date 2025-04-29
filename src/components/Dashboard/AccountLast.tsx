@@ -6,15 +6,8 @@ import { useState, useEffect } from "react";
 const AccountLast: React.FunctionComponent = () => {
     const [users, setUsers] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
         getStat()
     }, [])
 

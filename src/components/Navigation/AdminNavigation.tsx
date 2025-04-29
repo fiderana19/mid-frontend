@@ -1,18 +1,14 @@
-import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
+import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, LoadingOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import MidProfile from "../MidProfile";
-import MidCopyright from "../Midopyright";
-import { useEffect, useState } from "react";
-
+import { lazy, Suspense, useState } from "react";
+const MidProfile = lazy(() => import("../MidProfile"));
+const MidCopyright = lazy(() => import("../Midopyright"));
 
 function AdminNavigation() {
     const location = useLocation();
     const [isFailRequest, setIsFailRequest] = useState<boolean>(false);
     const [isAudienceSearch, setIsAudienceSearch] = useState<boolean>(false);
 
-    useEffect(() => {
-
-    }, [])
     async function setRequestDropdown() {
         if(isFailRequest) {
             setIsFailRequest(false)
@@ -31,7 +27,9 @@ function AdminNavigation() {
 
     return(
         <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-second text-center">
-            <MidProfile/>
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+              <MidProfile/>
+            </Suspense>
             <div className="text-left w-full">
                 <Link to="/admin/home">
                     <div className={location.pathname === "/admin/home" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
@@ -108,7 +106,9 @@ function AdminNavigation() {
                     </div>
                 </Link>
             </div>
-            <MidCopyright />
+            <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                <MidCopyright />
+            </Suspense>
         </div>
     )
 }
