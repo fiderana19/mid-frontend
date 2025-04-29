@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
 import { getAudienceChart } from '../../api/dashboard';
 import { LoadingOutlined } from '@ant-design/icons';
+import ReactApexChart from 'react-apexcharts';
 
 const AudienceChart: React.FunctionComponent = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -46,11 +46,11 @@ const AudienceChart: React.FunctionComponent = () => {
         <div className="rounded border shadow-md bg-white  p-4 h-full">
             <div className="text-lg font-latobold">AUDIENCES</div>
             {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
-            <ReactApexChart 
+            {/* <ReactApexChart 
                 options={chartData.options}  
                 series={chartData.series}
                 type="donut"
-            />
+            /> */}
         </div>
     )
 }

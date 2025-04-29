@@ -48,11 +48,11 @@ const RequestChart: React.FunctionComponent = () => {
         <div className="rounded border bg-white shadow-md p-4 h-full">
             <div className="text-lg font-latobold">DEMANDES D'AUDIENCE</div>
             {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
-            <ReactApexChart 
+            {/* <ReactApexChart 
                 options={chartData.options}  
                 series={chartData.series}
                 type="donut"
-            />
+            /> */}
         </div>
     )
 }
