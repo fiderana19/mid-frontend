@@ -1,11 +1,11 @@
-import Header from "../../../components/Header";
-import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteUser, getUserById, validateUser } from "../../../api/users";
 import { message, Modal } from "antd";
 import { CheckCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 import { HttpStatus } from "../../../constants/Http_status";
+const Header = lazy(() => import("../../../components/Header"));
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 
 const AdminAccountView: React.FC = () => {
     const [user, setUser] = useState<any>();
@@ -76,11 +76,15 @@ const AdminAccountView: React.FC = () => {
         <>
             <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="pl-10 pr-5 pt-16 pb-5 w-full">
                         {

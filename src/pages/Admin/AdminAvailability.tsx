@@ -1,8 +1,8 @@
 import { DatePicker, Dropdown, MenuProps, message, Modal, TimePicker } from "antd";
-import Header from "../../components/Header";
-import AdminNavigation from "../../components/Navigation/AdminNavigation";
+const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../components/Header"));
 import { CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
@@ -226,11 +226,15 @@ function AdminAvailability() {
         <>
             <div className="w-full flex">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="pl-10 pr-5 py-16 min-h-screen bg-four">
                         <div className="flex justify-between items-center my-4">

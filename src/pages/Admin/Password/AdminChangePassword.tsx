@@ -1,10 +1,10 @@
-import { LockOutlined, WarningOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
 import { useNavigate } from "react-router-dom";
-import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import Header from "../../../components/Header";
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../../components/Header"));
 import { message } from "antd";
 import { HttpStatus } from "../../../constants/Http_status";
 
@@ -82,11 +82,15 @@ function AdminChangePassword() {
         <>
             <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="pl-10 pr-5 py-16">
                     <div className="w-80 mx-auto mt-10 mb-5">

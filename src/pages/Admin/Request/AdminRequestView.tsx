@@ -1,6 +1,6 @@
-import Header from "../../../components/Header";
-import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import React, { useEffect, useState } from "react";
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../../components/Header"));
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { message, Modal } from "antd";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
@@ -76,11 +76,15 @@ const AdminRequestView: React.FC = () => {
         <>
             <div className="w-full flex bg-four min-h-screen">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="pl-10 px-5 pt-16 pb-5 w-full">
                         <div className="font-latobold text-lg mb-6">Demande d'audience</div>

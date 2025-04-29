@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { denyRequest, getAllRequest, validateRequest } from "../../api/request";
-import Header from "../../components/Header";
-import AdminNavigation from "../../components/Navigation/AdminNavigation";
+const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../components/Header"));
 import { CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
 import { MenuProps, Dropdown, Modal, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -165,11 +165,15 @@ function AdminDemande() {
         <>
             <div className="w-full flex min-h-screen bg-four">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="pl-10 pr-5 py-16">
                         <div className="flex justify-between items-center mt-4 mb-6">

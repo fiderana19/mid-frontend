@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { CheckCircleOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
-import AdminNavigation from "../../../components/Navigation/AdminNavigation";
-import Header from "../../../components/Header";
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../../components/Header"));
 import { audienceReport, getAudienceById } from "../../../api/audience";
 import { getAllFreeAvailability } from "../../../api/availability";
 import dayjs from "dayjs";
@@ -87,11 +87,15 @@ function AdminAudienceReport() {
         <>
             <div className="w-full flex">
                 <div className="md:w-52 sm:block hidden">
-                    <AdminNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <AdminNavigation />
+                    </Suspense>
                 </div>
                 <div className="w-full">
                     <div className="z-40 fixed top-0 right-0 w-full">
-                        <Header />
+                        <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                            <Header />
+                        </Suspense>
                     </div>
                     <div className="">
                         <div className="pl-10 px-5 pt-16 pb-5 w-full">
