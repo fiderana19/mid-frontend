@@ -1,103 +1,27 @@
-import axios from "axios";
+import axiosAuthInstance from "./Config";
 
-const availabilityAPIUrl = "http://localhost:3002/availability";
+const AvailabilityAPIUrl = `${import.meta.env.VITE_BASE_URL}/availability`;
 
-export const getAllAvailability = async (token: string | null) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${availabilityAPIUrl}/all`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors du recuperation des disponibilités :", error)
-  }
+export const getAllAvailability = async () => {
+  return await axiosAuthInstance.get(`${AvailabilityAPIUrl}/all`);
 }
 
-export const getAllFreeAvailability = async (token: string | null) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${availabilityAPIUrl}/all/free`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors du recuperation des disponibilités :", error)
-  }
+export const getAllFreeAvailability = async () => {
+  return await axiosAuthInstance.get(`${AvailabilityAPIUrl}/all/free`);
 }
 
-export const getAvailabilityById = async (token: string | null, id: string) => {
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `${availabilityAPIUrl}/get/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response;
-    } catch (error) {
-      console.error("Erreur lors de la recuperation de la disponiblité :", error)
-    }
+export const getAvailabilityById = async (id: string) => {
+  return await axiosAuthInstance.get(`${AvailabilityAPIUrl}/get/${id}`);
 }
 
-export const createAvailability = async (token: string | null, data: any) => {
-    try {
-      const response = await axios({
-        method: 'post',
-        url: `${availabilityAPIUrl}/create`,
-        data: data,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response;
-    } catch (error: any) {
-      console.error("Erreur lors de la creation d'une disponibilité :", error)
-      return error;
-    }
+export const createAvailability = async (data: any) => {
+  return await axiosAuthInstance.post(`${AvailabilityAPIUrl}/create`, data);
 }
 
-export const cancelAvailability = async (token: string | null, id: string) => {
-    try {
-      const response = await axios({
-        method: 'patch',
-        url: `${availabilityAPIUrl}/status/${id}`,
-        data: {status_availability: "Annulé"},
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response;
-    } catch (error: any) {
-      console.error("Erreur lors de la modification de la disponbilité :", error)
-      return error;
-    }
+export const cancelAvailability = async (id: string) => {
+  return await axiosAuthInstance.patch(`${AvailabilityAPIUrl}/status/${id}`, {status_availability: "Annulé"});
 }
 
-export const deleteAvailability = async (token: string | null, id: string) => {
-    try {
-      const response = await axios({
-        method: 'delete',
-        url: `${availabilityAPIUrl}/delete/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response;
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la disponiblité :", error)
-    }
+export const deleteAvailability = async (id: string) => {
+  return await axiosAuthInstance.delete(`${AvailabilityAPIUrl}/delete/${id}`);
 }
