@@ -1,197 +1,62 @@
-import axios from "axios";
 import { SignupInterface } from "../interfaces/User";
+import axiosAuthInstance, { axiosInstance, axiosMutlipartFormDataInstance } from "./Config";
 
-const UserAPIUrl = "http://localhost:3002/auth";
+const UserAPIUrl = `${import.meta.env.VITE_BASE_URL}/auth`;
 
 export const userLogin = async (email:string, password: string) => {
-  try {
-    const response = await axios({
-      method: 'post',
-      url: `${UserAPIUrl}/login`,
-      data: { email, password },
-    })
-
-    return response;
-  } catch (error: any) {
-    console.error("Erreur lors de l'authentfication :", error)
-    return error;
-  }
+  return await axiosInstance.post(`${UserAPIUrl}/login`, { email, password });
 }
 
-export const userSignup = async (signinCredentials: SignupInterface) => {
-  try {
-    const response = await axios({
-      method: 'post',
-      url: `${UserAPIUrl}/signup`,
-      data: signinCredentials,
-      headers: {
-        "Content-Type" : "multipart/form-data",
-      }
-    })
-
-    return response;
-  } catch (error: any) {
-    return error;
-  }
+export const userSignup = async (signupCredentials: SignupInterface) => {
+  return await axiosMutlipartFormDataInstance.post(`${UserAPIUrl}/signup`, signupCredentials)
 }
 
-export const validateUser = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${UserAPIUrl}/validate/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la validation de l'utilisateur :", error)
-  }
+export const validateUser = async (id: string) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/validate/${id}`);
 }
 
-export const getUserForChart = async (token: string | null) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${UserAPIUrl}/chart`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la recupeartion des données pour la chart :", error)
-  }
+export const getUserForChart = async () => {
+  return await axiosAuthInstance.get(`${UserAPIUrl}/chart`);
 }
 
-export const editUser = async (token: string | null, id: string, editData: any) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${UserAPIUrl}/update/${id}`, 
-      data: editData,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response.data;
-  } catch (error) {
-    console.error("Erreur lors de la modification de l'utilisateur :", error)
-  }
+export const editUser = async (id: string, editData: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/update/${id}`, editData);
 }
 
-export const initializePassword = async (token: string |null, id: string, data: any) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${UserAPIUrl}/first/password/${id}`,
-      data:  data ,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error: any) {
-    console.error("Erreur lors de l'initialisation du mot de passe :", error)
-  }
+export const initializePassword = async (id: string, data: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/first/password/${id}`, data);
 }
 
-export const updatePassword = async (token: string |null, id: string, passwordData: any) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${UserAPIUrl}/password/${id}`,
-      data:  passwordData ,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error: any) {
-    console.error("Erreur lors de la modification du mot de passe :", error);
-    return error;
-  }
+export const updatePassword = async (id: string, passwordData: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/password/${id}`, passwordData);
 }
 
-export const deleteUser = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'delete',
-      url: `${UserAPIUrl}/delete/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la suppression de l'utilisateur :", error)
-  }
+export const deleteUser = async (id: string) => {
+  return await axiosAuthInstance.delete(`${UserAPIUrl}/delete/${id}`);
 }
 
 export const checkEmailExistisAPI = async (email: string) => {
   try {
-    const response = await axios({
-      method: 'get',
-      url: `${UserAPIUrl}/check/${email}`,
-    })
+    const response = await axiosInstance.get(`${UserAPIUrl}/check/${email}`);
     return !!response.data;
   } catch (error) {
-    console.error("Erreur  :", error)
     return false;
   }
 }
 
-export const checkUserFirstLogin = async (token: string | null, id: string) => {
+export const checkUserFirstLogin = async (id: string) => {
   try {
-    const response = await axios({
-      method: 'get',
-      url: `${UserAPIUrl}/firstlogin/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+    const response = await axiosAuthInstance.get(`${UserAPIUrl}/firstlogin/${id}`);
     return response;
   } catch (error) {
-    console.error("Erreur  :", error)
     return false;
   }
 }
 
-export const getAllUser = async (token: string | null) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${UserAPIUrl}/all`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la recuperation des utilisateurs.", error)
-  }
+export const getAllUser = async () => {
+  return await axiosAuthInstance.get(`${UserAPIUrl}/all`);
 }
 
-export const getUserById = async (token: string | null, id: string) => {
-  try {
-    if(token) {        
-      const response = await axios({
-        method: 'get',
-        url: `${UserAPIUrl}/get/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      return response.data;
-    }
-  } catch (error) {
-    console.error("Erreur lors de la recuperation de l'utilisateur.", error)
-  }
+export const getUserById = async (id: string) => {
+  return await axiosAuthInstance.get(`${UserAPIUrl}/get/${id}`);
 }

@@ -27,4 +27,11 @@ export const axiosInstance = axios.create({
     }
 })
 
+export const axiosMutlipartFormDataInstance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        "Content-Type": "multipart/form-data"
+    }
+})
+
 export default axiosAuthInstance;
