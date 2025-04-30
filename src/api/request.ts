@@ -1,152 +1,39 @@
-import axios from "axios";
+import axiosAuthInstance from "./Config";
 
-const RequestAPUrl = "http://localhost:3002/request"
+const RequestAPUrl = `${import.meta.env.VITE_BASE_URL}/request`;
 
-export const getAllRequest = async (token: string | null) => {
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `${RequestAPUrl}/all`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response.data;
-    } catch (error) {
-      console.error("Erreur lors de la recupeartion des demandes :", error)
-    }
+export const getAllRequest = async () => {
+  return await axiosAuthInstance.get(`${RequestAPUrl}/all`);
 }
 
-export const getNotOrganizedRequest = async (token: string | null) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${RequestAPUrl}/fail`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response.data;
-  } catch (error) {
-    console.error("Erreur lors de la recupeartion des demandes :", error)
-  }
+export const getNotOrganizedRequest = async () => {
+  return await axiosAuthInstance.get(`${RequestAPUrl}/fail`);
 }
 
-export const getRequestById = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'get',
-      url: `${RequestAPUrl}/get/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response.data;
-  } catch (error) {
-    console.error("Erreur lors de la recuperation de la demande :", error)
-  }
+export const getRequestById = async (id: string) => {
+  return await axiosAuthInstance.get(`${RequestAPUrl}/get/${id}`);
 }
 
-export const getAllRequestByUser = async (token: string | null, id: string) => {
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `${RequestAPUrl}/user/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-  
-      return response.data;
-    } catch (error) {
-      console.error("Erreur lors de la recuperation des demandes de l'tilisateur :", error)
-    }
-}
-  
-
-export const requestCreate = async (token: string | null, requestData: any) => {
-  try {
-    const response = await axios({
-      method: 'post',
-      url: `${RequestAPUrl}/create`,
-      data: requestData, 
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la creation de la demande :", error)
-  }
+export const getAllRequestByUser = async (id: string) => {
+  return await axiosAuthInstance.get(`${RequestAPUrl}/user/${id}`);
 }
 
-export const requestEdit = async (token: string | null, id: string | null,  requestData: any) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${RequestAPUrl}/update/${id}`,
-      data: requestData, 
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la modification de la demande :", error)
-  }
+export const requestCreate = async (requestData: any) => {
+  return await axiosAuthInstance.post(`${RequestAPUrl}/create`, requestData);
 }
 
-export const requestDelete = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'delete',
-      url: `${RequestAPUrl}/delete/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la suppression de la demande :", error)
-  }
+export const requestEdit = async (id: string | null,  requestData: any) => {
+  return await axiosAuthInstance.patch(`${RequestAPUrl}/update/${id}`, requestData);
 }
 
-export const validateRequest = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${RequestAPUrl}/accept/${id}`,
-      data: { status_request: "Accepté" },
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-
-    return response;
-  } catch (error) {
-    console.error("Erreur lors de la validation du demande :", error)
-  }
+export const requestDelete = async (id: string) => {
+  return await axiosAuthInstance.delete(`${RequestAPUrl}/delete/${id}`);
 }
 
-export const denyRequest = async (token: string | null, id: string) => {
-  try {
-    const response = await axios({
-      method: 'patch',
-      url: `${RequestAPUrl}/deny/${id}`,
-      data: { status_request: "Refusé" },
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+export const validateRequest = async (id: string) => {
+  return await axiosAuthInstance.patch(`${RequestAPUrl}/accept/${id}`, { status_request: "Accepté" });
+}
 
-    return response;
-  } catch (error) {
-    console.error("Erreur lors du refus de la demande :", error)
-  }
+export const denyRequest = async (id: string) => {
+  return await axiosAuthInstance.patch(`${RequestAPUrl}/deny/${id}`, { status_request: "Refusé" });
 }
