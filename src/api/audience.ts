@@ -22,8 +22,8 @@ export const audienceCreate = async (audienceData: any) => {
   return await axiosAuthInstance.post(`${AudienceAPIUrl}/create`, audienceData);
   }
 
-export const audienceReport = async (id: string, audienceData: any) => {
-  return await axiosAuthInstance.patch(`${AudienceAPIUrl}/report/${id}`, audienceData);
+export const audienceReport = async (audienceData: any) => {
+  return await axiosAuthInstance.patch(`${AudienceAPIUrl}/report/${audienceData?._id}`, audienceData);
 }
 
 export const audienceCancel = async (id: string) => {

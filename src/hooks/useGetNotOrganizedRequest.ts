@@ -16,7 +16,7 @@ export const useGetNotOrganizedRequest = () => {
         if(isError) {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: error.message
+                message: "Erreur lors de la récuperation des demandes d'audiences acceptées mais pas eonre organisées !"
             })
         }
     }, [error])

@@ -16,7 +16,7 @@ export const useGetAllRequestByUser = (id: string) => {
         if(isError) {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: error?.message
+                message: "Erreur lors de la récuperation de la demande d'audience !"
             })
         }
     }, [error])

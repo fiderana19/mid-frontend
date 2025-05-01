@@ -1,14 +1,14 @@
+import { getAudienceByUser } from "@/api/audience"
 import { QueryCacheKey } from "@/api/QueryCacheKey"
-import { getRequestById } from "@/api/request"
 import { TOAST_TYPE } from "@/constants/ToastType"
 import { showToast } from "@/utils/Toast"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 
-export const useGetRequestById = (id: string) => {
+export const useGetAudienceByUser = (id: string) => {
     const { data, isLoading, error, isError } = useQuery({
-        queryKey: [QueryCacheKey.REQUESTS, id],
-        queryFn: () => getRequestById(id),
+        queryKey: [QueryCacheKey.AUDIENCES, id],
+        queryFn: () => getAudienceByUser(id),
         staleTime: Infinity
     })
 
@@ -16,7 +16,7 @@ export const useGetRequestById = (id: string) => {
         if(isError) {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: "Erreur lors de la récuperation de la demande d'audience !"
+                message: "Erreur lors de la récuperation des audiences de l'utilisateur !"
             })
         }
     }, [error])

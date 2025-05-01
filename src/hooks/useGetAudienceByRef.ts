@@ -1,14 +1,14 @@
+import { getAudienceByRef } from "@/api/audience"
 import { QueryCacheKey } from "@/api/QueryCacheKey"
-import { getRequestById } from "@/api/request"
 import { TOAST_TYPE } from "@/constants/ToastType"
 import { showToast } from "@/utils/Toast"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 
-export const useGetRequestById = (id: string) => {
+export const useGetAudienceByRef = (id: string) => {
     const { data, isLoading, error, isError } = useQuery({
-        queryKey: [QueryCacheKey.REQUESTS, id],
-        queryFn: () => getRequestById(id),
+        queryKey: [QueryCacheKey.AUDIENCES, id],
+        queryFn: () => getAudienceByRef(id),
         staleTime: Infinity
     })
 

@@ -1,4 +1,5 @@
 import { getAvailabilityById } from "@/api/availability"
+import { QueryCacheKey } from "@/api/QueryCacheKey"
 import { TOAST_TYPE } from "@/constants/ToastType"
 import { showToast } from "@/utils/Toast"
 import { useQuery } from "@tanstack/react-query"
@@ -6,7 +7,7 @@ import { useEffect } from "react"
 
 export const useGetAvailabilityById = (id: string) => {
     const { data, isLoading, error, isError } = useQuery({
-        queryKey: [id],
+        queryKey: [QueryCacheKey.AVAILABILITIES, id],
         queryFn: () => getAvailabilityById(id),
         staleTime: Infinity
     })
@@ -15,7 +16,7 @@ export const useGetAvailabilityById = (id: string) => {
         if(isError) {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: error?.message
+                message: "Erreur lors de la récuperation de la diponibilité !"
             })
         }
     }, [error])

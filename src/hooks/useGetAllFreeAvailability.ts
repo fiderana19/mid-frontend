@@ -16,7 +16,7 @@ export const useGetAllFreeAvailability = () => {
         if(isError) {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: error?.message
+                message: "Erreur lors de la récuperation des diponibilités libres !"
             })
         }
     }, [error])
