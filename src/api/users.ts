@@ -19,16 +19,16 @@ export const getUserForChart = async () => {
   return await axiosAuthInstance.get(`${UserAPIUrl}/chart`);
 }
 
-export const editUser = async (id: string, editData: any) => {
-  return await axiosAuthInstance.patch(`${UserAPIUrl}/update/${id}`, editData);
+export const editUser = async (data: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/update/${data?._id}`, data);
 }
 
-export const initializePassword = async (id: string, data: any) => {
-  return await axiosAuthInstance.patch(`${UserAPIUrl}/first/password/${id}`, data);
+export const initializePassword = async (data: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/first/password/${data?._id}`, data);
 }
 
-export const updatePassword = async (id: string, passwordData: any) => {
-  return await axiosAuthInstance.patch(`${UserAPIUrl}/password/${id}`, passwordData);
+export const updatePassword = async (data: any) => {
+  return await axiosAuthInstance.patch(`${UserAPIUrl}/password/${data?._id}`, data);
 }
 
 export const deleteUser = async (id: string) => {
