@@ -1,4 +1,6 @@
 export enum QueryCacheKey {
     USER_FOR_CHART = "USER_FOR_CHART",
     USERS = "USERS",
+    REQUESTS = "REQUESTS",
+    NOT_ORGANIZED_REQUEST = "NOT_ORGANIZED_REQUEST"
 }

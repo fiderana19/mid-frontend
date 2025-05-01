@@ -22,8 +22,8 @@ export const requestCreate = async (requestData: any) => {
   return await axiosAuthInstance.post(`${RequestAPUrl}/create`, requestData);
 }
 
-export const requestEdit = async (id: string | null,  requestData: any) => {
-  return await axiosAuthInstance.patch(`${RequestAPUrl}/update/${id}`, requestData);
+export const requestEdit = async (data: any) => {
+  return await axiosAuthInstance.patch(`${RequestAPUrl}/update/${data?._id}`, data);
 }
 
 export const requestDelete = async (id: string) => {
