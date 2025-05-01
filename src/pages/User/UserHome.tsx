@@ -3,12 +3,13 @@ import { getUserById } from "../../api/users";
 const Typewriter = lazy(() => import("../../components/TypeWritter"));
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 import Ministre from '../../assets/image/ministre.jpg';
-import { ministre } from "../../constants/Ministre";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const UserHome: FunctionComponent = () => {
     const [user, setUser] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const Ministre_Firstname = `${import.meta.env.VITE_MINISTRE_FIRSTNAME}`;
+    const Ministre_Lastname = `${import.meta.env.VITE_MINISTRE_LASTNAME}`;
 
     useEffect(() => { 
         async function fetchUser() {
@@ -16,9 +17,10 @@ const UserHome: FunctionComponent = () => {
   
           if(token) {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(token,decodedToken.id);
+            const response = await getUserById(decodedToken.id);
             setIsLoading(false);
-            setUser(response)
+
+            setUser(response.data)
           }
         }
         fetchUser()
@@ -48,7 +50,7 @@ const UserHome: FunctionComponent = () => {
                             <div className="sm:w-2/3 md:w-full w-full bg-white shadow-md rounded mx-auto">
                                 <img src={Ministre} className="w-full object-cover border mx-auto" />
                                 <div className="p-2">
-                                    <div className="text-center text-lg font-latobold"> Madame { ministre.nom } {ministre.prenom}</div>
+                                    <div className="text-center text-lg font-latobold"> Madame { Ministre_Firstname } { Ministre_Lastname }</div>
                                     <div className="text-center text-md text-gray-800"> Ministre de l'Intérieur</div>
                                 </div>
                             </div>
