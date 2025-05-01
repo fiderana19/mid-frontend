@@ -3,6 +3,7 @@ import { checkEmailExistisAPI, userLogin } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import { HttpStatus } from "../constants/Http_status";
 import { message } from "antd";
+import { ToastContainer } from "react-toastify";
 
 type AuthContextProps = {
     token?: string | null;
@@ -80,6 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }}
         >
             {children}
+            <ToastContainer />
         </AuthContext.Provider>
     )
 }
