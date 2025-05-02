@@ -1,53 +1,26 @@
-import { EyeInvisibleOutlined, EyeOutlined, LockOutlined, MailOutlined, WarningFilled } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import MidLogo from '../assets/image/mid-logo.jpg';
 import Bg from '../assets/image/bg-login.jpeg'
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect, useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
-import { Modal } from 'antd';
 import { useAuth } from '../context/AuthContext';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { LoginValidation } from '@/validation/login.validation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-function LoginPage() {
-    const [loginCredentials, setLoginCredentials] = useState<LoginInterface>({ email: '', password: '' });
+const LoginPage: React.FC = () => {
+    const { handleSubmit: loginSubmit, control , formState: { errors, isSubmitting } } = useForm<LoginInterface>({
+        resolver: yupResolver(LoginValidation)
+    })
     const { login } = useAuth();
-    const [loginError, setLoginError] = useState<string>('');
-    const [emailError, setEmailError] = useState<string>('');
-    const [passwordError, setPasswordError] = useState<string>('');
-    const [isNotValidModalVisible, setIsNotValidModalVisible] = useState<boolean>(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-    useEffect(() => {
-    }, [])
 
-    const handleLoginUser = async () => {
-        setEmailError('');
-        setPasswordError('');
-
-        if(loginCredentials.email === '') {
-            setEmailError("Le champ email ne peut pas être vide !");
-        }
-        if(loginCredentials.password === '') {
-            setPasswordError("Mot de passe vide !");
-        }
-
-        if(loginCredentials.email !== "" && loginCredentials.password!== "") {
-            const response = await login(loginCredentials.email, loginCredentials.password);
-            if(response) {
-                setLoginError(response?.message)
-                setIsNotValidModalVisible(true);
-            }
-        }
-    }
-
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmailError('');
-        setPasswordError('');
-
-        const {name, value} = e.target;
-        setLoginCredentials((prevLogin) => ({...prevLogin, [name]: value}));
-    }
-
-    const handleModalOk = async () => {
-        setIsNotValidModalVisible(false);
+    const handleLoginUser = async (data: LoginInterface) => {
+        await login(data);
     }
 
     const handlePasswordVisible = async () => {
@@ -70,74 +43,59 @@ function LoginPage() {
                         </div>
                     </div>
                 </div>
-                <div id='login' className='lg:w-1/3 sm:w-1/2 w-full bg-second h-screen text-center py-5 sm:px-10 px-4 flex flex-col justify-center'>
-                    <div className='text-2xl font-latobold my-4'>Connexion à votre compte</div>
-                    <div className='w-64 my-2 mx-auto'>
-                        <div className="text-left text-xs font-latobold">
-                                Adresse mail
-                        </div>
-                        <div className="relative">
-                            <input
-                                onChange={handleChange}
-                                name="email"
-                                placeholder="Saisir votre mail..."
-                                className={emailError ? "border-red-500 w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
-                                />
-                            <MailOutlined className="absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm" />
-                        </div>
-                        {emailError && <div className="text-left text-red-500 text-xs">{emailError}</div>}
-                    </div>
-                    <div className='w-64 my-2 mx-auto'>
-                        <div className="text-left text-xs font-latobold">
-                                Mot de passe
-                        </div>
-                        <div className="relative">
-                            <input 
-                                onChange={handleChange}
-                                type={!!(isPasswordVisible) ? 'text' : 'password'}
-                                name='password'
-                                placeholder='Saisir votre mot de passe...'
-                                className={passwordError ? "border-red-500 w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-red-400 hover:border-red-300 shadow-sm focus:shadow" : "peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"}
+                <div className='lg:w-1/3 sm:w-1/2 w-full bg-second-custom h-screen text-center py-5 sm:px-10 px-4 flex flex-col justify-center'>
+                    <div className='text-2xl font-latobold mb-10'>Connexion à votre compte</div>
+                    <form onSubmit={loginSubmit(handleLoginUser)}>
+                        <div className='w-64 mx-auto'>
+                            <Label htmlFor='email' className='mb-1'>Adresse mail </Label>
+                            <Controller 
+                                control={control}
+                                name='email'
+                                render={({
+                                    field: { value, onChange, onBlur }
+                                }) => (
+                                    <div className='relative'>
+                                        <Input value={value} onChange={onChange} onBlur={onBlur} className={`${errors.email ? 'border border-red-500 text-red-500' : ''} pl-10`} />
+                                        <MailOutlined className="absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm" />
+                                    </div>
+                                )}
                             />
-                            <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
-                            {
-                                isPasswordVisible ?
-                                <EyeInvisibleOutlined 
-                                onClick={handlePasswordVisible}
-                                className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
-                                : 
-                                <EyeOutlined 
-                                onClick={handlePasswordVisible}
-                                className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
-                            }
+                            {errors.email && <div className='text-xs text-red-500 text-left w-full'>{ errors.email.message }</div>}
+                            <Label htmlFor='password' className='mb-1 mt-4'>Mot de passe </Label>
+                            <Controller 
+                                control={control}
+                                name='password'
+                                render={({
+                                    field: { value, onChange, onBlur }
+                                }) => (
+                                    <div className='relative'>
+                                        <Input value={value} onChange={onChange} onBlur={onBlur} type={!!(isPasswordVisible) ? 'text' : 'password'} className='pl-10' />
+                                        <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
+                                        {
+                                            isPasswordVisible ?
+                                            <EyeInvisibleOutlined 
+                                            onClick={handlePasswordVisible}
+                                            className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                                            : 
+                                            <EyeOutlined 
+                                            onClick={handlePasswordVisible}
+                                            className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                                        }
+                                    </div>
+                                )}
+                            />
+                            {errors.password && <div className='text-xs text-red-500 text-left w-full'>{ errors.password.message }</div>}
+                            <Button variant={'secondary'} size={'lg'} disabled={isSubmitting ? true : false } className={`${isSubmitting ? 'cursor-not-allowed' : ''} w-full mt-4`} type='submit'>{ isSubmitting && <LoadingOutlined /> }  SE CONNECTER</Button>
                         </div>
-                        {passwordError && <div className="text-left text-red-500 text-xs">{passwordError}</div>}
-                    </div>
-                    <button className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64' onClick={handleLoginUser}>SE CONNECTER</button>
-                    <div className='text-xs my-7 flex mx-auto max-w-max gap-2'>
+                    </form>
+                    <div className='text-xs mt-10 flex items-center mx-auto max-w-max gap-2'>
                         <div>Vous n'avez pas encore un compte ?</div>
                         <Link to="/signup">
-                            <div className='text-white font-latobold hover:underline'>
-                                S'inscrire
-                            </div>
+                            <Button variant={'link'} size={'sm'}>S'inscrire</Button>
                         </Link>
                     </div>
                 </div>
             </div>
-            <Modal title="Erreur" 
-                open={isNotValidModalVisible}
-                onOk={handleModalOk}
-                onCancel={handleModalOk}
-                onClose={handleModalOk}
-            >
-                <div>
-                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
-                    {
-                        loginError &&
-                        <span> {loginError} </span>
-                    }
-                </div>
-            </Modal>
         </div>
     )
 }

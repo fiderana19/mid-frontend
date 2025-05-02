@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { HttpStatus } from "../constants/Http_status";
 import { message } from "antd";
 import { ToastContainer } from "react-toastify";
+import { LoginInterface } from "@/interfaces/User";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
 
 type AuthContextProps = {
     token?: string | null;
     isAuthenticated?: boolean;
-    login: (email: string, password: string) => Promise<any>;
+    login: (data: LoginInterface) => Promise<any>;
     logout: () => Promise<void>;
 }
 
@@ -22,9 +25,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const isAuthenticated = !!token;
 
-    const login = async (email: string, password: string) => {
+    const login = async (loginCredentials: LoginInterface) => {
+        const { email } = loginCredentials;
         try {
-            const response: any = await userLogin(email, password)
+            const response: any = await userLogin(loginCredentials)
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 if(response) {
                     const data = response?.data.token;
@@ -58,7 +62,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 return { status: 201 }
             } 
             if(response?.status === HttpStatus.BAD_REQUEST ||response?.status === HttpStatus.UNAUTHORIZED) {
-                return { status: 401, message: response?.response.data.message }
+                showToast({
+                    type: TOAST_TYPE.ERROR,
+                    message: response?.response.data.message
+                })
+                console.log("999")
             }
         } catch (error) {
             throw error;

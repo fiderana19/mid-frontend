@@ -1,10 +1,10 @@
-import { SignupInterface } from "../interfaces/User";
+import { LoginInterface, SignupInterface } from "../interfaces/User";
 import axiosAuthInstance, { axiosInstance, axiosMutlipartFormDataInstance } from "./Config";
 
 const UserAPIUrl = `${import.meta.env.VITE_BASE_URL}/auth`;
 
-export const userLogin = async (email:string, password: string) => {
-  return await axiosInstance.post(`${UserAPIUrl}/login`, { email, password });
+export const userLogin = async (data: LoginInterface) => {
+  return await axiosInstance.post(`${UserAPIUrl}/login`, data);
 }
 
 export const userSignup = async (signupCredentials: SignupInterface) => {
