@@ -3,7 +3,7 @@ import MidLogo from '../assets/image/mid-logo.jpg';
 import Bg from '../assets/image/bg-login.jpeg'
 import { Link } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
 import { useAuth } from '../context/AuthContext';
 import { Label } from '@/components/ui/label';
@@ -48,42 +48,42 @@ const LoginPage: React.FC = () => {
                     <form onSubmit={loginSubmit(handleLoginUser)}>
                         <div className='w-64 mx-auto'>
                             <Label htmlFor='email' className='mb-1'>Adresse mail </Label>
-                            <Controller 
-                                control={control}
-                                name='email'
-                                render={({
-                                    field: { value, onChange, onBlur }
-                                }) => (
-                                    <div className='relative'>
+                            <div className='relative'>
+                                <Controller 
+                                    control={control}
+                                    name='email'
+                                    render={({
+                                        field: { value, onChange, onBlur }
+                                    }) => (
                                         <Input value={value} onChange={onChange} onBlur={onBlur} className={`${errors.email ? 'border border-red-500 text-red-500' : ''} pl-10`} />
-                                        <MailOutlined className="absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm" />
-                                    </div>
-                                )}
-                            />
+                                    )}
+                                />
+                                <MailOutlined className="absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm" />
+                            </div>
                             {errors.email && <div className='text-xs text-red-500 text-left w-full'>{ errors.email.message }</div>}
                             <Label htmlFor='password' className='mb-1 mt-4'>Mot de passe </Label>
-                            <Controller 
-                                control={control}
-                                name='password'
-                                render={({
-                                    field: { value, onChange, onBlur }
-                                }) => (
-                                    <div className='relative'>
+                            <div className='relative'>
+                                <Controller 
+                                    control={control}
+                                    name='password'
+                                    render={({
+                                        field: { value, onChange, onBlur }
+                                    }) => (
                                         <Input value={value} onChange={onChange} onBlur={onBlur} type={!!(isPasswordVisible) ? 'text' : 'password'} className='pl-10' />
-                                        <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
-                                        {
-                                            isPasswordVisible ?
-                                            <EyeInvisibleOutlined 
-                                            onClick={handlePasswordVisible}
-                                            className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
-                                            : 
-                                            <EyeOutlined 
-                                            onClick={handlePasswordVisible}
-                                            className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
-                                        }
-                                    </div>
-                                )}
-                            />
+                                    )}
+                                />
+                                <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
+                                {
+                                    isPasswordVisible ?
+                                    <EyeInvisibleOutlined 
+                                        onClick={handlePasswordVisible}
+                                        className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                                    : 
+                                    <EyeOutlined 
+                                        onClick={handlePasswordVisible}
+                                        className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
+                                }
+                            </div>
                             {errors.password && <div className='text-xs text-red-500 text-left w-full'>{ errors.password.message }</div>}
                             <Button variant={'secondary'} size={'lg'} disabled={isSubmitting ? true : false } className={`${isSubmitting ? 'cursor-not-allowed' : ''} w-full mt-4`} type='submit'>{ isSubmitting && <LoadingOutlined /> }  SE CONNECTER</Button>
                         </div>

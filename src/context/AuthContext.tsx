@@ -1,12 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { checkEmailExistisAPI, userLogin } from "../api/users";
+import { userLogin } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import { HttpStatus } from "../constants/Http_status";
-import { message } from "antd";
 import { ToastContainer } from "react-toastify";
 import { LoginInterface } from "@/interfaces/User";
-import { showToast } from "@/utils/Toast";
-import { TOAST_TYPE } from "@/constants/ToastType";
 
 type AuthContextProps = {
     token?: string | null;
@@ -26,52 +23,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const isAuthenticated = !!token;
 
     const login = async (loginCredentials: LoginInterface) => {
-        const { email } = loginCredentials;
-        try {
-            const response: any = await userLogin(loginCredentials)
-            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                if(response) {
-                    const data = response?.data.token;
-                    const isNotFirstLogin = response?.data.is_not_first_login;
+        const response = await userLogin(loginCredentials)
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
+            const data = response?.data.token;
+            const isNotFirstLogin = response?.data.is_not_first_login;
 
-                    setToken(data);
-                    localStorage.setItem("token", data);
+            setToken(data);
+            localStorage.setItem("token", data);
 
-                    const decodedToken = JSON.parse(atob(data.split('.')[1]));
-                    if(decodedToken.role[0] === "admin") {
-                        if(isNotFirstLogin === false) {
-                            navigate("/admin/password");
-                        } else {
-                            navigate("/admin/home");
-                        }
-                    } else if(decodedToken.role[0] === "user" && !decodedToken.id) {
-                        const user = await checkEmailExistisAPI(email);
-                        if(user) {
-                            navigate("/");
-                        } else {
-                            message.error("User not found !")
-                        }
-                    } else {
-                        if(!isNotFirstLogin) {
-                            navigate("/user/password");
-                        } else {
-                            navigate("/user/home");
-                        }
-                    }
+            const decodedToken = JSON.parse(atob(data.split('.')[1]));
+            if(decodedToken.role[0] === "admin") {
+                if(isNotFirstLogin === false) {
+                    navigate("/admin/password");
+                } else {
+                    navigate("/admin/home");
                 }
-                return { status: 201 }
-            } 
-            if(response?.status === HttpStatus.BAD_REQUEST ||response?.status === HttpStatus.UNAUTHORIZED) {
-                showToast({
-                    type: TOAST_TYPE.ERROR,
-                    message: response?.response.data.message
-                })
-                console.log("999")
+            } else {
+                if(!isNotFirstLogin) {
+                    navigate("/user/password");
+                } else {
+                    navigate("/user/home");
+                }
             }
-        } catch (error) {
-            throw error;
         }
-    }
+    } 
 
     async function logout() {
         setToken(null);

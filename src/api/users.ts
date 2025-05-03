@@ -1,10 +1,22 @@
 import { LoginInterface, SignupInterface } from "../interfaces/User";
 import axiosAuthInstance, { axiosInstance, axiosMutlipartFormDataInstance } from "./Config";
+import { showToast } from "@/utils/Toast";
+import { TOAST_TYPE } from "@/constants/ToastType";
+import { HttpStatus } from "@/constants/Http_status";
 
 const UserAPIUrl = `${import.meta.env.VITE_BASE_URL}/auth`;
 
 export const userLogin = async (data: LoginInterface) => {
-  return await axiosInstance.post(`${UserAPIUrl}/login`, data);
+  try {
+    return await axiosInstance.post(`${UserAPIUrl}/login`, data);
+  } catch (error: any) {
+    if(error?.status == HttpStatus.BAD_REQUEST || error?.status == HttpStatus.UNAUTHORIZED) {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: error?.response.data.message
+      })
+    }
+  }
 }
 
 export const userSignup = async (signupCredentials: SignupInterface) => {
@@ -33,15 +45,6 @@ export const updatePassword = async (data: any) => {
 
 export const deleteUser = async (id: string) => {
   return await axiosAuthInstance.delete(`${UserAPIUrl}/delete/${id}`);
-}
-
-export const checkEmailExistisAPI = async (email: string) => {
-  try {
-    const response = await axiosInstance.get(`${UserAPIUrl}/check/${email}`);
-    return !!response.data;
-  } catch (error) {
-    return false;
-  }
 }
 
 export const checkUserFirstLogin = async (id: string) => {
