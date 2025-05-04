@@ -10,7 +10,7 @@ function Signup() {
     return(
         <div className='min-h-screen flex flex-col justify-center'>
             <div className='sm:flex block justify-between '>
-                <div className='lg:w-1/3 sm:w-1/2 w-full flex flex-col bg-second h-screen text-center py-5 sm:px-10 px-4 justify-center'>
+                <div className='lg:w-1/3 sm:w-1/2 w-full flex flex-col bg-second-custom h-screen text-center py-5 sm:px-10 px-4 justify-center'>
                     <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
                         <SignupForm />
                     </Suspense>

@@ -1,36 +1,87 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { handleLetterKeyPress } from "@/utils/handleKeyPress";
+import { UserPersonnalValidation } from "@/validation/signup.validation";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
-import { FunctionComponent, useState } from 'react';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FunctionComponent } from 'react';
+import { Controller, useForm } from "react-hook-form";
 
 interface StepsProp {
-    handleNext: () => void;
-    handleChange: (e: any) => void;
-    handleLetterKeyPress: (e: any) => void;
     formData: any;
+    handleNext: () => void;
+    setFormData: (d: any) => void;
 }
 
-const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, handleLetterKeyPress, handleChange}) => {
-    const [nomError, setNomError] = useState<string>('');
-    const [adresseError, setAdresseError] = useState<string>('');
+const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, setFormData, handleNext}) => {
+    const { handleSubmit: submit, control, formState: { errors } } = useForm({
+        resolver: yupResolver(UserPersonnalValidation)
+    });
 
-    async function handleSubmit () {
-        setNomError('');
-        setAdresseError('');
-        
-        if(formData.nom === '') {
-            setNomError("Le champ nom ne doit pas être vide !");
-        }
-        if(formData.adresse === '') {
-            setAdresseError("Le champ adresse ne doit pas être vide !");
-        }
+    async function handleSubmit (data: any) {
+        setFormData({
+            ...formData,
+            nom: data.nom,
+            prenom: data.prenom,
+            adresse: data.adresse
+        })
 
-        if(formData.nom !== "" && formData.adresse !== "") {
-            handleNext();
-        }
+        handleNext();
     }
     
     return(
-        <div>
-            <div className='w-60 my-4 mx-auto'>
+        <form onSubmit={submit(handleSubmit)}>
+            <div className="w-60 my-4 mx-auto">
+                <Label htmlFor="nom" className="mb-1 mt-4">Nom </Label>
+                <div className="relative">
+                    <Controller 
+                        control={control}
+                        name="nom"
+                        defaultValue={formData?.nom}
+                        render={({
+                            field: { value, onChange, onBlur }
+                        }) => (
+                            <Input value={value} onChange={onChange} onBlur={onBlur} onKeyPress={handleLetterKeyPress} className={`${errors?.nom ? 'border-red-500 border text-red-500' : ''} pl-10`} />
+                        )}
+                    />
+                    <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
+                </div>
+                {errors?.nom && <div className="text-red-500 text-xs text-left">{ errors?.adresse?.message }</div>}
+                <Label htmlFor="prenom" className="mb-1 mt-4">Prenom </Label>
+                <div className="relative">
+                    <Controller 
+                        control={control}
+                        name="prenom"
+                        defaultValue={formData?.prenom ? formData?.prenom : ''}
+                        render={({
+                            field: { value, onChange, onBlur }
+                        }) => (
+                            <Input value={value  ? value : ''} onChange={onChange} onBlur={onBlur} onKeyPress={handleLetterKeyPress} className="pl-10" />
+                        )}
+                    />
+                    <UserOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
+                </div>
+                <Label htmlFor="adresse" className="mb-1 mt-4">Adresse </Label>
+                <div className="relative">
+                    <Controller 
+                        control={control}
+                        name="adresse"
+                        defaultValue={formData?.adresse}
+                        render={({
+                            field: { value, onChange, onBlur }
+                        }) => (
+                            <Input value={value} onChange={onChange} onBlur={onBlur} className={`${errors?.adresse ? 'border-red-500 border text-red-500' : ''} pl-10`} />
+                        )}
+                    />
+                    <MailOutlined className='absolute top-1.5 left-1.5 bg-gray-400 text-white p-1.5 rounded text-sm' />
+                </div>
+                {errors?.adresse && <div className="text-red-500 text-xs text-left">{ errors?.adresse?.message }</div>}
+                <div className="flex justify-end gap-2 mt-4">
+                    <Button variant={'secondary'} type="submit">Suivant</Button>
+                </div>
+            </div>
+            {/* <div className='w-60 my-4 mx-auto'>
                 <div className="text-left text-xs font-bold">
                     Nom
                 </div>
@@ -78,11 +129,11 @@ const SignupPersonnal: FunctionComponent<StepsProp> = ({formData, handleNext, ha
                     <MailOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                 </div>
                 {adresseError && <div className="text-left text-red-500 text-xs">{adresseError}</div>}
-            </div>
-            <div className="flex justify-end gap-2">
+            </div> */}
+            {/* <div className="flex justify-end gap-2">
                 <button onClick={handleSubmit} className='bg-green-500 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'>Suivant</button>
-            </div>        
-        </div>
+            </div>         */}
+        </form>
     )
 }
 

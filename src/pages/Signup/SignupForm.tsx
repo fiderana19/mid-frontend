@@ -41,14 +41,6 @@ const AddForms: FunctionComponent = () => {
             e.preventDefault();
         }
     }
-
-    const handleLetterKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const charCode = e.which || e.keyCode;
-
-        if(!((charCode >= 97 && charCode <= 122) || (charCode >= 65 && charCode <= 90) || (charCode >= 224 && charCode <= 246) || (charCode >= 249 && charCode <= 252))) {
-            e.preventDefault();
-        }
-    }
  
     const handleDateNaissanceChange = (date: dayjs.Dayjs | null) => {
         if (date) {
@@ -71,20 +63,20 @@ const AddForms: FunctionComponent = () => {
     };
 
     const handleSignupUser = async () => {
-        setApiLoading(true);
-        const response = await userSignup(signupCredentials);
-        if(response) {
-            if(response?.status === HttpStatus.CREATED) {
-                setApiLoading(false);
-                setIsRegisteredModalVisible(true);
-                setInitialPwd(response?.data.initialPwd);
-            }
-            if(response?.status === HttpStatus.UNAUTHORIZED) {
-                setApiLoading(false);
-                setSignupError(response?.response.data.message);
-                setIsErrorModalVisible(true);
-            }     
-        }
+        // setApiLoading(true);
+        // const response = await userSignup(signupCredentials);
+        // if(response) {
+        //     if(response?.status === HttpStatus.CREATED) {
+        //         setApiLoading(false);
+        //         setIsRegisteredModalVisible(true);
+        //         setInitialPwd(response?.data.initialPwd);
+        //     }
+        //     if(response?.status === HttpStatus.UNAUTHORIZED) {
+        //         setApiLoading(false);
+        //         setSignupError(response?.response.data.message);
+        //         setIsErrorModalVisible(true);
+        //     }     
+        // }
     }
 
     const handleModalOk = async () => {
@@ -120,14 +112,14 @@ const AddForms: FunctionComponent = () => {
             {currentStep === 0 && (
                 <div>
                     <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
-                        <SignupPersonnal formData={signupCredentials} handleLetterKeyPress={handleLetterKeyPress} handleChange={handleChange} handleNext={handleNextPage} />
+                        <SignupPersonnal formData={signupCredentials} setFormData={setSignupCredentials} handleNext={handleNextPage} />
                     </Suspense>
                 </div>
             )}
             {currentStep === 1 && (
                 <div>
                     <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
-                        <SignupBirth formData={signupCredentials} handleChange={handleChange} handleDateNaissanceChange={handleDateNaissanceChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                        <SignupBirth setFormData={setSignupCredentials} formData={signupCredentials} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
                     </Suspense>
                 </div>
             )}

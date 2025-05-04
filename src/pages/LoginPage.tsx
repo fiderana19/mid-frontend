@@ -13,7 +13,7 @@ import { LoginValidation } from '@/validation/login.validation';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const LoginPage: React.FC = () => {
-    const { handleSubmit: loginSubmit, control , formState: { errors, isSubmitting } } = useForm<LoginInterface>({
+    const { handleSubmit: loginSubmit, control , formState: { errors, isSubmitting, },  } = useForm<LoginInterface>({
         resolver: yupResolver(LoginValidation)
     })
     const { login } = useAuth();
