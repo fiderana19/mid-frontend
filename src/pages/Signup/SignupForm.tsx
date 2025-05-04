@@ -3,7 +3,6 @@ import { FunctionComponent, lazy, Suspense, useEffect, useState } from 'react'
 import { userSignup } from '../../api/users';
 import { useNavigate } from 'react-router-dom';
 import { SignupInterface } from '../../interfaces/User';
-import dayjs from 'dayjs';
 const SignupBirth = lazy(() => import('./SignupBirth'));
 const SignupCNI = lazy(() => import('./SignupCNI'));
 const SignupPersonnal = lazy(() => import('./SignupPersonnal'));
@@ -34,34 +33,6 @@ const AddForms: FunctionComponent = () => {
         setSignupCredentials((prevSignup) => ({...prevSignup, [name]: file}));
     }
 
-    const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const charCode = e.which || e.keyCode;
-
-        if(charCode < 48 || charCode > 57) {
-            e.preventDefault();
-        }
-    }
- 
-    const handleDateNaissanceChange = (date: dayjs.Dayjs | null) => {
-        if (date) {
-        const isoDate = date.toISOString();
-        setSignupCredentials({
-            ...signupCredentials,
-            date_naissance: isoDate,
-        });
-        }
-    };
-
-    const handleDateCNIChange = (date: dayjs.Dayjs | null) => {
-        if (date) {
-        const isoDate = date.toISOString();
-        setSignupCredentials({
-            ...signupCredentials,
-            date_cni: isoDate,
-        });
-        }
-    };
-
     const handleSignupUser = async () => {
         // setApiLoading(true);
         // const response = await userSignup(signupCredentials);
@@ -84,7 +55,6 @@ const AddForms: FunctionComponent = () => {
         navigate("/");
     }
 
-    //handling next or prev page
     const handleNextPage = () => {
       setCurrentStep(currentStep + 1);
     };
@@ -92,11 +62,7 @@ const AddForms: FunctionComponent = () => {
     const handlePreviousPage = () => {
       setCurrentStep(currentStep - 1);
     };
-    
-    useEffect(() => {  
      
-    }, [])
- 
   return (
     <div className="sm:w-60 w-max mx-auto">
         <div className='text-2xl font-bold mb-5'>CREER UN COMPTE</div>
@@ -126,7 +92,7 @@ const AddForms: FunctionComponent = () => {
             {currentStep === 2 && (
                 <div>
                     <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
-                        <SignupCNI formData={signupCredentials}  handleChange={handleChange} handleDateCNIChange={handleDateCNIChange} handleKeyPress={handleKeyPress} handleNext={handleNextPage} handlePrev={handlePreviousPage} />
+                        <SignupCNI setFormData={setSignupCredentials} formData={signupCredentials}  handleNext={handleNextPage} handlePrev={handlePreviousPage} />
                     </Suspense>
                 </div>
             )}

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { UserBirthValidation } from "@/validation/signup.validation";
 import { showToast } from "@/utils/Toast";
 import { TOAST_TYPE } from "@/constants/ToastType";
+import { UserBirthSignup } from "@/interfaces/Signup";
 
 interface StepsProp {
     handlePrev: () => void;
@@ -20,7 +21,7 @@ interface StepsProp {
 }
 
 const SignupBirth: FunctionComponent<StepsProp> = ({setFormData, formData, handlePrev, handleNext}) => {
-    const { handleSubmit: submit, control, formState: { errors } } = useForm({
+    const { handleSubmit: submit, control, formState: { errors } } = useForm<UserBirthSignup>({
         resolver: yupResolver(UserBirthValidation)
     })
     async function handleSubmit (data: any) {

@@ -11,3 +11,9 @@ export const UserBirthValidation = yup.object({
     lieu_naissance: yup.string().required("Lieu de naissance requis !"),
     telephone: yup.string().length(9, "Le telephone doit être composé de 9 chiffres !").required("Telephone requis !")
 })
+
+export const UserCNIValidation = yup.object({
+    date_cni: yup.string().required("Date de délivrance CIN requis !"),
+    lieu_cni: yup.string().required("Lieu de délivrance CIN requis !"),
+    cni: yup.string().length(12, "Le numero CIN doit être composé de 12 chiffres !").required("Numero CIN requis !")
+})
