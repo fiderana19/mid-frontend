@@ -17,3 +17,9 @@ export const UserCNIValidation = yup.object({
     lieu_cni: yup.string().required("Lieu de délivrance CIN requis !"),
     cni: yup.string().length(12, "Le numero CIN doit être composé de 12 chiffres !").required("Numero CIN requis !")
 })
+
+export const UserFileValidation = yup.object({
+    email: yup.string().email("Adresse mail invalide !").required("Adresse mail requis !"),
+    profile_photo: yup.mixed().required("Photo d'identité requis !"),
+    cni_photo: yup.mixed().required("San du CIN requis !"),
+})

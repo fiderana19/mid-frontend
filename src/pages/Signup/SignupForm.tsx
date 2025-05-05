@@ -1,24 +1,22 @@
-import { Steps ,Button, Modal  } from 'antd'
-import { FunctionComponent, lazy, Suspense, useEffect, useState } from 'react'
-import { userSignup } from '../../api/users';
+import { Steps , Modal  } from 'antd'
+import { FunctionComponent, lazy, Suspense, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { SignupInterface } from '../../interfaces/User';
 const SignupBirth = lazy(() => import('./SignupBirth'));
 const SignupCNI = lazy(() => import('./SignupCNI'));
 const SignupPersonnal = lazy(() => import('./SignupPersonnal'));
 const SignupFile = lazy(() => import('./SignupFile'));
-import { CheckCircleFilled, LoadingOutlined, WarningFilled } from '@ant-design/icons';
+import { CheckCircleFilled, LoadingOutlined } from '@ant-design/icons';
 import { HttpStatus } from '../../constants/Http_status';
+import { useSignupUser } from '@/hooks/useSignupUser';
 const {Step} = Steps
 
 const AddForms: FunctionComponent = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [signupCredentials, setSignupCredentials] = useState<SignupInterface>({nom: '', prenom: '', email: '', adresse: '', telephone: '', date_naissance: '', lieu_naissance: '', cni: '', date_cni: '', lieu_cni: '', profile_photo: '', cni_photo : ''});
     const [isRegisteredModalVisible, setIsRegisteredModalVisible] = useState<boolean>(false);
-    const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
-    const [signupError, setSignupError] = useState<string>('');
     const [initialPwd, setInitialPwd] = useState<any>();
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const { mutateAsync: userSignup, isPending: apiLoading } = useSignupUser()
     const navigate = useNavigate();
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,20 +32,13 @@ const AddForms: FunctionComponent = () => {
     }
 
     const handleSignupUser = async () => {
-        // setApiLoading(true);
-        // const response = await userSignup(signupCredentials);
-        // if(response) {
-        //     if(response?.status === HttpStatus.CREATED) {
-        //         setApiLoading(false);
-        //         setIsRegisteredModalVisible(true);
-        //         setInitialPwd(response?.data.initialPwd);
-        //     }
-        //     if(response?.status === HttpStatus.UNAUTHORIZED) {
-        //         setApiLoading(false);
-        //         setSignupError(response?.response.data.message);
-        //         setIsErrorModalVisible(true);
-        //     }     
-        // }
+        const response = await userSignup(signupCredentials);
+        if(response) {
+            if(response?.status === HttpStatus.CREATED) {
+                setIsRegisteredModalVisible(true);
+                setInitialPwd(response?.data.initialPwd);
+            }
+        }
     }
 
     const handleModalOk = async () => {
@@ -99,7 +90,7 @@ const AddForms: FunctionComponent = () => {
             {currentStep === 3 && (
                 <div>
                     <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
-                        <SignupFile formData={signupCredentials} apiLoading={apiLoading} setApiLoading={setApiLoading} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
+                        <SignupFile formData={signupCredentials} apiLoading={apiLoading} handleChangeFile={handleChangeFile} handleChange={handleChange} handlePrev={handlePreviousPage} handleSignupUser={handleSignupUser} />
                     </Suspense>
                     <Modal title="Inscription réussie" 
                         open={isRegisteredModalVisible}
@@ -122,20 +113,6 @@ const AddForms: FunctionComponent = () => {
                             </div>
                         </div>
                     </Modal> 
-                    <Modal title="Erreur" 
-                        open={isErrorModalVisible}
-                        onOk={() => setIsErrorModalVisible(false)}
-                        onCancel={() => setIsErrorModalVisible(false)}
-                        onClose={() => setIsErrorModalVisible(false)}
-                    >
-                        <div>
-                            <WarningFilled className='mr-2 text-red-500 text-lg' /> 
-                            {
-                                signupError &&
-                                <span> {signupError} </span>
-                            }
-                        </div>
-                    </Modal>
                 </div>
             )}
         </div>

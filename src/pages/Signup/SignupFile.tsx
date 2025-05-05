@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { LoadingOutlined, MailOutlined } from "@ant-design/icons";
 import { FunctionComponent } from 'react';
 
@@ -6,12 +8,11 @@ interface StepsProp {
     handleSignupUser: () => void;
     handleChange: (e: any) => void;
     handleChangeFile: (e: any) => void;
-    setApiLoading: (e: any) => void;
     apiLoading: boolean;
     formData: any;
 }
 
-const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, setApiLoading, handlePrev, handleSignupUser, handleChangeFile, handleChange}) => {
+const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, handlePrev, handleSignupUser, handleChangeFile, handleChange}) => {
 
     async function handleSubmit () {
         handleSignupUser();
@@ -24,7 +25,7 @@ const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, setApiL
                     Adresse mail
                 </div>
                 <div className="relative">
-                    <input 
+                    <Input 
                         value={formData.email} 
                         onChange={handleChange} 
                         name="email"
@@ -39,7 +40,7 @@ const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, setApiL
                     <div className="text-left text-xs font-bold">
                         Photo d'identité
                     </div>
-                    <input onChange={handleChangeFile} name="profile_photo" type="file" className="text-sm w-full whitespace-normal rounded border border-white" />
+                    <Input onChange={handleChangeFile} name="profile_photo" type="file" className="text-sm w-full whitespace-normal rounded border border-white" />
                 </div>
             </div>
             <div className='w-60 my-4 mx-auto overflow-hidden'>
@@ -47,19 +48,20 @@ const SignupFile: FunctionComponent<StepsProp> = ({formData, apiLoading, setApiL
                     <div className="text-left text-xs font-bold">
                         Scan du CIN
                     </div>
-                    <input onChange={handleChangeFile} name="cni_photo" type="file" className="text-sm w-full whitespace-normal rounded border border-white" />
+                    <Input onChange={handleChangeFile} name="cni_photo" type="file" className="text-sm w-full whitespace-normal rounded border border-white" />
                 </div>
             </div>
             <div className="flex justify-end gap-2 items-center">
-                <button onClick={handlePrev} className="border hover:border-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500">Précédent</button>
-                <button 
+                <Button variant={'default'} onClick={handlePrev} className="border hover:border-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500">Précédent</Button>
+                <Button
+                    variant={'secondary'} 
                     onClick={handleSubmit} 
                     disabled={ apiLoading ? true : false }
                     className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
                     >   
                     { apiLoading && <LoadingOutlined /> }
                     <div>S'incrire</div>
-                </button>
+                </Button>
             </div>  
         </div>
     )

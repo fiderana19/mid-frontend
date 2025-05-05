@@ -5,18 +5,13 @@ import { showToast } from "@/utils/Toast"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 
-export const useSignupUser = ({action} : {action?: () => void}) => {
+export const useSignupUser = () => {
     const mutation = useMutation({
         mutationFn: (data: SignupInterface) => userSignup(data),
-        onSuccess: () => {
-            if(action) {
-                action();
-            }
-        },
-        onError: (error: AxiosError) => {
+        onError: (error: AxiosError | any) => {
             showToast({
                 type: TOAST_TYPE.ERROR,
-                message: error.message
+                message: error?.response?.data?.message,
             })
         }
     })
