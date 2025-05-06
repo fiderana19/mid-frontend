@@ -26,7 +26,7 @@ function AdminNavigation() {
     }
 
     return(
-        <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-second text-center">
+        <div className="z-50 fixed top-0 left-0 p-1 md:p-4 flex flex-col justify-between h-screen bg-second-custom text-center">
             <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
               <MidProfile/>
             </Suspense>

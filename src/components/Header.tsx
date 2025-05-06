@@ -2,28 +2,12 @@ import { Link } from "react-router-dom";
 import { DownOutlined, UserOutlined, LogoutOutlined, MenuOutlined, HomeOutlined, ExceptionOutlined, LoadingOutlined, SnippetsOutlined, ContactsOutlined, CalendarOutlined, ContainerOutlined } from '@ant-design/icons'
 import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
-import { useState, useEffect } from "react";
-import { getUserById } from "../api/users";
 import MidLogo from '../assets/image/mid-logo.jpg';
+import { useGetUserById } from "@/hooks/useGetUserById";
 
 function Header() {
-  const { logout } = useAuth();
-  const [user, setUser] = useState<any>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => { 
-      async function fetchUser() {
-        const token = localStorage.getItem("token");
-
-        if(token) {
-          const decodedToken = JSON.parse(atob(token.split('.')[1]));
-          const response = await getUserById(token,decodedToken.id);
-          setIsLoading(false);
-          setUser(response);
-        }
-      }
-      fetchUser()
-  }, [])
+  const { logout, token } = useAuth();
+  const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)
     
   const items: MenuProps['items'] = [
     {
@@ -122,7 +106,7 @@ function Header() {
   ];
   
     return(
-        <div className="bg-five shadow-sm px-4 py-3 flex justify-normal sm:justify-end">
+        <div className="bg-five-custom shadow-sm px-4 py-3 flex justify-normal sm:justify-end">
           <div className="sm:flex hidden">
             <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
@@ -145,7 +129,7 @@ function Header() {
             </Dropdown>
           </div>
           <div className="sm:hidden flex justify-between items-center w-full">
-            <img src={MidLogo} alt="Mininter Logo" className="w-10 h-10 object-cover" />
+            <img src={MidLogo} alt="Mininter Logo" className="w-10 h-10 hidden object-cover" />
             <Dropdown menu={{ items: itemssm }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
                 {

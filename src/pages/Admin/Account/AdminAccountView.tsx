@@ -1,48 +1,36 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteUser, getUserById, validateUser } from "../../../api/users";
-import { message, Modal } from "antd";
+import { Modal } from "antd";
 import { CheckCircleFilled, DeleteFilled, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 import { HttpStatus } from "../../../constants/Http_status";
+import { useDeleteUser } from "@/hooks/useDeleteUser";
+import { useValidateUser } from "@/hooks/useValidateUser";
+import { useGetUserById } from "@/hooks/useGetUserById";
 const Header = lazy(() => import("../../../components/Header"));
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 
 const AdminAccountView: React.FC = () => {
-    const [user, setUser] = useState<any>();
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    let req = useParams();
+    let userId = req.id;
+
+    console.log(req)
+    const { data: user, isLoading: userLoading  } = useGetUserById(userId ? userId : '');
+    const { mutateAsync: deleteUser, isPending: deleteLoading } = useDeleteUser({
+        action() {
+        },
+    })
+    const { mutateAsync: validateUser, isPending: validateLoading } = useValidateUser({
+        action() {
+        },
+    })
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isCniVisible, setIsCniVisible] = useState(false);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-    let req = useParams();
     const navigate = useNavigate();
-    let userId = req.id;
-
-    useEffect(() => { 
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchUser()
-    }, [])
-    async function fetchUser() {
-        const token = localStorage.getItem('token');
-
-        if(userId && token) {
-            const response = await getUserById(token,userId);
-
-            setUser(response)    
-        }
-    }
 
     const handleDeleteConfirm = async () => {
-        setApiLoading(true);
-        const response = await deleteUser(access_token,user._id);
+        const response = await deleteUser(user._id);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-            setApiLoading(false);
-            message.success("Compte supprimé !");
             navigate("/admin/account");
         }
     }
@@ -55,12 +43,8 @@ const AdminAccountView: React.FC = () => {
     }   
     
     const handleValidateConfirm = async () => {
-        setApiLoading(true);
-        const response = await validateUser(access_token,user._id);
+        const response = await validateUser(user._id);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-            fetchUser();
-            setApiLoading(false);
-            message.success("Compte validé !");
             setIsValidateModalVisible(false)
         }
     }
@@ -88,6 +72,11 @@ const AdminAccountView: React.FC = () => {
                     </div>
                     <div className="pl-10 pr-5 pt-16 pb-5 w-full">
                         {
+                            userLoading ?
+                                <div className="text-3xl text-center">
+                                    <LoadingOutlined />
+                                </div>
+                            :
                             user && 
                             <div>
                                 <div className="flex justify-between items-center">
@@ -219,10 +208,10 @@ const AdminAccountView: React.FC = () => {
                             </button>
                             <button 
                                 onClick={handleValidateConfirm}
-                                disabled={ apiLoading ? true : false }
-                                className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                disabled={ validateLoading ? true : false }
+                                className= { validateLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
                             >   
-                                { apiLoading && <LoadingOutlined /> }
+                                { validateLoading && <LoadingOutlined /> }
                                 <div>Valider</div>
                             </button>
                         </div>
@@ -247,10 +236,10 @@ const AdminAccountView: React.FC = () => {
                             </button>
                             <button 
                                 onClick={handleDeleteConfirm}
-                                disabled={ apiLoading ? true : false }
-                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                disabled={ deleteLoading ? true : false }
+                                className= { deleteLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
                             >   
-                                { apiLoading && <LoadingOutlined /> }
+                                { deleteLoading && <LoadingOutlined /> }
                                 <div>Supprimer</div>
                             </button>
                         </div>
