@@ -1,31 +1,16 @@
-import { FunctionComponent, lazy, Suspense, useEffect, useState } from "react";
-import { getUserById } from "../../api/users";
+import { FunctionComponent, lazy, Suspense } from "react";
 const Typewriter = lazy(() => import("../../components/TypeWritter"));
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 import Ministre from '../../assets/image/ministre.jpg';
 import { LoadingOutlined } from "@ant-design/icons";
+import { useGetUserById } from "@/hooks/useGetUserById";
+import { useAuth } from "@/context/AuthContext";
 
 const UserHome: FunctionComponent = () => {
-    const [user, setUser] = useState<any>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { token } = useAuth()
+    const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)        
     const Ministre_Firstname = `${import.meta.env.VITE_MINISTRE_FIRSTNAME}`;
     const Ministre_Lastname = `${import.meta.env.VITE_MINISTRE_LASTNAME}`;
-
-    useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(decodedToken.id);
-            setIsLoading(false);
-
-            setUser(response.data)
-          }
-        }
-        fetchUser()
-    }, [])
-
 
     return(
         <div className="w-full flex flex-col justify-center bg-four min-h-screen">
