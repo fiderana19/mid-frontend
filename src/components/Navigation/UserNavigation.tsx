@@ -2,29 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { Dropdown, MenuProps } from "antd";
 import { UserOutlined, LogoutOutlined, DownOutlined, MenuOutlined, LoadingOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react";
-import { getUserById } from "../../api/users";
 import { useAuth } from "../../context/AuthContext";
+import { useGetUserById } from "@/hooks/useGetUserById";
 
 function UserNavigation() {
     const location = useLocation();
-    const { logout } = useAuth();
-    const [user, setUser] = useState<any>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(decodedToken.id);
-            setIsLoading(false);
-            setUser(response.data)
-          }
-        }
-        fetchUser()
-    }, [])
+    const { logout, token } = useAuth();
+    const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)    
 
     const items: MenuProps['items'] = [
         {
@@ -83,7 +67,7 @@ function UserNavigation() {
       
 
     return(
-        <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-second text-center text-white md:py-0 py-3">
+        <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-second-custom text-center text-white md:py-0 py-3">
             <Link to='/user/home' className="flex items-center gap-2">
                 <img src={MidLogo} alt="Logo du ministere" className="w-10 h-10 object-cover rounded-full mx-auto" />
                 <div className="text-md font-latobold">MININTER: Audience</div>
