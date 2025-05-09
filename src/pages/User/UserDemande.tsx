@@ -1,41 +1,31 @@
 import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined, DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { getAllRequestByUser, requestDelete } from "../../api/request";
-import { message, Modal } from "antd";
+import { lazy, Suspense, useState } from "react";
+import { Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
+import { useAuth } from "@/context/AuthContext";
+import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
+import { useDeleteRequest } from "@/hooks/useDeleteRequest";
+import { Button } from "@/components/ui/button";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserDemande() {
-    const [requests, setRequests] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
+    const { token } = useAuth();
+    const { data: requests, refetch, isLoading } = useGetAllRequestByUser(token ? JSON.parse(atob(token.split('.')[1])).id : null);
+    const { mutateAsync: requestDelete } = useDeleteRequest({
+        action() {
+            refetch()
+        },
+    })
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<any>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchUserRequest()
-    }, [])
-    async function fetchUserRequest () {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token)
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getAllRequestByUser(token, decodedToken.id);
-            if(response) {
-                setIsLoading(false);
-                setRequests(response);
-            }
-        }
-    }
 
     const handleDeleteConfirm = async () => {
         if(selectedRequest) {
-            const response = await requestDelete(access_token,selectedRequest);
+            const response = await requestDelete(selectedRequest);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchUserRequest();
-                message.success("Demande d'audience supprimée !")
                 setIsDeleteModalVisible(false);    
             }
         }
@@ -50,14 +40,14 @@ function UserDemande() {
                 <div className="sm:flex block justify-between items-center">
                     <div className="text-lg font-latobold my-4">Les demandes d'audience</div>
                     <Link to="/user/add/demande" className="flex justify-end">
-                        <button className='bg-gray-500 border border-gray-600 hover:transition-colors hover:bg-gray-700 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
+                        <Button variant={'default'}>
                             <PlusOutlined />
                             <div>Faire une demande</div>
-                        </button>
+                        </Button>
                     </Link>
                 </div>
                 <div className='my-7 grid gap-4 justify-center grid-cols-customized'>
-                    { requests && requests.map((request, index) => {
+                    { requests && requests.map((request: any, index: any) => {
                         return(
                             <div key={index} className="rounded bg-white w-72 shadow-md">
                                 <div className="flex gap-2 p-2 bg-gray-400 bg-opacity-80 rounded">
@@ -110,19 +100,19 @@ function UserDemande() {
                                     {
                                         request.status_request[0] !== "Accepté" &&
                                         <div className="flex justify-end mt-2 gap-2">
-                                            <button 
-                                                onClick={() => {navigate(`/user/edit/demande/${request._id}`)}}
-                                                className='bg-blue-500 border border-blue-600 hover:transition-colors hover:bg-blue-700 text-white flex py-1 px-3 rounded items-center gap-1'>
+                                            <Button 
+                                                variant={'primary'}
+                                                onClick={() => {navigate(`/user/edit/demande/${request._id}`)}}>
                                                 <EditOutlined />
                                                 Modifier
-                                            </button>
-                                            <button 
-                                                className='bg-red-500 border border-red-600 hover:transition-colors hover:bg-red-700 text-white flex py-1 px-3 rounded items-center gap-1'
+                                            </Button>
+                                            <Button
+                                                variant={'destructive'} 
                                                 onClick={() => {setSelectedRequest(request._id); setIsDeleteModalVisible(true)}}
                                                 >
                                                 <DeleteOutlined />
                                                 Supprimer
-                                            </button>
+                                            </Button>
                                         </div>
                                     }
                                     
@@ -155,18 +145,18 @@ function UserDemande() {
                         <WarningFilled className='mr-2 text-red-500 text-xl' />  
                         Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
                         <div className='flex justify-end gap-2'>
-                            <button 
+                            <Button 
+                                variant={'secondary'}
                                 onClick={() => setIsDeleteModalVisible(false)}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >   
                                 Annuler
-                            </button>
-                            <button 
+                            </Button>
+                            <Button
+                                variant={'destructive'} 
                                 onClick={handleDeleteConfirm}
-                                className= "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                             >   
                                 <div>Supprimer</div>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </Modal>
