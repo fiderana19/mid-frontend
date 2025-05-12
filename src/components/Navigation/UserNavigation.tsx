@@ -67,7 +67,7 @@ function UserNavigation() {
       
 
     return(
-        <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-second-custom text-center text-white md:py-0 py-3">
+        <div className="px-4 fixed top-0 left-0 flex justify-between w-full bg-second-custom text-center text-white md:py-0 py-3 z-50">
             <Link to='/user/home' className="flex items-center gap-2">
                 <img src={MidLogo} alt="Logo du ministere" className="w-10 h-10 object-cover rounded-full mx-auto" />
                 <div className="text-md font-latobold">MININTER: Audience</div>
