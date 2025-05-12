@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 
 export const useGetAudienceByUser = (id: string) => {
-    const { data, isLoading, error, isError } = useQuery({
+    const { data, isLoading, error, isError, refetch } = useQuery({
         queryKey: [QueryCacheKey.AUDIENCES, id],
         queryFn: () => getAudienceByUser(id),
         staleTime: Infinity
@@ -23,6 +23,7 @@ export const useGetAudienceByUser = (id: string) => {
 
     return {
         isLoading,
-        data: data?.data
+        data: data?.data,
+        refetch
     }
 }

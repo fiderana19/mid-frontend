@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
 import { ToLocalISOString } from './toIsoString';
 
-export const getWeekStartAndEnd = (date: any) => {
+export const getWeekStartAndEnd = (dt: any) => {
+  const date = dayjs(dt);
     const weekStart = date.clone().startOf('week');
     const weekEnd = date.clone().endOf('week');
     const date_debut = ToLocalISOString(weekStart);
