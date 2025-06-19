@@ -1,32 +1,13 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { getAudienceByUser } from "../../api/audience";
+import { lazy, Suspense } from "react";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useGetAudienceByUser } from "@/hooks/useGetAudienceByUser";
+import { useAuth } from "@/context/AuthContext";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserAudience() {
-    const [audiences, setAudiences] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
-
-    useEffect(() => {
-        fetchUserRequest()
-    }, [])
-
-    async function fetchUserRequest () {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token)
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getAudienceByUser(token, decodedToken.id);
-            if(response) {
-                setIsLoading(false);
-                setAudiences(response.data);
-            }
-        }
-    }
-
+    const { token } = useAuth();
+    const { isLoading, data: audiences } = useGetAudienceByUser(token ? JSON.parse(atob(token.split('.')[1])).id : null);
+    
     return(
         <div className="w-full min-h-screen bg-four">
             <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
@@ -34,9 +15,9 @@ function UserAudience() {
             </Suspense>
             <div className="pt-16 sm:px-20 px-4">
                 <div className="text-lg font-latobold my-4">Les audiences</div>
-                <div className='my-7 grid gap-4 justify-center grid-cols-customized'>
+                <div className='my-7 grid gap-4 justify-center grid-customized'>
                     {
-                        audiences && audiences.map((audience, index) => {
+                        audiences && audiences.map((audience: any, index: any) => {
                             return(
                             <div key={index} className="rounded bg-white w-72  shadow-md">
                                 <div className="flex bg-gray-400 bg-opacity-80 gap-2 items-center p-2 rounded">

@@ -1,5 +1,3 @@
-const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
-const Header = lazy(() => import("../../../components/Header"));
 import { useState, useEffect, lazy, Suspense } from "react";
 import { DatePicker, DatePickerProps, Modal, Select } from "antd";
 import { getWeekStartAndEnd } from "../../../utils/GetWeek";
@@ -10,6 +8,9 @@ import GeneratePdf from "../../../utils/setPdfGenerate";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import { HttpStatus } from "../../../constants/Http_status";
 import { SearchAudienceDto } from '../../../../../mid-backend/src/dto/search-audience.dto';
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../../components/Header"));
+
 
 function AdminAudienceSearch() {
     const [selectedDateType, setSelectedDateType] = useState<string>('week');
@@ -20,17 +21,6 @@ function AdminAudienceSearch() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [isPdfModalVisible, setIsPdfModalVisible] = useState(false);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if(token) {
-            setAccessToken(token);
-        }
-    }, [])
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
         if(selectedDateType === 'week') {
@@ -76,7 +66,7 @@ function AdminAudienceSearch() {
         }
         if(searchCredentials.date_end !== '' && searchCredentials.date_end !== '') {
             setIsLoading(true);
-            const response = await audienceSearch(access_token, searchCredentials);
+            const response = await audienceSearch(searchCredentials);
             setIsSearching(true);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
                 setAudiences(response.data);

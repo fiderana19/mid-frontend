@@ -46,7 +46,7 @@ function UserDemande() {
                         </Button>
                     </Link>
                 </div>
-                <div className='my-7 grid gap-4 justify-center grid-cols-customized'>
+                <div className='my-7 grid gap-4 justify-center grid-customized'>
                     { requests && requests.map((request: any, index: any) => {
                         return(
                             <div key={index} className="rounded bg-white w-72 shadow-md">
