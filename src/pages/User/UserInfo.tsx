@@ -1,28 +1,15 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { getUserById } from "../../api/users";
+import { lazy, Suspense } from "react";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { useGetUserById } from "@/hooks/useGetUserById";
+import { Button } from "@/components/ui/button";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserInfo() {
-    const [user, setUser] = useState<any>();
+    const { token } = useAuth();
+    const {isLoading, data: user} = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null);
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(token,decodedToken.id);
-            setIsLoading(false);
-            setUser(response)
-          }
-        }
-        fetchUser()
-    }, [])
-
 
     return(
         <div className="w-full min-h-screen bg-four">
@@ -78,7 +65,7 @@ function UserInfo() {
                                             <div className="font-latobold text-md mb-3">Identité Nationale</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">CIN</div>
-                                                <div className="font-latobold">{ user.cni }</div>
+                                                <div className="font-latobold">{ user.cni.toLocaleString('fr-FR') }</div>
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Date de délivrance</div>
@@ -93,11 +80,9 @@ function UserInfo() {
                                             <div className="font-latobold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>
-                                                <button 
-                                                    onClick={() => {navigate("/user/change/password")}}
-                                                    className='bg-gray-500 border border-gray-600 hover:transition-colors hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500'
-                                                >
-                                                    Changer le mot de passe</button>
+                                                <Button variant={'default'} onClick={() => navigate("/user/change/password")}>
+                                                    Changer le mot de passe
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
