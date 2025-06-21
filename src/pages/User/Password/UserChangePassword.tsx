@@ -1,87 +1,57 @@
+import { lazy, Suspense, useState } from "react";
 import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
 const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
-import { lazy, Suspense, useEffect, useState } from "react";
-import { getUserById, updatePassword } from "../../../api/users";
 import { UpdateUserPassword } from "../../../interfaces/User";
-import { message } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { HttpStatus } from "../../../constants/Http_status";
+import { Controller, useForm } from "react-hook-form";
+import { useAuth } from "@/context/AuthContext";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { UserChangePasswordValidation } from "@/validation/user.validation";
+import { Button } from "@/components/ui/button";
+import { usePatchPassword } from "@/hooks/usePatchPassword";
 
 function UserChangePassword() {
-    const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
+    const { token } = useAuth()
+    const { mutateAsync: updatePassword, isPending: isLoading } = usePatchPassword();
+    const { control, formState, handleSubmit } = useForm<UpdateUserPassword>({
+        resolver: yupResolver(UserChangePasswordValidation)
+    });
+    const { errors } = formState;
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [user, setUser] = useState<any>();
-    const [emptyPasswordError, setEmptyPasswordError] = useState<string>('');
-    const [newPassordError, setNewPassordError] = useState<string>('');
-    const [matchPassordError, setMatchPassordError] = useState<string>('');
-    const [notMatchedError, setNotMatchedPasswordError] = useState<string>('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+    const [notMatchedPasswordError, setNotMatchedPasswordError] = useState<string>('');
     const navigate = useNavigate();
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
 
-    useEffect(() => { 
-        const token = localStorage.getItem("token");
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchUser()
-    }, [])
-
-    async function fetchUser() {
-        const token = localStorage.getItem("token");
-
-        if(token) {
-          const decodedToken = JSON.parse(atob(token.split('.')[1]));
-          const response = await getUserById(token,decodedToken.id);
-
-          setUser(response)
-        }
-    }
-
-    async function updatePasswordSubmit() {
-        setNewPassordError('');
-        setMatchPassordError('');
+    async function updatePasswordSubmit(data: any) {
+        console.log(data)
         setNotMatchedPasswordError('');
-        setEmptyPasswordError('');
 
-        if(updatePasswordData.old_password === "") {
-            setEmptyPasswordError("Veuiller saisir l'ancien mot de passe !")
-        }
-        if(updatePasswordData.new_password.length < 6) {
-            setNewPassordError('Le mot doit comporter au moins 6 caractères !')
-        }
-        if(updatePasswordData.new_password !== confirmPassword) {
-            setMatchPassordError('Confirmation mot de passe incorrecte !')
+        if(data.new_password !== confirmPassword) {
+            setConfirmPasswordError('Confirmation mot de passe incorrecte !')
         }
 
-        if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword && updatePasswordData.old_password !== "") {
-            const response = await updatePassword(access_token,user._id,updatePasswordData);
+        if(data.new_password === confirmPassword) {
+            const id = token ? JSON.parse(atob(token.split('.')[1])).id : null;
+            const updatePasswordCredentials = {
+                _id: id,
+                old_password: data.old_password,
+                new_password: data.new_password,
+            }
+            const response = await updatePassword(updatePasswordCredentials);
             if(response.status === HttpStatus.UNAUTHORIZED) {
-                setNotMatchedPasswordError(response.response.data.message);
+                setNotMatchedPasswordError(response.data.message);
             }
             if(response.status === HttpStatus.OK) {
-                message.success("Mot de passe changé !");
                 navigate("/user/info");
             }
         }
     }
 
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassordError('');
-        setMatchPassordError('');
-        setNotMatchedPasswordError('');
-        setEmptyPasswordError('');
-
-        const {name, value} = e.target;
-        setUpdatePasswordData((prev) => ({...prev, [name]: value}));
-    }
-
     const handleConfirmChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassordError('');
-        setMatchPassordError('');
-        setNotMatchedPasswordError('');
-        setEmptyPasswordError('');
+        setConfirmPasswordError('');
 
         const {value} = e.target;
         setConfirmPassword(value);
@@ -94,73 +64,90 @@ function UserChangePassword() {
                     <UserNavigation />
                 </Suspense>
                 <div className="pt-16 sm:px-20 px-4">
-                    <div className="sm:w-80 w-full mx-auto mt-10 mb-5">
+                    <form onSubmit={handleSubmit(updatePasswordSubmit)} className="sm:w-80 w-full mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
                             <div className="border rounded p-4 bg-white shadow-md">
                                 {
-                                    notMatchedError &&  
+                                    notMatchedPasswordError &&  
                                     <div className="bg-red-300 w-64 transition-opacity mx-auto p-2 border border-red-500 rounded text-xs">
                                         <WarningOutlined />
-                                        <span className="ml-2"> { notMatchedError } </span>
+                                        <span className="ml-2"> { notMatchedPasswordError } </span>
                                     </div>
                                 }
                                
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
-                                            Mot de passe actuel
-                                    </div>
+                                    <Label htmlFor="old_password" className="text-left text-xs font-latobold mb-1">
+                                        Mot de passe actuel
+                                    </Label>
                                     <div className="relative">
-                                        <input 
-                                            type="password"
-                                            onChange={handleChange}
-                                            name='old_password'
-                                            placeholder='Saisir votre mot de passe actuel...'
-                                            className={ emptyPasswordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
+                                        <Controller 
+                                            control={control}
+                                            name="old_password"
+                                            render={({
+                                                field: { onBlur, onChange, value }
+                                            }) => (
+                                                <Input
+                                                    type="password"
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    className={`w-full text-left pl-10 ${errors.old_password ? "border border-red-500 text-red-500" : ""}`}
+                                                    name='old_password'
+                                                />
+                                            )}
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { emptyPasswordError && <div className="text-xs text-red-500">{ emptyPasswordError }</div> }
+                                    { errors?.old_password && <div className="text-xs text-red-500 text-left">{ errors?.old_password.message }</div> }
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
-                                            Nouveau mot de passe
-                                    </div>
+                                    <Label htmlFor="new_password" className="text-left text-xs font-latobold mb-1">
+                                        Nouveau mot de passe
+                                    </Label>
                                     <div className="relative">
-                                        <input 
-                                            type="password"
-                                            onChange={handleChange}
-                                            name='new_password'
-                                            placeholder='Saisir le nouveau mot de passe...'
-                                            className={ newPassordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
+                                        <Controller 
+                                            control={control}
+                                            name="new_password"
+                                            render={({
+                                                field: { onBlur, onChange, value }
+                                            }) => (
+                                                <Input
+                                                    type="password"
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    className={`w-full text-left pl-10 ${errors.new_password ? "border border-red-500 text-red-500" : ""}`}
+                                                    name='old_password'
+                                                />
+                                            )}
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { newPassordError && <div className="text-xs text-red-500">{ newPassordError }</div> }
+                                    { errors?.new_password && <div className="text-xs text-red-500 text-left">{ errors?.new_password.message }</div> }
                                 </div>
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
-                                            Confirmation nouveau mot de passe
-                                    </div>
+                                    <Label className="text-left text-xs font-latobold mb-1">
+                                        Confirmation nouveau mot de passe
+                                    </Label>
                                     <div className="relative">
-                                        <input 
+                                        <Input
                                             onChange={handleConfirmChange}
                                             type="password"
                                             name='password'
-                                            placeholder='Confirmer le nouveau mot de passe...'
-                                            className={ matchPassordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
-                                        />
+                                            className={`w-full text-left pl-10 ${confirmPasswordError ? "border border-red-500 text-red-500" : ""}`}
+                                            />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { matchPassordError && <div className="text-xs text-red-500">{ matchPassordError }</div> }
+                                    { confirmPasswordError && <div className="text-xs text-red-500 text-left">{confirmPasswordError }</div> }
                                 </div>
-                                <div className="flex justify-center">
-                                    <button 
-                                        onClick={updatePasswordSubmit}
-                                        className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 mt-2 px-4 rounded'
-                                    >CHANGER</button>
+                                <div className="flex justify-center w-64 my-2 mx-auto">
+                                    <Button variant={'primary'} size={'lg'} disabled={isLoading ? true : false } className={`${isLoading ? 'cursor-not-allowed' : ''} w-full mt-4`} type='submit'>
+                                        { isLoading && <LoadingOutlined /> }  
+                                        CHANGER
+                                    </Button>
                                 </div>
                             </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

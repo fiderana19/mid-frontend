@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const isAuthenticated = !!token;
 
     const login = async (loginCredentials: LoginInterface) => {
-        const response = await userLogin(loginCredentials)
+        const response = await userLogin(loginCredentials);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             const data = response?.data.token;
             const isNotFirstLogin = response?.data.is_not_first_login;

@@ -15,6 +15,11 @@ export const userLogin = async (data: LoginInterface) => {
         type: TOAST_TYPE.ERROR,
         message: error?.response.data.message
       })
+    } else if (error.code == "ERR_NETWORK") {
+      showToast({
+        type: TOAST_TYPE.ERROR,
+        message: "Erreur lors de la connexion au serveur !"
+      })
     }
   }
 }
