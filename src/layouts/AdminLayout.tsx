@@ -1,7 +1,8 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from 'react';
 import { Outlet } from "react-router-dom";
 import MidLogo from '../assets/image/mid-logo.jpg';
-import AdminNavigation from "../components/Navigation/AdminNavigation";
+import { LoadingOutlined } from '@ant-design/icons';
+const AdminNavigation = lazy(() => import("../components/Navigation/AdminNavigation"));
 
 const AdminLayout: FunctionComponent = () => {
     return(
@@ -11,7 +12,9 @@ const AdminLayout: FunctionComponent = () => {
                     <img src={MidLogo} alt="Logo du ministere" className="w-20 h-20 object-cover rounded-full mx-auto" />
                     <div className="text-md font-semibold mt-2">Gestion d'audience avec le ministre</div>
                 </div>
-                <AdminNavigation />
+                <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                    <AdminNavigation />
+                </Suspense>
                 <div className="text-xs font-bold">
                     MID. @copyright 2024
                 </div>
