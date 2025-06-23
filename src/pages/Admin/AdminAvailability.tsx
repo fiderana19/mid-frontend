@@ -1,6 +1,4 @@
 import { DatePicker, Dropdown, MenuProps, message, Modal, TimePicker } from "antd";
-const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
-const Header = lazy(() => import("../../components/Header"));
 import { CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import { lazy, Suspense, useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -9,6 +7,8 @@ import { CreateAvailabilityInterface } from "../../interfaces/Availability";
 import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
 import { okConfirmStyle } from "../../utils/ModalStyle";
 import { HttpStatus } from "../../constants/Http_status";
+const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../components/Header"));
 
 function AdminAvailability() {
     const [availabilities, setAvailabilities] = useState<any>([]);

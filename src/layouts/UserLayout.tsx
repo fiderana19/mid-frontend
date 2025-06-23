@@ -1,7 +1,8 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, lazy, Suspense } from "react";
 import { Link, Outlet } from "react-router-dom";
 import MidLogo from '../assets/image/mid-logo.jpg';
-import UserNavigation from "../components/Navigation/UserNavigation";
+import { LoadingOutlined } from "@ant-design/icons";
+const UserNavigation = lazy(() => import("../components/Navigation/UserNavigation"));
 
 const UserLayout: FunctionComponent = () => {
     return(
@@ -12,7 +13,9 @@ const UserLayout: FunctionComponent = () => {
                     <div className="text-md font-semibold mt-2">Audience</div>
                 </Link>
                 <div className="flex gap-2">
-                    <UserNavigation />
+                    <Suspense fallback={<div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>}>
+                        <UserNavigation />
+                    </Suspense>
                     <Link to="/user/info" className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded'>
                         rakoto@gmail.com
                     </Link>

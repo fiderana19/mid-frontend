@@ -1,9 +1,9 @@
-const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
-const Header = lazy(() => import("../../components/Header"));
 import { lazy, Suspense, useEffect, useState } from "react";
 import { getUserById } from "../../api/users";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../components/Header"));
 
 function AdminInfo() {
     const [user, setUser] = useState<any>();
