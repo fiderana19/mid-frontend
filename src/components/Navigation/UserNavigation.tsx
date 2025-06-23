@@ -75,7 +75,7 @@ function UserNavigation() {
             <div className="flex gap-4 items-center">
                 <div className="text-left gap-4 md:flex hidden">
                     <Link to="/user/home">
-                        <div className={location.pathname === '/user/home' ? "px-2 py-4 text-third border-b-2 border-third" : "transition-colors px-2 py-4 border-b-2 border-b-second hover:border-b-2 hover:border-third"}>
+                        <div className={`transition-colors px-2 py-4 border-b-2  hover:border-b-2 hover:border-third ${location.pathname === '/user/home' ? "border-b-" : ""}`}>
                             Accueil
                         </div>
                     </Link>
