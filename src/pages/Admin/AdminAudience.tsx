@@ -1,11 +1,11 @@
-const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
-const Header = lazy(() => import("../../components/Header"));
 import { audienceCancel, audienceMissed, getAllAudience } from '../../api/audience';
 import { useState, useEffect, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopOutlined, WarningFilled } from "@ant-design/icons";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
+const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../components/Header"));
 
 function AdminAudience() {
     const [audiences, setAudiences] = useState<any[]>([]);

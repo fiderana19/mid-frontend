@@ -1,7 +1,7 @@
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Dropdown, Input, MenuProps, message, Modal } from "antd";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
-import { lazy, Suspense, useEffect, useState } from "react";
 import { deleteUser, getAllUser, validateUser } from "../../api/users";
 import { CheckCircleOutlined, CloseOutlined, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";

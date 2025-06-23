@@ -1,11 +1,11 @@
-const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
-const Header = lazy(() => import("../../../components/Header"));
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { message, Modal } from "antd";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
 import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
 import { HttpStatus } from "../../../constants/Http_status";
+const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
+const Header = lazy(() => import("../../../components/Header"));
 
 const AdminRequestView: React.FC = () => {
     const [request, setRequest] = useState<any>();
