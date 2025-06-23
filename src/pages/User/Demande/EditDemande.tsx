@@ -16,6 +16,7 @@ import { RequestEditValidation } from "@/validation/request_edit.validation";
 import { usePatchRequest } from "@/hooks/usePatchRequest";
 import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useAuth } from "@/context/AuthContext";
+import Status from "@/components/status/Status";
 
 const UserEditDemande: FunctionComponent = () => {
     const { token } = useAuth();
@@ -79,13 +80,14 @@ const UserEditDemande: FunctionComponent = () => {
                 {
                     request &&
                     <div className="mx-auto my-5 p-4 bg-white shadow-md rounded sm:w-80 w-full">
-                        <div className="mx-auto flex w-60 items-center gap-2">
-                            <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-11 h-11 rounded-full object-cover border" />
-                        <div className="">
+                        <div className="flex w-60 items-center gap-2 pt-4">
+                            <img src={`data:image/png;base64,${request.profile_photo}`} alt="" className="w-12 h-12 rounded-full object-cover border" />
+                            <div className="">
                                 <span>Soumise le </span>
                                 <span className="font-latobold">
                                     { request.request_creation }
                                 </span>
+                                <Status type="alert" data="En attente" />
                             </div>
                         </div>
                         <Label htmlFor="type_demande" className="mt-4 mb-1">Type de la demande</Label>

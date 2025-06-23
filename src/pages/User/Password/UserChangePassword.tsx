@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
 const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
 import { UpdateUserPassword } from "../../../interfaces/User";
@@ -13,7 +13,7 @@ import { UserChangePasswordValidation } from "@/validation/user.validation";
 import { Button } from "@/components/ui/button";
 import { usePatchPassword } from "@/hooks/usePatchPassword";
 
-function UserChangePassword() {
+const UserChangePassword: React.FC = () => {
     const { token } = useAuth()
     const { mutateAsync: updatePassword, isPending: isLoading } = usePatchPassword();
     const { control, formState, handleSubmit } = useForm<UpdateUserPassword>({
@@ -22,13 +22,9 @@ function UserChangePassword() {
     const { errors } = formState;
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
-    const [notMatchedPasswordError, setNotMatchedPasswordError] = useState<string>('');
     const navigate = useNavigate();
 
     async function updatePasswordSubmit(data: any) {
-        console.log(data)
-        setNotMatchedPasswordError('');
-
         if(data.new_password !== confirmPassword) {
             setConfirmPasswordError('Confirmation mot de passe incorrecte !')
         }
@@ -41,9 +37,6 @@ function UserChangePassword() {
                 new_password: data.new_password,
             }
             const response = await updatePassword(updatePasswordCredentials);
-            if(response.status === HttpStatus.UNAUTHORIZED) {
-                setNotMatchedPasswordError(response.data.message);
-            }
             if(response.status === HttpStatus.OK) {
                 navigate("/user/info");
             }
@@ -67,14 +60,6 @@ function UserChangePassword() {
                     <form onSubmit={handleSubmit(updatePasswordSubmit)} className="sm:w-80 w-full mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
                             <div className="border rounded p-4 bg-white shadow-md">
-                                {
-                                    notMatchedPasswordError &&  
-                                    <div className="bg-red-300 w-64 transition-opacity mx-auto p-2 border border-red-500 rounded text-xs">
-                                        <WarningOutlined />
-                                        <span className="ml-2"> { notMatchedPasswordError } </span>
-                                    </div>
-                                }
-                               
                                 <div className='w-64 my-2 mx-auto'>
                                     <Label htmlFor="old_password" className="text-left text-xs font-latobold mb-1">
                                         Mot de passe actuel

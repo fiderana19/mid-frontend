@@ -7,6 +7,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useDeleteRequest } from "@/hooks/useDeleteRequest";
 import { Button } from "@/components/ui/button";
+import Status from "@/components/status/Status";
+import { StatusType } from "@/constants/Status_type";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserDemande() {
@@ -65,27 +67,12 @@ function UserDemande() {
                                     <div className="flex justify-end">
                                         {
                                             request.status_request[0] === "En attente" ?
-                                            <div className="max-w-max">
-                                                <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                    <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                    { request.status_request }
-                                                </div>   
-                                            </div>                                     
+                                            <Status type={`${StatusType.alert}`} data={`${request.status_request}`}/>
                                             : (
                                                 request.status_request[0] === "Accepté" ?
-                                                <div className="max-w-max">
-                                                    <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                        <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                        { request.status_request }
-                                                    </div>        
-                                                </div>                                                                        
+                                                <Status type={`${StatusType.success}`} data={`${request.status_request}`}/>
                                                 :
-                                                <div className="max-w-max">
-                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                        { request.status_request }
-                                                    </div>     
-                                                </div>                                                                           
+                                                <Status type={`danger`} data={`${request.status_request}`}/>
                                             )
                                         } 
                                     </div>

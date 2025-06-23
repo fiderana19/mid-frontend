@@ -1,51 +1,40 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { Dropdown, Input, MenuProps, message, Modal } from "antd";
+import React, { lazy, Suspense, useState } from "react";
+import { Dropdown, MenuProps, Modal } from "antd";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
-import { deleteUser, getAllUser, validateUser } from "../../api/users";
 import { CheckCircleOutlined, CloseOutlined, DeleteOutlined, DownOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { HttpStatus } from "../../constants/Http_status";
+import { useGetAllUser } from '../../hooks/useGetAllUser';
+import { Input } from "@/components/ui/input";
+import { useValidateUser } from "@/hooks/useValidateUser";
+import { useDeleteUser } from "@/hooks/useDeleteUser";
+import { handleNumberKeyPress } from "@/utils/handleKeyPress";
+import { Button } from "@/components/ui/button";
 
-function AdminAccount() {
-    const [accounts, setAccounts] = useState<any[]>([]);
+const AdminAccount: React.FC = () => {
+    const { data: accounts, isLoading, refetch } = useGetAllUser();
+    const { mutateAsync: validateUser, isPending: validateLoading } = useValidateUser({action() {
+        refetch();
+    }});
+    const { mutateAsync: deleteUser, isPending: deleteLoading } = useDeleteUser({action() {
+        refetch();
+    }})
     const [filteredAccounts, setFilteredAccounts] = useState<any[]>([]);
-    const [access_token, setAccessToken] = useState<string | null>(localStorage.getItem('token'));
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAcount, setSelectedAccount] = useState<any>()
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
     const [searchRef, setSearchRef] = useState<string>('');
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token)
-        }
-        
-        fetchAccount()
-    }, [])
-
-    async function fetchAccount () {
-        const token = localStorage.getItem('token');
-        const response = await getAllUser(token);
-        if(response) {
-            setIsLoading(false);
-            setAccounts(response.data)
-        }
-    }
 
     async function filterAccounts (filter: boolean, text: string) {
         setFilterRef(true);
         setFilterText(text);
-        const acc = accounts.filter(accounts => accounts.validation === filter);
+        const acc = accounts.filter((accounts: any) => accounts.validation === filter);
         setFilteredAccounts(acc);
     }
-   
-    
+       
     const items: MenuProps['items'] = [
         {
           label:  <Link to={`/admin/account/view/${selectedAcount?._id}`} >
@@ -101,49 +90,32 @@ function AdminAccount() {
                     </div>,
             key: '1',
         },
-      ];
+    ];
       
     const handleValidateConfirm = async () => {
-        setApiLoading(true);
         if(selectedAcount) {
-            const response = await validateUser(access_token,selectedAcount?._id);
+            const response = await validateUser(selectedAcount?._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                setApiLoading(false);
                 setIsValidateModalVisible(false);
-                message.success("Compte validé !")
-                fetchAccount();    
             }
         }
     }
-    //handling delete cancel
+
     const handleValidateCancel = async () => {
         setIsValidateModalVisible(false)
     }
 
     const handleDeleteConfirm = async () => {
-        setApiLoading(true);
         if(selectedAcount) {
-            const response = await deleteUser(access_token,selectedAcount?._id);
+            const response = await deleteUser(selectedAcount?._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAccount();
-                setApiLoading(false);
-                message.success("Compte supprimé !")
                 setIsDeleteModalVisible(false);    
             }
         }
     }
-    //handling delete cancel
+
     const handleDeleteCancel = async () => {
         setIsDeleteModalVisible(false)
-    }
-
-    //handling the keypress
-    const handleKeyPress =async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const charCode = e.which || e.keyCode;
-
-        if (charCode < 48 || charCode > 57) {
-        e.preventDefault();
-        }
     }
 
     return(
@@ -164,19 +136,26 @@ function AdminAccount() {
                         <div className="flex justify-between items-center my-4">
                             <div className="text-lg font-latobold">Les comptes des citoyens</div>
                             <div className="flex items-center gap-1">
-                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
+                                <Input 
+                                    name="filter" 
+                                    type="text" 
+                                    placeholder="Saisir le CIN..."  
+                                    value={searchRef} 
+                                    onChange={(e) => setSearchRef(e.target.value)} 
+                                    onKeyPress={handleNumberKeyPress}  
+                                />
                                 <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
                                     <a onClick={(e) => {e.preventDefault()}}>
-                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
+                                        <Button>
                                             <FilterOutlined className="text-md mr-1"/>
                                             {
                                                 (filterRef && filterText) ? 
                                                 <div className="min-w-max">{filterText}</div>
                                                 :
-                                                <div className="min-w-max">Filtrer</div>
+                                                <div className="min-w-max">Tout</div>
                                             }
                                             <DownOutlined />
-                                        </button>
+                                        </Button>
                                     </a>
                                 </Dropdown>
                             </div>
@@ -195,8 +174,8 @@ function AdminAccount() {
                             </thead> 
                             <tbody className='bg-white divide-y divide-gray-200'>
                                 {
-                                    filterRef ? 
-                                    filteredAccounts.map((account, index) => {
+                                    (filterRef && accounts) ? 
+                                    filteredAccounts.map((account: any, index: any) => {
                                         if (searchRef && !account.cni.includes(searchRef)) {
                                             return null;
                                         }
@@ -239,7 +218,7 @@ function AdminAccount() {
                                         )
                                     })
                                     :
-                                    accounts.map((account, index) => {
+                                    accounts && accounts.map((account: any, index: any) => {
                                         if (searchRef && !account.cni.includes(searchRef)) {
                                             return null;
                                         }
@@ -285,6 +264,7 @@ function AdminAccount() {
 
                             </tbody>
                         </table>
+                        {/* Handling the accounts and filters length */}
                         {                          
                             (!isLoading && accounts && accounts.length < 1) &&
                                 <div className="mx-auto flex justify-center w-full my-4 text-gray-500">
@@ -307,6 +287,7 @@ function AdminAccount() {
                                     </div>
                                 </div>
                         }
+                        {/* Handling the loading */}
                         {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     </div>
                 </div>
@@ -321,21 +302,21 @@ function AdminAccount() {
                 <div>
                     <WarningFilled className='mr-2 text-green-500 text-xl' />  
                     Êtes-vous sûr de vouloir valider ce demande d'audience ?
-                    <div className='flex justify-end gap-2'>
-                        <button 
+                    <div className='flex justify-end gap-2 mt-2'>
+                        <Button variant={'secondary'} 
                             onClick={handleValidateCancel}
-                            className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >   
                             Annuler
-                        </button>
-                        <button 
+                        </Button>
+                        <Button
+                            variant={'success'} 
                             onClick={handleValidateConfirm}
-                            disabled={ apiLoading ? true : false }
-                            className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                            disabled={ validateLoading ? true : false }
+                            className= {`flex gap-2 items-center ${validateLoading ? 'cursor-not-allowed' : '' }`} 
                         >   
-                            { apiLoading && <LoadingOutlined /> }
+                            { validateLoading && <LoadingOutlined /> }
                             <div>Valider</div>
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </Modal>
@@ -349,26 +330,26 @@ function AdminAccount() {
                 <div>
                     <WarningFilled className='mr-2 text-red-500 text-xl' />  
                     Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
-                    <div className='flex justify-end gap-2'>
-                        <button 
+                    <div className='flex justify-end gap-2 mt-2'>
+                        <Button
+                            variant={'secondary'} 
                             onClick={handleDeleteCancel}
-                            className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >   
                             Annuler
-                        </button>
-                        <button 
+                        </Button>
+                        <Button
+                            variant={'destructive'} 
                             onClick={handleDeleteConfirm}
-                            disabled={ apiLoading ? true : false }
-                            className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                            disabled={ deleteLoading ? true : false }
+                            className= {`flex gap-2 items-center ${deleteLoading ? 'cursor-not-allowed' : '' }`} 
                         >   
-                            { apiLoading && <LoadingOutlined /> }
+                            { deleteLoading && <LoadingOutlined /> }
                             <div>Supprimer</div>
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </Modal>
         </>
-
     )
 }
 

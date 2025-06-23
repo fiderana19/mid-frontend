@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     navigate("/admin/home");
                 }
             } else {
-                if(!isNotFirstLogin) {
+                if(isNotFirstLogin === true) {
                     navigate("/user/password");
                 } else {
                     navigate("/user/home");
