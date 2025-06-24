@@ -6,6 +6,8 @@ import { HttpStatus } from "../../../constants/Http_status";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
 import { useValidateUser } from "@/hooks/useValidateUser";
 import { useGetUserById } from "@/hooks/useGetUserById";
+import Status from "@/components/status/Status";
+import { Button } from "@/components/ui/button";
 const Header = lazy(() => import("../../../components/Header"));
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 
@@ -101,20 +103,10 @@ const AdminAccountView: React.FC = () => {
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
                                             <div className="font-latobold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
-                                                { user.validation ? 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                            Validé
-                                                        </div>        
-                                                    </div>                                                                        
+                                                { user.validation ?
+                                                    <Status type="success" data="Validé" /> 
                                                     : 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                            Non Validé
-                                                        </div>        
-                                                    </div>
+                                                    <Status type="danger" data="Non validé" /> 
                                                 }  
                                             </div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
@@ -199,21 +191,22 @@ const AdminAccountView: React.FC = () => {
                     <div>
                         <WarningFilled className='mr-2 text-green-500 text-xl' />  
                         Êtes-vous sûr de vouloir valider ce demande d'audience ?
-                        <div className='flex justify-end gap-2'>
-                            <button 
+                        <div className='flex justify-end gap-2 mt-2'>
+                            <Button
+                                variant={'secondary'} 
                                 onClick={handleValidateCancel}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >   
                                 Annuler
-                            </button>
-                            <button 
+                            </Button>
+                            <Button
+                                variant={'success'}
                                 onClick={handleValidateConfirm}
                                 disabled={ validateLoading ? true : false }
-                                className= { validateLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                className={` ${validateLoading ? 'cursor-not-allowed' : ''}`}
                             >   
-                                { validateLoading && <LoadingOutlined /> }
+                                { validateLoading && <LoadingOutlined className="text-xs" /> }
                                 <div>Valider</div>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </Modal>
@@ -227,21 +220,22 @@ const AdminAccountView: React.FC = () => {
                     <div>
                         <WarningFilled className='mr-2 text-red-500 text-xl' />  
                         Êtes-vous sûr de vouloir supprimer ce compte de citoyen ?
-                        <div className='flex justify-end gap-2'>
-                            <button 
+                        <div className='flex justify-end gap-2 mt-2'>
+                            <Button 
+                                variant={'secondary'}
                                 onClick={handleDeleteCancel}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >   
                                 Annuler
-                            </button>
-                            <button 
+                            </Button>
+                            <Button
+                                variant={'destructive'}
                                 onClick={handleDeleteConfirm}
                                 disabled={ deleteLoading ? true : false }
-                                className= { deleteLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                className={`${ deleteLoading ? 'cursor-not-allowed' : '' }`}
                             >   
-                                { deleteLoading && <LoadingOutlined /> }
+                                { deleteLoading && <LoadingOutlined className="text-xs" /> }
                                 <div>Supprimer</div>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </Modal>
