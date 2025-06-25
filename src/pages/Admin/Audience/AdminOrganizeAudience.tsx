@@ -1,95 +1,69 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { CheckCircleOutlined, CloseOutlined, EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
-import { Select, message } from "antd";
+import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
-import { getRequestById } from "../../../api/request";
-import { getAllFreeAvailability } from '../../../api/availability';
-import { audienceCreate } from "../../../api/audience";
 import dayjs from "dayjs";
 import { HttpStatus } from "../../../constants/Http_status";
 import { CreateAudienceInterface } from "../../../interfaces/Audience";
+import { useGetRequestById } from "@/hooks/useGetRequestById";
+import { useGetAllFreeAvailability } from "@/hooks/useGetAllFreeAvailability";
+import Status from "@/components/status/Status";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useCreateAudience } from "@/hooks/useCreateAudience";
+import { useGetAllAudience } from "@/hooks/useGetAllAudience";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { AudienceOrganizeValidation } from "@/validation/audience.validation";
+import { useGetAllAvailability } from "@/hooks/useGetAllAvailability";
 
 const { Option } = Select;
 
-function AdminOrganizeAudience() {
-    const [request, setRequest] = useState<any>();
-    const [audienceCredentials, setAudienceCredentials] = useState<CreateAudienceInterface>({ user: '', availability: '', request: '' });
-    let [apiLoading, setApiLoading] = useState<boolean>(false);
-    let [selectError, setSelectError] = useState<string>('');
-    let [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
-    const [selectedAvailabilityId, setSelectedAvailabilityId] = useState('');
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-    let req = useParams();
+const AdminOrganizeAudience: React.FC = () => {
+    const req = useParams();
+    const requestId = req.id;
+    const { data: request, isLoading } = useGetRequestById(requestId ? requestId : '');
+    const { refetch } = useGetAllAudience();
+    const { refetch: refetchAvailability } = useGetAllAvailability();
+    const { mutateAsync: audienceCreate, isPending: createLoading } = useCreateAudience({action() {
+        refetch();
+        refetchAvailability();
+        refetchFreeAvailability();
+    },});
+    const { data: freeAvailability, refetch: refetchFreeAvailability } = useGetAllFreeAvailability();
+    const { control, handleSubmit: submit, formState: { errors }, setValue } = useForm<CreateAudienceInterface>({
+        resolver: yupResolver(AudienceOrganizeValidation)
+    });
+    const [availabilities_pref, setAvailabilitiesPref] = useState<any[]>([]);
     const navigate = useNavigate();
-    let reqestId = req.id;
 
     useEffect(() => { 
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchRequest();
-        fetchAvailability();
-    }, [])
-    async function fetchRequest() {
-        const token = localStorage.getItem('token');
+        assignDefaultValue();
+        filterAvailability();
+    }, [request, freeAvailability])
 
-        if(reqestId && token) {
-            const response = await getRequestById(token,reqestId);
-
-            if(response) {
-                setRequest(response);
-                setAudienceCredentials({
-                    ...audienceCredentials,
-                    user: response.user,
-                    request: response._id,
-                }); 
-            }
-        }
+    async function assignDefaultValue() {
+        setValue('request', ((requestId) ? requestId : ''));
+        setValue('user', request.user);
     }
 
-    async function fetchAvailability() {
-        const token = localStorage.getItem('token');
-        if(reqestId && token) {
-            const response = await getAllFreeAvailability(token);
-            const req = await getRequestById(token,reqestId);
-            const availability_pref: any = response?.data.filter((item: any) => {
-                return (
-                    dayjs(item.date_initial) >= dayjs(req?.debut_initial) && 
-                    dayjs(item.date_initial) <= dayjs(req?.end_initial)
-                )            
-            })  
-            setAvailabilitiesPref(availability_pref);
-        }
+    async function filterAvailability() {
+        const availability_pref: any = freeAvailability.filter((item: any) => {
+            return (
+                dayjs(item.date_initial) >= dayjs(request?.debut_initial) && 
+                dayjs(item.date_initial) <= dayjs(request?.end_initial)
+            )            
+        })  
+        setAvailabilitiesPref(availability_pref);
     }
 
-      //handle select change
-    const handleSelectChange = (value: any) => {
-        setSelectedAvailabilityId(value);
-        setAudienceCredentials({
-            ...audienceCredentials,
-            availability: value,
-        });
-    };
-
-    const handleOrganizeSubmit = async () => {
-        setSelectError('');
-        if(!selectedAvailabilityId) {
-            setSelectError("Veuillez selectionner un disponibilité !")
-        }
-        if(selectedAvailabilityId) {
-            setApiLoading(true);
-            const response = await audienceCreate(access_token,audienceCredentials);
-            if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                setApiLoading(false);
-                message.success("Audience organisée !");
-                navigate("/admin/audience");
-            }    
-        }
+    const handleOrganizeSubmit = async (data: CreateAudienceInterface) => {
+        const response = await audienceCreate(data);
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
+            navigate("/admin/audience");
+        }    
     }
     
     return(
@@ -109,6 +83,11 @@ function AdminOrganizeAudience() {
                     <div className="">
                         <div className="pl-10 px-5 pt-16 pb-5 w-full">
                             <div className="font-latobold text-lg mb-6">Organiser une audience</div>
+                            {
+                                isLoading && <div className="flex justify-center text-5xl">
+                                    <LoadingOutlined />
+                                </div>
+                            }
                             {
                                 request && availabilities_pref && 
                                     <div>
@@ -137,7 +116,6 @@ function AdminOrganizeAudience() {
                                                         <div>+261 {request.user_telephone} </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div className="w-2/4" >
@@ -149,36 +127,20 @@ function AdminOrganizeAudience() {
                                                     <div >
                                                         {
                                                             request.status_request[0] === "En attente" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                    { request.status_request }
-                                                                </div>   
-                                                            </div>                                     
+                                                            <Status type="alert" data={`${request.status_request}`} />
                                                             : (
                                                                 request.status_request[0] === "Accepté" ?
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                        { request.status_request }
-                                                                    </div>        
-                                                                </div>                                                                        
+                                                                <Status type="success" data={`${request.status_request}`} />
                                                                 :
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                        { request.status_request }
-                                                                    </div>     
-                                                                </div>                                                                           
+                                                                <Status type="danger" data={`${request.status_request}`} />
                                                             )
                                                         } 
                                                     </div>
                                                     <div>soumise le <span className="font-latobold"> {request.request_creation}</span></div>
                                                 </div>
-                                                    <div className="text-sm text-gray-500">Motif: </div>
-                                                    <div className=""> { request.object } </div>
+                                                <div className="text-sm text-gray-500">Motif: </div>
+                                                <div className=""> { request.object } </div>
                                             </div>
-                                            
                                         </div>
                                         <div className="w-1/4">
                                             <div className="border rounded p-5">
@@ -190,56 +152,66 @@ function AdminOrganizeAudience() {
                                                     <div className="font-latobold"> { request.date_wanted_end } </div>
                                                 </div>
                                             </div>
-                                            <div className="border rounded my-4 p-5">
+                                            <form onSubmit={submit(handleOrganizeSubmit)} className="border rounded my-4 p-5">
                                                 <div className="font-latobold text-md mb-3">Organisation</div>
-                                                <label htmlFor='idproduit' className="text-sm text-gray-500">Les disponibilités : </label><br />
-                                                <Select
-                                                    value={selectedAvailabilityId}
-                                                    onChange={handleSelectChange}
-                                                    className={ selectError ? 'w-full my-1 border border-red-500 rounded' : 'w-full my-1'  }
-                                                    showSearch
-                                                    optionFilterProp="children"
-                                                    filterOption={(input: any, option: any) =>
-                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                    }
-                                                >
-                                                    <Option value="">Sélectionnez un disponibilité</Option>
-                                                    {
-                                                       availabilities_pref && availabilities_pref.map((ava: any, index) => {
-                                                        if(availabilities_pref.length < 1) {
-                                                            return(
-                                                                <Option key={index} value={ava._id}>
-                                                                    <div>
-                                                                        <CloseOutlined className="" />
-                                                                        Pas de disponibilité pour la semaine preféré
-                                                                    </div>
-                                                                </Option>
-                                                            )
-                                                        } else {
-                                                            return(
-                                                                <Option key={index} value={ava._id}>
-                                                                    <div className="flex gap-1">
-                                                                        <CheckCircleOutlined className="text-green-500" />
-                                                                        { `${ava.date_availability} de ${ava.hour_debut} à ${ava.hour_end}` }
-                                                                    </div>
-                                                                </Option>
-                                                            )
-                                                        }
-                                                    })
-                                                    }
-                                                </Select>
-                                                {selectError && <div className="text-left text-red-500 text-xs">{selectError}</div>}
+                                                <Label className="mb-1 ">Les disponibilités : </Label>
+                                                <Controller 
+                                                    control={control}
+                                                    name="availability"
+                                                    render={({
+                                                        field: { value, onChange, onBlur }
+                                                    }) => (
+                                                        <Select
+                                                            value={value}
+                                                            onChange={onChange}
+                                                            onBlur={onBlur}
+                                                            showSearch
+                                                            placeholder="Sélectionnez un disponibilité"
+                                                            className={`w-full text-left ${errors.availability ? "border rounded border-red-500 text-red-500" : ""}`}
+                                                            optionFilterProp="children"
+                                                            filterOption={(input: any, option: any) =>
+                                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                            }
+                                                        >
+                                                            {
+                                                            availabilities_pref && availabilities_pref.map((ava: any, index) => {
+                                                                if(availabilities_pref.length < 1 || !availabilities_pref) {
+                                                                    return(
+                                                                        <Option key={index} value={ava._id}>
+                                                                            <div>
+                                                                                <CloseOutlined className="" />
+                                                                                Pas de disponibilité pour la semaine preféré
+                                                                            </div>
+                                                                        </Option>
+                                                                    )
+                                                                } else {
+                                                                    return(
+                                                                        <Option key={index} value={ava._id}>
+                                                                            <div className="flex gap-1">
+                                                                                <CheckCircleOutlined className="text-green-500" />
+                                                                                { `${ava.date_availability} de ${ava.hour_debut} à ${ava.hour_end}` }
+                                                                            </div>
+                                                                        </Option>
+                                                                    )
+                                                                }
+                                                            })
+                                                            }
+                                                        </Select>
+                                                    )}
+                                                />
+                                                {errors.availability && <div className="text-left text-red-500 text-xs">{ errors?.availability?.message }</div>}
                                                 <div className="flex justify-end mt-2">
-                                                    <button 
-                                                        onClick={handleOrganizeSubmit} 
-                                                        disabled={ apiLoading ? true : false }
-                                                        className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                                    <Button
+                                                        variant={'success'} 
+                                                        type="submit"
+                                                        disabled={ createLoading ? true : false }
+                                                        className={`${createLoading ? 'cursor-not-allowed' : ''}`}
                                                     >   
-                                                        { apiLoading && <LoadingOutlined /> }
+                                                        { createLoading && <LoadingOutlined className="text-xs" /> }
                                                         <div>Organiser</div>                                                    
-                                                    </button>
+                                                    </Button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
