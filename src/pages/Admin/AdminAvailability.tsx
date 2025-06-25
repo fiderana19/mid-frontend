@@ -1,119 +1,109 @@
-import { DatePicker, Dropdown, MenuProps, message, Modal, TimePicker } from "antd";
+import { DatePicker, Dropdown, MenuProps, Modal, TimePicker } from "antd";
 import { CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import dayjs from "dayjs";
 import { AssignDateToTime, ToLocalISOString } from '../../utils/toIsoString';
 import { CreateAvailabilityInterface } from "../../interfaces/Availability";
-import { cancelAvailability, createAvailability, getAllAvailability } from "../../api/availability";
-import { okConfirmStyle } from "../../utils/ModalStyle";
 import { HttpStatus } from "../../constants/Http_status";
+import { useGetAllAvailability } from "@/hooks/useGetAllAvailability";
+import { useForm } from "react-hook-form";
+import { useCancelAvailability } from "@/hooks/useCancelAvailability";
+import { useCreateAvailability } from "@/hooks/useCreateAvailability";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import Status from "@/components/status/Status";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CreateAvailabilityValidation } from "@/validation/availability.validation";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 
-function AdminAvailability() {
-    const [availabilities, setAvailabilities] = useState<any>([]);
+const AdminAvailability: React.FC = () => {
+    const { data: availabilities, isLoading, refetch } = useGetAllAvailability();
+    const { mutateAsync: cancelAvailability, isPending: cancelLoading } = useCancelAvailability({action() {
+        refetch()
+    },});
+    const { mutateAsync: createAvailability, isPending: createLoading } = useCreateAvailability({action() {
+        refetch()
+    },})
+    const { handleSubmit: submit, formState: { errors }, setValue } = useForm<CreateAvailabilityInterface>({
+        resolver: yupResolver(CreateAvailabilityValidation)
+    });
     const [filteredAvailabilities, setFilteredAvailabilities] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [createAvailabilityCredentials, setCreateAvailabilityCredentials] = useState<CreateAvailabilityInterface>({date_availability: '', hour_debut: '', hour_end: ''});
     const [isAddAvailabilityModalVisible, setIsAddAvailabilityModalVisible] = useState<boolean>(false);
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [day, setDay] = useState<any>();
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
-    const [isErrorModalVisible, setIsErrorModalVisible] = useState<boolean>(false);
-    const [cancelError, setCancelError] = useState<string>('');
-    const [dateError, setDateError] = useState<string>('');
     const [weekendError, setWeekendError] = useState<string>('');
-    const [hdebutError, setHDebutError] = useState<string>('');
-    const [hendError, setHEndError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token)
-        }
-        fetchAvailability()
-
-    }, [])
-
-    const fetchAvailability = async () => {
-        const token = localStorage.getItem('token');
-        const response = await getAllAvailability(token);
-        if(response?.status === 200) {
-            setIsLoading(false);
-            setAvailabilities(response.data);
-        }
-    }
 
     const handleCloseAddAvailabilityModal = async () => {
         setIsAddAvailabilityModalVisible(false);
     }
 
-
     const handleDateChange = (date: dayjs.Dayjs | null) => {
-        setDateError('');
-        setHDebutError('');
-        setHEndError('');
         setWeekendError('');
 
         if (date) {
             const isoDate = ToLocalISOString(date);
             setDay(isoDate)
+            
             setCreateAvailabilityCredentials((prev) => ({
                 ...prev,
                 date_availability: isoDate,
             }))
+            setValue('date_availability', isoDate);
+            
             if(createAvailabilityCredentials.hour_debut !== '' || createAvailabilityCredentials.hour_end !== '') {
                 const debuttime = AssignDateToTime(date,createAvailabilityCredentials.hour_debut);
                 const debutdate_time = ToLocalISOString(debuttime)
+                
                 setCreateAvailabilityCredentials((prev) => ({
                     ...prev,
                     hour_debut: debutdate_time,
                 }))
+                setValue('hour_debut', debutdate_time);
+                
                 const endtime = AssignDateToTime(date,createAvailabilityCredentials.hour_end);
                 const enddate_time = ToLocalISOString(endtime)
+                
                 setCreateAvailabilityCredentials((prev) => ({
                     ...prev,
                     hour_end: enddate_time,
                 }))
+                setValue('hour_end', enddate_time);
             }
         }
     };
 
     const handleDebutTimeChange = (date: dayjs.Dayjs | null) => {
-        setDateError('');
-        setHDebutError('');
-        setHEndError('');
         setWeekendError('');
 
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
+            
             setCreateAvailabilityCredentials((prev) => ({
                 ...prev,
                 hour_debut: date_time
             }))
+            setValue('hour_debut', date_time);
         }
     };
     
     const handleEndTimeChange = (date: dayjs.Dayjs | null) => {
-        setDateError('');
-        setHDebutError('');
-        setHEndError('');
         setWeekendError('');
 
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
+            
             setCreateAvailabilityCredentials((prev) => ({
                 ...prev,
                 hour_end: date_time
             }))
+            setValue('hour_end', date_time);
         }
     };
 
@@ -151,36 +141,18 @@ function AdminAvailability() {
         setFilteredAvailabilities(acc);
     }
 
-    const handleAddAvailabilitySubmit = async () => {
-        setDateError('');
-        setHDebutError('');
-        setHEndError('');
+    const handleAddAvailabilitySubmit = async (data: CreateAvailabilityInterface) => {
         setWeekendError('');
-        const dayToVerify = new Date(createAvailabilityCredentials.date_availability);
+        const dayToVerify = new Date(data.date_availability);
 
-        if(createAvailabilityCredentials.date_availability === '') {
-            setDateError("Veuillez selectionner un date !");
-        }
         if(dayToVerify.getDay() === 0 || dayToVerify.getDay() === 6) {
             setWeekendError("Impossible d'ajouter un jour de weekend !");
         }
-        if(createAvailabilityCredentials.hour_debut === '') {
-            setHDebutError("Veuillez selectionner l'heure debut !");
-        }
-        if(createAvailabilityCredentials.hour_end === '') {
-            setHEndError("Veuillez selectionner l'heure fin !")
-        }
-        if(createAvailabilityCredentials.date_availability !== '' && createAvailabilityCredentials.hour_debut !== '' && createAvailabilityCredentials.hour_end !== '' && dayToVerify.getDay() !== 0 && dayToVerify.getDay() !== 6) {
-            const response = await createAvailability(access_token,createAvailabilityCredentials);
+
+        if(dayToVerify.getDay() !== 0 && dayToVerify.getDay() !== 6) {
+            const response = await createAvailability(data);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAvailability();
-                message.success("Disponiblité ajoutée !");
                 setIsAddAvailabilityModalVisible(false);    
-            }
-            if(response?.status === 401) {
-                setCancelError(response?.response.data.message); 
-                setIsAddAvailabilityModalVisible(false);   
-                setIsErrorModalVisible(true);           
             }
         }
     }
@@ -191,19 +163,9 @@ function AdminAvailability() {
 
     const handleCancelOk = async () => {
         if(selectedAvailability) {
-            setApiLoading(true);
-            const response = await cancelAvailability(access_token,selectedAvailability);
+            const response = await cancelAvailability(selectedAvailability);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAvailability();
-                setApiLoading(false);
-                message.success("Disponibilité annulée !");
                 setIsCancelModalVisible(false);  
-            }
-            if(response?.status === 401) {
-                setCancelError(response?.response.data.message); 
-                setApiLoading(false);       
-                setIsCancelModalVisible(false); 
-                setIsErrorModalVisible(true);          
             }
         }
     }
@@ -240,22 +202,24 @@ function AdminAvailability() {
                         <div className="flex justify-between items-center my-4">
                             <div className="text-lg font-latobold">Les disponibilités du ministre</div>
                             <div className="flex items-center gap-1">
-                                <button className="items-center flex gap-2 bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-latobold py-1 px-3 rounded" onClick={()=> setIsAddAvailabilityModalVisible(true)}>
+                                <Button 
+                                    onClick={()=> setIsAddAvailabilityModalVisible(true)}
+                                >
                                     <PlusOutlined />
                                     <span>Nouvelle disponibilité</span>
-                                </button>
-                                <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
+                                </Button>
+                                <Dropdown menu={{ items: filter }} trigger={['click']}>
                                     <a onClick={(e) => {e.preventDefault()}}>
-                                        <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
+                                        <Button>
                                             <FilterOutlined className="text-md mr-1"/>
                                             {
                                                 (filterRef && filterText) ?
                                                 <div className="min-w-max"> {filterText} </div>
                                                 :
-                                                <div className="min-w-max">Filtrer</div>
+                                                <div className="min-w-max">Tout</div>
                                             }
                                             <DownOutlined />
-                                        </button>
+                                        </Button>
                                     </a>
                                 </Dropdown>
                             </div>
@@ -284,40 +248,34 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Occupé" ? 
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                { availability.status_availability }
-                                                            </div>    
-                                                        </div>                                    
+                                                        <Status type="gray" data={`${availability.status_availability}`} />
                                                         : (
                                                             availability.status_availability[0] === "Libre" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { availability.status_availability }
-                                                                </div> 
-                                                            </div>                                      
+                                                            <Status type="success" data={`${availability.status_availability}`} />
                                                             :
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                    { availability.status_availability }
-                                                                </div> 
-                                                            </div>
+                                                            <Status type="danger" data={`${availability.status_availability}`} />
                                                         )
                                                     }    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Annulé" ?
-                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
+                                                        <Button
+                                                            size={'sm'} 
+                                                            variant={'destructive'}
+                                                            disabled 
+                                                            onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} 
+                                                            className='bg-red-400 cursor-not-allowed'>
                                                             <CloseCircleFilled /> Annuler 
-                                                        </button>
+                                                        </Button>
                                                         :
-                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
+                                                        <Button 
+                                                            size={'sm'}
+                                                            variant={'destructive'}
+                                                            onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} 
+                                                        >
                                                             <CloseCircleFilled /> Annuler 
-                                                        </button>
+                                                        </Button>
                                                     }
                                                 </td>
                                             </tr>)
@@ -332,40 +290,34 @@ function AdminAvailability() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Occupé" ? 
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                { availability.status_availability }
-                                                            </div>    
-                                                        </div>                                    
+                                                        <Status type="gray" data={`${availability.status_availability}`} />
                                                         : (
                                                             availability.status_availability[0] === "Libre" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { availability.status_availability }
-                                                                </div> 
-                                                            </div>                                      
+                                                            <Status type="success" data={`${availability.status_availability}`} />
                                                             :
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                    { availability.status_availability }
-                                                                </div> 
-                                                            </div>
+                                                            <Status type="danger" data={`${availability.status_availability}`} />
                                                         )
                                                     }    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         availability.status_availability[0] === "Annulé" ?
-                                                        <button disabled onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-300 hover:bg-red-400 cursor-not-allowed text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
+                                                        <Button
+                                                            size={'sm'} 
+                                                            variant={'destructive'}
+                                                            disabled 
+                                                            onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} 
+                                                            className='bg-red-400 cursor-not-allowed'>
                                                             <CloseCircleFilled /> Annuler 
-                                                        </button>
+                                                        </Button>
                                                         :
-                                                        <button onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} className='bg-red-500 hover:bg-red-600 text-white py-1 px-2 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500'>
+                                                        <Button 
+                                                            size={'sm'}
+                                                            variant={'destructive'}
+                                                            onClick={() => {setSelectedAvailability(availability._id); setIsCancelModalVisible(true)}} 
+                                                        >
                                                             <CloseCircleFilled /> Annuler 
-                                                        </button>
+                                                        </Button>
                                                     }
                                                 </td>
                                             </tr>)
@@ -404,27 +356,53 @@ function AdminAvailability() {
             <Modal
                 title="Nouvelle disponibilité"
                 open={isAddAvailabilityModalVisible}
-                onOk={handleAddAvailabilitySubmit}
                 onCancel={handleCloseAddAvailabilityModal}
                 onClose={handleCloseAddAvailabilityModal}
-                okButtonProps={{style: okConfirmStyle}}
-                okText="Ajouter"
+                footer={null}
                  >
-                    <div>
+                    <form onSubmit={submit(handleAddAvailabilitySubmit)} className="my-4">
                         <div className='w-60 my-4 mx-auto'>
-                            <DatePicker name="date_availability" onChange={handleDateChange} className={(dateError || weekendError) ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Date de la disponibilité..."  />
-                            {dateError && <div className="text-left text-red-500 text-xs">{dateError}</div>}
+                            <Label className="mb-1">Date de la disponibilité :</Label>
+                            <DatePicker 
+                                name="date_availability" 
+                                onChange={handleDateChange} 
+                                className={`w-full py-1.5 bg-transparent placeholder:text-slate-400 ${(errors?.hour_debut || weekendError) ? ' border border-red-500 rounded' : ''} `}
+                                placeholder="Date de la disponibilité..."  
+                            />
+                            {errors?.date_availability && <div className="text-left text-red-500 text-xs">{ errors?.date_availability.message }</div>}                        
                             {weekendError && <div className="text-left text-red-500 text-xs">{weekendError}</div>}
-                        </div>                                        
-                        <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_debut" disabledHours={disabledDebutHours} format="HH:mm" onChange={handleDebutTimeChange} className={hdebutError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Début de la disponibilité..."  />
-                            {hdebutError && <div className="text-left text-red-500 text-xs">{hdebutError}</div>}                        
-                        </div>     
-                        <div className='w-60 my-4 mx-auto'>
-                            <TimePicker name="hour_end" disabledHours={disabledEndHours} format="HH:mm" onChange={handleEndTimeChange} className={hendError ? "w-full py-1.5 bg-transparent placeholder:text-slate-400 border border-red-500 rounded" : "w-full py-1.5 bg-transparent placeholder:text-slate-400" } placeholder="Fin de la disponibilité..."  />
-                            {hendError && <div className="text-left text-red-500 text-xs">{hendError}</div>}                        
-                        </div>                                  
-                    </div>
+                            <Label className="mb-1 mt-4">Heure debut de la disponibilité :</Label>
+                            <TimePicker 
+                                name="hour_debut" 
+                                disabledHours={disabledDebutHours} 
+                                format="HH:mm" 
+                                onChange={handleDebutTimeChange} 
+                                className={`w-full  py-1.5 bg-transparent placeholder:text-slate-400 ${errors?.hour_debut ? ' border border-red-500 rounded' : ''} `}
+                                placeholder="Début de la disponibilité..."  
+                            />
+                            {errors?.hour_debut && <div className="text-left text-red-500 text-xs">{ errors?.hour_debut.message }</div>}                        
+                            <Label className="mb-1 mt-4">Heure fin de la disponibilité :</Label>
+                            <TimePicker 
+                                name="hour_end" 
+                                disabledHours={disabledEndHours} 
+                                format="HH:mm" 
+                                onChange={handleEndTimeChange} 
+                                className={`w-full py-1.5 bg-transparent placeholder:text-slate-400 ${errors?.hour_end ? ' border border-red-500 rounded' : ''} `}
+                                placeholder="Fin de la disponibilité..."  
+                            />
+                            {errors?.hour_end && <div className="text-left text-red-500 text-xs">{ errors?.hour_end?.message }</div>}                        
+                        </div>    
+                        <div className="flex justify-center">
+                            <Button 
+                                variant={'success'} 
+                                type="submit"
+                                className={`${createLoading ? 'cursor-not-allowed' : ''}`}
+                            >
+                                { createLoading && <LoadingOutlined className="text-xs" /> }
+                                AJOUTER
+                            </Button>
+                        </div>                              
+                    </form>
             </Modal>    
             <Modal title="Annuler une disponibilité" 
                 open={isCancelModalVisible}
@@ -433,38 +411,25 @@ function AdminAvailability() {
                 footer={null}
             >
                 <div>
-                <WarningFilled className='mr-2 text-red-500 text-xl' />  
-                Êtes-vous sûr de vouloir annuler cette disponibilité ?
-                <div className='flex justify-end gap-2'>
-                    <button 
-                        onClick={handleCancelClose}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
-                            >   
-                                Annuler
-                            </button>
-                            <button 
-                                onClick={handleCancelOk}
-                                disabled={ apiLoading ? true : false }
-                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
-                            >   
-                                { apiLoading && <LoadingOutlined /> }
-                                <div>Confirmer</div>
-                            </button>
-                        </div>
-                </div>
-            </Modal>
-            <Modal title="Erreur" 
-                open={isErrorModalVisible}
-                onOk={() => setIsErrorModalVisible(false)}
-                onCancel={() => setIsErrorModalVisible(false)}
-                onClose={() => setIsErrorModalVisible(false)}
-            >
-                <div>
-                    <WarningFilled className='mr-2 text-red-500 text-lg' /> 
-                    {
-                        cancelError &&
-                        <span> {cancelError} </span>
-                    }
+                    <WarningFilled className='mr-2 text-red-500 text-xl' />  
+                    Êtes-vous sûr de vouloir annuler cette disponibilité ?
+                    <div className='flex justify-end gap-2 mt-2'>
+                        <Button
+                            variant={'secondary'} 
+                            onClick={handleCancelClose}
+                        >   
+                            Annuler
+                        </Button>
+                        <Button
+                            variant={'destructive'} 
+                            onClick={handleCancelOk}
+                            disabled={ cancelLoading ? true : false }
+                            className={`${cancelLoading ? 'cursor-not-allowed' : ''}`}
+                        >   
+                            { cancelLoading && <LoadingOutlined /> }
+                            <div>Confirmer</div>
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         </>
