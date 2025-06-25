@@ -1,24 +1,9 @@
 import { Link } from "react-router-dom";
 import { CheckOutlined, CloseOutlined, LoadingOutlined } from "@ant-design/icons";
-import { getLatestUser } from "../../api/dashboard";
-import { useState, useEffect } from "react";
+import useGetLatestUser from "@/hooks/useGetLatestUser";
 
 const AccountLast: React.FunctionComponent = () => {
-    const [users, setUsers] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        getStat()
-    }, [])
-
-    async function getStat() {
-        const token = localStorage.getItem('token');
-        const response = await getLatestUser(token);
-        if(response) {
-            setUsers(response.data);
-            setIsLoading(false);
-        }
-    }
+    const { data: users, isLoading } = useGetLatestUser();
 
     return(
             <div className="">
@@ -34,9 +19,9 @@ const AccountLast: React.FunctionComponent = () => {
                 <div className="">
                     {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     {
-                        users && users.map((user, index) => {
+                        users && users.map((user: any, index: any) => {
                             return(
-                                <div key={index} className="flex hover:bg-four cursor-pointer justify-between items-center mt-4">
+                                <div key={index} className="flex hover:bg-gray-100 cursor-pointer justify-between items-center mt-4">
                                     <div className="flex items-center gap-2">
                                         <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="bg-red-400 rounded w-10 h-10 object-cover" />
                                         <div>

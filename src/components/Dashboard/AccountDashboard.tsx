@@ -1,25 +1,11 @@
 import { UserOutlined, MoreOutlined, LoadingOutlined } from "@ant-design/icons";
 import { MenuProps, Dropdown } from "antd";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getUserStat } from "../../api/dashboard";
+import { useGetUserForChart } from "@/hooks/useGetUserForChart";
 
 const AccountDashboard: React.FunctionComponent = () => {
-    const [stat, setStat] = useState<any>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { data: stat, isLoading } = useGetUserForChart();
 
-    useEffect(() => {
-        getStat()
-    }, [])
-
-    async function getStat() {
-        const token = localStorage.getItem('token');
-        const response = await getUserStat(token);
-        if(response) {
-            setStat(response.data);
-            setIsLoading(false);
-        }
-    }
     const items: MenuProps['items'] = [
         {
           label: <Link to="/admin/account" className="flex gap-2 items-center"><UserOutlined />Voir les citoyens</Link>,

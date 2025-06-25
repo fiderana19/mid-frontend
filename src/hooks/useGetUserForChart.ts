@@ -9,6 +9,7 @@ export const useGetUserForChart = () => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: [QueryCacheKey.USER_FOR_CHART],
         queryFn: () => getUserForChart(),
+        staleTime: Infinity
     })
 
     useEffect(() => {

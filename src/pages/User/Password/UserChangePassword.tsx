@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState } from "react";
-import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
+import { LoadingOutlined, LockOutlined } from "@ant-design/icons";
 const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
 import { UpdateUserPassword } from "../../../interfaces/User";
 import { useNavigate } from "react-router-dom";
