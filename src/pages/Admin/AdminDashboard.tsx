@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 const AccountDashboard = lazy(() => import("../../components/Dashboard/AccountDashboard"));
 const AccountLast = lazy(() => import("../../components/Dashboard/AccountLast"));
 const AudienceChart = lazy(() => import("../../components/Dashboard/AudienceChart"));
@@ -8,8 +8,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 
-function AdminDashboard() {
-
+const AdminDashboard: React.FC = () => {
     return(
         <>
             <div className="w-full flex bg-four min-h-screen">

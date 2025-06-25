@@ -1,27 +1,16 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { getUserById } from "../../api/users";
+import React, { lazy, Suspense } from "react";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { useGetUserById } from "@/hooks/useGetUserById";
+import { Button } from "@/components/ui/button";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 
-function AdminInfo() {
-    const [user, setUser] = useState<any>();
+const AdminInfo: React.FC = () => {
+    const { token } = useAuth();
+    const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)
     const navigate = useNavigate();
-
-    useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(token,decodedToken.id);
-  
-            setUser(response)
-          }
-        }
-        fetchUser()
-    }, [])
 
     return(
         <>
@@ -39,6 +28,9 @@ function AdminInfo() {
                     </div>
                     <div className="md:pl-10 md:pr-5 sm:pl-20 pl-4 pr-4 pt-16 pb-5 w-full">
                         <div className="font-latobold text-lg mb-6">Votre profile</div>
+                        {
+                            isLoading && <div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>
+                        }
                         {
                             user && 
                             <div>
@@ -101,11 +93,10 @@ function AdminInfo() {
                                             <div className="font-latobold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Changer le mot de passe</div>
-                                                <button 
+                                                <Button
                                                     onClick={() => {navigate("/admin/change/password")}}
-                                                    className='bg-gray-500 border border-gray-600 hover:transition-colors hover:bg-gray-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500'
                                                 >
-                                                    Changer le mot de passe</button>
+                                                    Changer le mot de passe</Button>
                                             </div>
                                         </div>
                                     </div>

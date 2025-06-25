@@ -1,78 +1,52 @@
 import { LoadingOutlined, LockOutlined, WarningOutlined } from "@ant-design/icons";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { getUserById, updatePassword } from "../../../api/users";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { UpdateUserPassword } from "../../../interfaces/User";
 import { useNavigate } from "react-router-dom";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
-import { message } from "antd";
 import { HttpStatus } from "../../../constants/Http_status";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { UserChangePasswordValidation } from "@/validation/user.validation";
+import { usePatchPassword } from "@/hooks/usePatchPassword";
 
-function AdminChangePassword() {
-    const [updatePasswordData, setUpdatePasswordData] = useState<UpdateUserPassword>({ old_password: '', new_password: '' });
+const AdminChangePassword: React.FC = () => {
+    const { token } = useAuth();
+    const { control, handleSubmit: submit, formState: { errors } } = useForm<UpdateUserPassword>({
+        resolver: yupResolver(UserChangePasswordValidation)
+    });
+    const { mutateAsync: updatePassword, isPending: updateLoading } = usePatchPassword();
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [user, setUser] = useState<any>();
-    const [newPassordError, setNewPassordError] = useState<string>('');
-    const [matchPassordError, setMatchPassordError] = useState<string>('');
-    const [notMatchedError, setNotMatchedPasswordError] = useState<string>('');
+    const [matchPasswordError, setMatchPasswordError] = useState<string>('');
     const navigate = useNavigate();
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
 
-    useEffect(() => { 
-        fetchUser()
-    }, [])
+    async function handleChangePasswordSubmit(data: UpdateUserPassword) {
+        setMatchPasswordError('');
 
-    async function fetchUser() {
-        const token = localStorage.getItem("token");
-
-        if(token) {
-        setAccessToken(token);
-          const decodedToken = JSON.parse(atob(token.split('.')[1]));
-          const response = await getUserById(token,decodedToken.id);
-
-          setUser(response)
-        }
-    }
-
-    async function updatePasswordSubmit() {
-        setNewPassordError('');
-        setMatchPassordError('');
-        setNotMatchedPasswordError('');
-
-        if(updatePasswordData.new_password.length < 6) {
-            setNewPassordError('Le mot doit comporter au moins 6 caractères !')
-        }
-        if(updatePasswordData.new_password !== confirmPassword) {
-            setMatchPassordError('Confirmation mot de passe incorrecte !')
+        if(data.new_password !== confirmPassword) {
+            setMatchPasswordError('Confirmation mot de passe incorrecte !')
         }
 
-        if(updatePasswordData.new_password.length >= 6 && updatePasswordData.new_password === confirmPassword) {
-            const response = await updatePassword(access_token,user._id,updatePasswordData);
-            if(response.status === HttpStatus.UNAUTHORIZED) {
-                setNotMatchedPasswordError(response.response.data.message);
+        if(data.new_password === confirmPassword) {
+            const id = token ? JSON.parse(atob(token.split('.')[1])).id : null;
+            const updatePasswordCredentials = {
+                _id: id,
+                old_password: data.old_password,
+                new_password: data.new_password,
             }
+            const response = await updatePassword(updatePasswordCredentials);
             if(response.status === HttpStatus.OK) {
-                message.success("Mot de passe changé !");
                 navigate("/admin/info");
             }
         }
     }
 
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassordError('');
-        setMatchPassordError('');
-        setNotMatchedPasswordError('');
-
-        const {name, value} = e.target;
-        setUpdatePasswordData((prev) => ({...prev, [name]: value}));
-    }
-
     const handleConfirmChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassordError('');
-        setMatchPassordError('');
-        setNotMatchedPasswordError('');
+        setMatchPasswordError('');
 
         const {value} = e.target;
         setConfirmPassword(value);
@@ -95,68 +69,74 @@ function AdminChangePassword() {
                     <div className="pl-10 pr-5 py-16">
                     <div className="w-80 mx-auto mt-10 mb-5">
                         <div className="font-latobold text-xl my-4 text-center">Changer mot de passe</div>
-                            <div className="border rounded p-4 bg-white shadow-md">
-                                {
-                                    notMatchedError &&  
-                                    <div className="bg-red-300 w-64 transition-opacity mx-auto p-2 border border-red-500 rounded text-xs">
-                                        <WarningOutlined />
-                                        <span className="ml-2"> { notMatchedError } </span>
-                                    </div>
-                                }
+                            <form onSubmit={submit(handleChangePasswordSubmit)} className="border rounded p-4 bg-white shadow-md">
                                 <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
+                                    <Label className="mb-1 mt-4">
                                         Mot de passe actuel
-                                    </div>
+                                    </Label>
                                     <div className="relative">
-                                        <input 
-                                            type="password"
-                                            onChange={handleChange}
-                                            name='old_password'
-                                            placeholder='Saisir votre mot de passe actuel...'
-                                            className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                                        <Controller 
+                                            control={control}
+                                            name="old_password"
+                                            render={({
+                                                field: { value, onChange, onBlur }
+                                            }) => (
+                                                <Input 
+                                                    type="password"
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    className={`w-full bg-transparent pr-3 pl-10 ${errors?.old_password ? 'border border-red-500 text-red-500 rounded' : ''}`}
+                                                />
+                                            )}
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                </div>
-                                <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
+                                    { errors?.old_password && <div className="text-xs text-red-500">{ errors?.old_password.message }</div> }
+                                    <Label className="mb-1 mt-4">
                                         Nouveau mot de passe
-                                    </div>
+                                    </Label>
                                     <div className="relative">
-                                        <input 
-                                            type="password"
-                                            onChange={handleChange}
-                                            name='new_password'
-                                            placeholder='Saisir le nouveau mot de passe...'
-                                            className={ newPassordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
+                                        <Controller 
+                                            control={control}
+                                            name="new_password"
+                                            render={({
+                                                field: { value, onChange, onBlur }
+                                            }) => (
+                                                <Input 
+                                                    type="password"
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    className={`w-full bg-transparent pr-3 pl-10 ${errors?.new_password ? 'border border-red-500 text-red-500 rounded' : ''}`}
+                                                />
+                                            )}
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { newPassordError && <div className="text-xs text-red-500">{ newPassordError }</div> }
-                                </div>
-                                <div className='w-64 my-2 mx-auto'>
-                                    <div className="text-left text-xs font-latobold">
+                                    { errors?.new_password && <div className="text-xs text-red-500">{ errors?.new_password.message }</div> }
+                                    <Label className="mb-1 mt-4">
                                         Confirmation nouveau mot de passe
-                                    </div>
+                                    </Label>
                                     <div className="relative">
-                                        <input 
+                                        <Input 
                                             onChange={handleConfirmChange}
                                             type="password"
-                                            name='password'
-                                            placeholder='Confirmer le nouveau mot de passe...'
-                                            className={ matchPassordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
+                                            className={`w-full bg-transparent pr-3 pl-10 ${matchPasswordError ? 'border border-red-500 text-red-500 rounded' : ''}`}
                                         />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { matchPassordError && <div className="text-xs text-red-500">{ matchPassordError }</div> }
+                                    { matchPasswordError && <div className="text-xs text-red-500">{ matchPasswordError }</div> }
+                                    <div className="flex justify-center mt-4">
+                                        <Button
+                                            type="submit"
+                                        >
+                                            { updateLoading && <LoadingOutlined className="text-xs" /> }
+                                            CHANGER
+                                        </Button>
+                                    </div>
                                 </div>
-                                <div className="flex justify-center">
-                                    <button 
-                                        onClick={updatePasswordSubmit}
-                                        className='bg-blue-500 hover:bg-blue-700 text-white mx-auto font-latobold py-2 mt-2 px-4 rounded'
-                                    >CHANGER</button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
