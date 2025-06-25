@@ -1,17 +1,26 @@
-import { audienceCancel, audienceMissed, getAllAudience } from '../../api/audience';
-import { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CloseCircleOutlined, CloseOutlined, DownOutlined, EditFilled, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, QrcodeOutlined, StopOutlined, WarningFilled } from "@ant-design/icons";
-import { Dropdown, Input, MenuProps, message, Modal } from "antd";
+import { Dropdown, MenuProps, Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
+import { useGetAllAudience } from '@/hooks/useGetAllAudience';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Status from '@/components/status/Status';
+import { useCancelAudience } from '@/hooks/useCancelAudience';
+import { useMissedAudience } from '@/hooks/useMissedAudience';
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 
-function AdminAudience() {
-    const [audiences, setAudiences] = useState<any[]>([]);
+const AdminAudience: React.FC = () => {
+    const { data: audiences, refetch, isLoading } = useGetAllAudience();
+    const { mutateAsync: cancelAudience, isPending: cancelLoading } = useCancelAudience({action() {
+        refetch()
+    },});
+    const { mutateAsync: missedAudience, isPending: missedLoading } = useMissedAudience({action() {
+        refetch();
+    },});
     const [filteredAudiences, setFilteredAudiences] = useState<any[]>([]);
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [selectedAudience, setSelectedAudience] = useState<any>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [isMissingModalVisible, setIsMissingModalVisible] = useState(false);
@@ -19,29 +28,6 @@ function AdminAudience() {
     const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
     const navigate = useNavigate();
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchAllAudience()
-    }, [])
-
-    async function fetchAllAudience () {
-        const token = localStorage.getItem('token');
-        if(token) {
-            const response = await getAllAudience(token);
-            if(response) {
-                setIsLoading(false);
-                setAudiences(response.data);
-            }
-        }
-    }
 
     const items: MenuProps['items'] = [
         {
@@ -57,20 +43,13 @@ function AdminAudience() {
           type: 'divider',
         },
         {
-          label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
-                    { (selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ?
-                        <div className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
-                            <EditFilled  />
-                                <div>Reporter</div>
-                        </div>
-                    :            
-                    <Link to={`/admin/audience/report/${selectedAudience?._id}`} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+          label: <button onClick={() => navigate(`/admin/audience/report/${selectedAudience?._id}`)} disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
+                    <div className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
                         <div className="flex gap-2">
                             <EditFilled  />
                             <div>Reporter</div>
                         </div>
-                    </Link>
-                    }
+                    </div>
                 </button>
           ,
           key: '3',
@@ -80,7 +59,7 @@ function AdminAudience() {
                         <div onClick={() => setIsMissingModalVisible(true)} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
                             <div className="flex gap-2">
                                 <StopOutlined  />
-                                <div>Absent</div>
+                                <div>Absenter</div>
                             </div>
                         </div>
                     </button>
@@ -107,7 +86,7 @@ function AdminAudience() {
             label:  <div onClick={() => setFilterRef(false)} className="px-4">
                       Tout                    
                     </div>,
-            key: '3',
+            key: '6',
         },
         {
           label:  <div onClick={() => filterAudiences('Fixé')} className="px-4">
@@ -145,31 +124,23 @@ function AdminAudience() {
     async function filterAudiences (filter: string) {
         setFilterRef(true);
         setFilterText(filter);
-        const acc = audiences.filter(requests => requests.status_audience[0] === filter);
+        const acc = audiences.filter((audience: any) => audience.status_audience[0] === filter);
         setFilteredAudiences(acc);
     }
 
     const handleCancelAudienceConfirm = async () => {
-        setApiLoading(true);
         if(selectedAudience) {
-            const response = await audienceCancel(access_token,selectedAudience?._id);
+            const response = await cancelAudience(selectedAudience?._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAllAudience();
-                setApiLoading(false);
-                message.success("Audience annulée !")
                 setIsCancelModalVisible(false);    
             }
         }
     }
 
     const handleMissingAudienceConfirm = async () => {
-        setApiLoading(true);
         if(selectedAudience) {
-            const response = await audienceMissed(access_token,selectedAudience?._id);
+            const response = await missedAudience(selectedAudience?._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAllAudience();
-                setApiLoading(false);
-                message.success("Audience absentée !")
                 setIsMissingModalVisible(false);    
             }
         }
@@ -193,26 +164,25 @@ function AdminAudience() {
                         <div className="flex justify-between items-center my-4">
                             <div className="text-lg font-latobold">Les audiences</div>
                                 <div className="flex items-center gap-1">
-                                    <Input name="filter" type="text" className="h-8 py-1 " placeholder="Saisir le ref..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} />
-                                    <button 
-                                        className='flex bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white font-latobold py-1 px-3 rounded items-center gap-1'
+                                    <Input name="filter" type="text" placeholder="Saisir le ref..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} />
+                                    <Button 
                                         onClick={() => navigate('/admin/audience/qrcode')}
                                     >
                                         <QrcodeOutlined />
                                         <div className="">Scanner</div>
-                                    </button>
-                                    <Dropdown className="rounded hover:bg-gray-200 cursor-pointer" menu={{ items: filter }} trigger={['click']}>
+                                    </Button>
+                                    <Dropdown menu={{ items: filter }} trigger={['click']}>
                                         <a onClick={(e) => {e.preventDefault()}}>
-                                            <button className='bg-gray-500 bg-opacity-70 hover:bg-gray-700 hover:bg-opacity-70 text-white flex font-latobold py-1 px-3 rounded items-center gap-1'>
+                                            <Button>
                                                 <FilterOutlined className="text-md mr-1"/>
                                                 {
                                                     (filterRef && filterText) ?
                                                     <div className="min-w-max"> {filterText} </div>
                                                     :
-                                                    <div className="min-w-max">Filtrer</div>
+                                                    <div className="min-w-max">Tout</div>
                                                 }
                                                 <DownOutlined />
-                                            </button>
+                                            </Button>
                                         </a>
                                     </Dropdown>
                             </div>
@@ -249,44 +219,19 @@ function AdminAudience() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
                                                 { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
-                                                            { audience.status_audience }
-                                                        </div>       
-                                                    </div>                                 
+                                                    <Status type='primary' data={`${audience.status_audience}`} />
                                                     : (
                                                         audience.status_audience[0] === "Reporté" ?
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                { audience.status_audience }
-                                                            </div>       
-                                                        </div>                                 
+                                                        <Status type='alert' data={`${audience.status_audience}`} />
                                                         : (
                                                             audience.status_audience[0] === "Classé" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { audience.status_audience }
-                                                                </div>       
-                                                            </div>                                 
+                                                            <Status type='success' data={`${audience.status_audience}`} />
                                                             :
                                                             (
                                                                 audience.status_audience[0] === "Absent" ?
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>       
-                                                                </div>                                 
+                                                                <Status type='gray' data={`${audience.status_audience}`} />
                                                                 :
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>       
-                                                                </div>                                 
+                                                                <Status type='danger' data={`${audience.status_audience}`} />
                                                             )
                                                         )
                                                     )
@@ -295,7 +240,7 @@ function AdminAudience() {
                                             <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                 <div className='flex justify-center'>
                                                     <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
-                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAudience(audience._id)}}>
+                                                        <a onClick={(e) => {e.preventDefault(); setSelectedAudience(audience)}}>
                                                             <MenuOutlined />
                                                         </a>
                                                     </Dropdown>
@@ -305,7 +250,7 @@ function AdminAudience() {
                                         )
                                     })
                                     :
-                                    audiences && audiences.map((audience: any, index) => {
+                                    audiences && audiences.map((audience: any, index: any) => {
                                         if (searchRef && !audience.ref_audience.includes(searchRef)) {
                                             return null;
                                         }
@@ -321,44 +266,19 @@ function AdminAudience() {
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                             <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
                                                 { audience.status_audience[0] === "Fixé" ? 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
-                                                            { audience.status_audience }
-                                                        </div>       
-                                                    </div>                                 
+                                                    <Status type='primary' data={`${audience.status_audience}`} />
                                                     : (
                                                         audience.status_audience[0] === "Reporté" ?
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                { audience.status_audience }
-                                                            </div>       
-                                                        </div>                                 
+                                                        <Status type='alert' data={`${audience.status_audience}`} />
                                                         : (
                                                             audience.status_audience[0] === "Classé" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { audience.status_audience }
-                                                                </div>       
-                                                            </div>                                 
+                                                            <Status type='success' data={`${audience.status_audience}`} />
                                                             :
                                                             (
                                                                 audience.status_audience[0] === "Absent" ?
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>       
-                                                                </div>                                 
+                                                                <Status type='gray' data={`${audience.status_audience}`} />
                                                                 :
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>       
-                                                                </div>                                 
+                                                                <Status type='danger' data={`${audience.status_audience}`} />
                                                             )
                                                         )
                                                     )
@@ -413,21 +333,22 @@ function AdminAudience() {
                             <div>
                                 <WarningFilled className='mr-2 text-red-500 text-xl' />  
                                 Êtes-vous sûr de vouloir annuler cette audience ?
-                                <div className='flex justify-end gap-2'>
-                                    <button 
+                                <div className='flex justify-end gap-2 mt-2'>
+                                    <Button
+                                        variant={'secondary'} 
                                         onClick={() => {setIsCancelModalVisible(false)}}
-                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                                     >   
                                         Annuler
-                                    </button>
-                                    <button 
+                                    </Button>
+                                    <Button
+                                        variant={'destructive'}
                                         onClick={handleCancelAudienceConfirm}
-                                        disabled={ apiLoading ? true : false }
-                                        className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                        disabled={ cancelLoading ? true : false }
+                                        className={`${cancelLoading ? 'cursor-not-allowed' : ''}`}
                                     >   
-                                        { apiLoading && <LoadingOutlined /> }
+                                        { cancelLoading && <LoadingOutlined className='text-xs' /> }
                                         <div>Confirmer</div>
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </Modal>
@@ -441,21 +362,22 @@ function AdminAudience() {
                             <div>
                                 <WarningFilled className='mr-2 text-gray-500 text-xl' />  
                                 Êtes-vous sûr que le citoyen est absent pour cette audience ?
-                                <div className='flex justify-end gap-2'>
-                                    <button 
+                                <div className='flex justify-end gap-2 mt-2'>
+                                    <Button
+                                        variant={'secondary'} 
                                         onClick={() => {setIsMissingModalVisible(false)}}
-                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                                     >   
                                         Annuler
-                                    </button>
-                                    <button 
+                                    </Button>
+                                    <Button
+                                        variant={'destructive'}
                                         onClick={handleMissingAudienceConfirm}
-                                        disabled={ apiLoading ? true : false }
-                                        className= { apiLoading ? "bg-blue-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" : "flex gap-2 items-center border mt-2 bg-blue-500 hover:border-blue-600 hover:bg-blue-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-blue-500" } 
+                                        disabled={ missedLoading ? true : false }
+                                        className={`${missedLoading ? 'cursor-not-allowed' : ''}`}
                                     >   
-                                        { apiLoading && <LoadingOutlined /> }
+                                        { missedLoading && <LoadingOutlined className="text-xs" /> }
                                         <div>Confirmer</div>
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </Modal>

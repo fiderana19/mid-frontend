@@ -39,5 +39,5 @@ export const audienceClose = async (id: string) => {
 }
 
 export const audienceMissed = async (id: string) => {
-  return await axiosAuthInstance.get(`${AudienceAPIUrl}/missed/${id}`);
+  return await axiosAuthInstance.patch(`${AudienceAPIUrl}/missed/${id}`);
 }
