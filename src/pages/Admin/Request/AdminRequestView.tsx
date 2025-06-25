@@ -1,73 +1,59 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { message, Modal } from "antd";
+import { Modal } from "antd";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
-import { denyRequest, getRequestById, validateRequest } from "../../../api/request";
 import { HttpStatus } from "../../../constants/Http_status";
+import { useGetRequestById } from "@/hooks/useGetRequestById";
+import { useValidateRequest } from "@/hooks/useValidateRequest";
+import { useGetAllRequest } from "@/hooks/useGetAllRequest";
+import { useDenyRequest } from "@/hooks/useDenyRequest";
+import Status from "@/components/status/Status";
+import { Button } from "@/components/ui/button";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 
 const AdminRequestView: React.FC = () => {
-    const [request, setRequest] = useState<any>();
+    const req = useParams();
+    const requestId = req.id;
+    const { data: request, isLoading } = useGetRequestById(requestId ? requestId : '');
+    const { refetch } = useGetAllRequest();
+    const { mutateAsync: validateRequest, isPending: validateLoading } = useValidateRequest({action() {
+        refetch();
+    },});
+    const { mutateAsync: denyRequest, isPending: denyLoading } = useDenyRequest({action() {
+        refetch();
+    },})
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-    let req = useParams();
     const navigate = useNavigate();
-    let reqestId = req.id;
-
-    useEffect(() => { 
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchRequest()
-    }, [])
-    async function fetchRequest() {
-        const token = localStorage.getItem('token');
-
-        if(reqestId && token) {
-            const response = await getRequestById(token,reqestId);
-            setRequest(response);
-        }
-    }
 
     const handleDenyConfirm = async () => {
-        setApiLoading(true);
-        const response = await denyRequest(access_token,request._id);
+        const response = await denyRequest(request._id);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-            fetchRequest();
-            setApiLoading(false);
-            message.success("Demande refusée !");
             setIsDenyModalVisible(false);
         }
     }
-    //handling delete cancel
+
     const handleDenyCancel = async () => {
         setIsDenyModalVisible(false)
     }
+
     const showDenyConfirmation = async () => {
         setIsDenyModalVisible(true);
     }   
     
     const handleValidateConfirm = async () => {
-        setApiLoading(true);
-        const response = await validateRequest(access_token,request._id);
+        const response = await validateRequest(request._id);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-            fetchRequest();
-            setApiLoading(false);
-            message.success("Demande approuvée !");
             setIsValidateModalVisible(false);
-            navigate(`/admin/organize/audience/${reqestId}`)    
+            navigate(`/admin/organize/audience/${requestId}`)    
         }
     }
-    //handling delete cancel
+
     const handleValidateCancel = async () => {
         setIsValidateModalVisible(false)
     }
+
     const showValidateConfirmation = async () => {
         setIsValidateModalVisible(true);
     }    
@@ -88,6 +74,11 @@ const AdminRequestView: React.FC = () => {
                     </div>
                     <div className="pl-10 px-5 pt-16 pb-5 w-full">
                         <div className="font-latobold text-lg mb-6">Demande d'audience</div>
+                        {
+                            isLoading && <div className="flex justify-center text-5xl">
+                                <LoadingOutlined />
+                            </div>
+                        }
                         {
                             request && 
                                 <div>
@@ -128,27 +119,12 @@ const AdminRequestView: React.FC = () => {
                                                 <div >
                                                     {
                                                         request.status_request[0] === "En attente" ?
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                { request.status_request }
-                                                            </div>   
-                                                        </div>                                     
+                                                        <Status type="alert" data={`${request.status_request}`} />
                                                         : (
                                                             request.status_request[0] === "Accepté" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { request.status_request }
-                                                                </div>        
-                                                            </div>                                                                        
+                                                            <Status type="success" data={`${request.status_request}`} />
                                                             :
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                    { request.status_request }
-                                                                </div>     
-                                                            </div>                                                                           
+                                                            <Status type="danger" data={`${request.status_request}`} />
                                                         )
                                                     } 
                                                 </div>
@@ -180,11 +156,15 @@ const AdminRequestView: React.FC = () => {
                                             <div className="font-bold text-md mb-3">Actions</div>
                                             <div className="flex justify-between items-center">
                                                 <div className="text-sm text-gray-500">Approbation</div>
-                                                <button className='bg-green-500 hover:bg-green-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showValidateConfirmation}>Valider</button>
+                                                <Button  onClick={showValidateConfirmation} variant={'success'}>
+                                                    Valider
+                                                </Button>                                            
                                             </div>
                                             <div className="flex justify-between items-center mt-2">
                                                 <div className="text-sm text-gray-500">Refus</div>
-                                                <button className='bg-red-500 hover:bg-red-600 text-white py-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500' onClick={showDenyConfirmation}>Refuser</button>
+                                                <Button  onClick={showDenyConfirmation} variant={'destructive'}>
+                                                    Refuser
+                                                </Button>                                            
                                             </div>
                                         </div>
                                         }
@@ -204,21 +184,22 @@ const AdminRequestView: React.FC = () => {
                     <div>
                         <WarningFilled className='mr-2 text-red-500 text-xl' />  
                         Êtes-vous sûr de vouloir refuser ce demande d'audience ?
-                        <div className='flex justify-end gap-2'>
-                            <button 
+                        <div className='flex justify-end gap-2 mt-2'>
+                            <Button
+                                variant={'secondary'} 
                                 onClick={handleDenyCancel}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >   
                                 Annuler
-                            </button>
-                            <button 
+                            </Button>
+                            <Button
+                                variant={'destructive'} 
                                 onClick={handleDenyConfirm}
-                                disabled={ apiLoading ? true : false }
-                                className= { apiLoading ? "bg-red-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" : "flex gap-2 items-center border mt-2 bg-red-500 hover:border-red-600 hover:bg-red-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-red-500" } 
+                                disabled={ denyLoading ? true : false }
+                                className={`${denyLoading ? 'cursor-not-allowed' : ''}`}
                             >   
-                                { apiLoading && <LoadingOutlined /> }
+                                { denyLoading && <LoadingOutlined className="text-xs" /> }
                                 <div>Refuser</div>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </Modal>
@@ -232,21 +213,22 @@ const AdminRequestView: React.FC = () => {
                     <div>
                         <WarningFilled className='mr-2 text-green-500 text-xl' />  
                         Êtes-vous sûr de vouloir approuver ce demande d'audience ?
-                        <div className='flex justify-end gap-2'>
-                            <button 
+                        <div className='flex justify-end gap-2 mt-2'>
+                            <Button
+                                variant={'secondary'} 
                                 onClick={handleValidateCancel}
-                                className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                             >   
                                 Annuler
-                            </button>
-                            <button 
+                            </Button>
+                            <Button
+                                variant={'success'}
                                 onClick={handleValidateConfirm}
-                                disabled={ apiLoading ? true : false }
-                                className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                disabled={ validateLoading ? true : false }
+                                className={`${validateLoading ? 'cursor-not-allowed' : ''}`}
                             >   
-                                { apiLoading && <LoadingOutlined /> }
+                                { validateLoading && <LoadingOutlined className="text-xs" /> }
                                 <div>Approuver</div>
-                            </button>
+                            </Button>
                         </div> 
                     </div>
                 </Modal>
