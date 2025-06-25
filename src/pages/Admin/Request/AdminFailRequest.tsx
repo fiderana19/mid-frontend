@@ -1,40 +1,18 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { getNotOrganizedRequest } from "../../../api/request";
+import React, { useState, lazy, Suspense } from "react";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 import { CarryOutOutlined, CloseOutlined, LoadingOutlined, MenuOutlined } from "@ant-design/icons";
-import { MenuProps, Dropdown, Input } from "antd";
+import { MenuProps, Dropdown } from "antd";
 import { Link } from "react-router-dom";
+import { useGetNotOrganizedRequest } from "@/hooks/useGetNotOrganizedRequest";
+import { handleNumberKeyPress } from "@/utils/handleKeyPress";
+import { Input } from "@/components/ui/input";
+import Status from "@/components/status/Status";
 
-function AdminFailRequest() {
-    const [requests, setRequests] = useState<any[]>([]);
+const AdminFailRequest: React.FC = () => {
+    const { data: requests, isLoading } = useGetNotOrganizedRequest();
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const [searchRef, setSearchRef] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchUserRequest()
-    }, [])
-
-    async function fetchUserRequest () {
-        const token = localStorage.getItem('token');
-
-        if(token) {
-            const response = await getNotOrganizedRequest(token);
-            if(response) {
-                setIsLoading(false);
-                setRequests(response);
-            }
-        }
-    }
-
 
     const items: MenuProps['items'] = [
         {
@@ -45,17 +23,8 @@ function AdminFailRequest() {
                       </div>
                   </Link>,
             key: '0',
-          },  
-      ];
-
-    //handling the keypress
-    const handleKeyPress =async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const charCode = e.which || e.keyCode;
-
-        if (charCode < 48 || charCode > 57) {
-        e.preventDefault();
-        }
-    }
+        },  
+    ];
     
     return(
         <>
@@ -75,7 +44,7 @@ function AdminFailRequest() {
                         <div className="flex justify-between items-center mt-4 mb-6">
                             <div className="text-lg font-latobold ">Les demandes acceptés non oragnisées</div>
                             <div className="flex items-center gap-1">
-                                <Input name="filter" type="text" className="h-8 py-1" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleKeyPress}  />
+                                <Input name="filter" type="text" placeholder="Saisir le CIN..."  value={searchRef} onChange={(e) => setSearchRef(e.target.value)} onKeyPress={handleNumberKeyPress}  />
                             </div>
                         </div>
                         <table className='w-full divide-y divide-gray-200'>
@@ -93,7 +62,7 @@ function AdminFailRequest() {
                             </thead> 
                             <tbody className='bg-white divide-y divide-gray-200'>
                                 {
-                                    requests && requests.map((request, index) => {
+                                    requests && requests.map((request: any, index: any) => {
                                         if (searchRef && !request.user_cni.includes(searchRef)) {
                                             return null;
                                         }
@@ -110,27 +79,12 @@ function AdminFailRequest() {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
                                                         request.status_request[0] === "En attente" ?
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                { request.status_request }
-                                                            </div>   
-                                                        </div>                                     
+                                                        <Status type="alert" data={`${request.status_request}`} />
                                                         : (
                                                             request.status_request[0] === "Accepté" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                    { request.status_request }
-                                                                </div>        
-                                                            </div>                                                                        
+                                                            <Status type="success" data={`${request.status_request}`} />
                                                             :
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                    { request.status_request }
-                                                                </div>     
-                                                            </div>                                                                           
+                                                            <Status type="danger" data={`${request.status_request}`} />
                                                         )
                                                     } 
                                                 </td>
