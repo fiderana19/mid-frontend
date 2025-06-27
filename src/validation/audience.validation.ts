@@ -11,3 +11,9 @@ export const AudienceSearchValidation = yup.object({
     date_debut: yup.string().required("Date de recherche requis"), 
     date_end: yup.string().required("Date de recherche requis")
 })
+
+export const AudienceReportValidation = yup.object({
+    _id: yup.string().required("Audience à reporter requis"),
+    new_availability: yup.string().required("Veuillez selectionnez une disponibilité"),
+    old_availability: yup.string().required("Disponibilité à reporter requis"),
+})

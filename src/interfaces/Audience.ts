@@ -1,4 +1,5 @@
 export interface ReportAudienceInterface {
+    _id: string;
     new_availability: string;
     old_availability: string;
 }
