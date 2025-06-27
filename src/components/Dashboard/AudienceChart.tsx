@@ -36,7 +36,7 @@ const AudienceChart: React.FunctionComponent = () => {
     return(
         <div className="rounded border shadow-md bg-white  p-4 h-full">
             <div className="text-lg font-latobold">AUDIENCES</div>
-            {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
+            {isLoading  && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
             {
                 chartData &&             
                 <ReactApexChart 

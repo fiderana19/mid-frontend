@@ -5,12 +5,12 @@
 
 @theme {
   --color-primary-custom: #29ADB2;
-  --color-second-custom: #29ADB2;
-  --color-third-custom: #29ADB2;
-  --color-four-custom: #29ADB2;
-  --color-five-custom: #29ADB2;
-  --color-six-custom: #29ADB2;
-  --color-seven-custom: #29ADB2;
+  --color-second-custom: #508C9B;
+  --color-third-custom: #8ed1fc;
+  --color-four-custom: #EEEEEE;
+  --color-five-custom: #468585;
+  --color-six-custom: #7FC8A9;
+  --color-seven-custom: #E5E4E2;
 }
 
 @theme inline {
@@ -132,6 +132,11 @@
 .dark-container {
     background: #2d2d30;
     color: white;
+}
+
+
+.low-bg-opacity {
+    background: rgba(0,0,0,.75);
 }
 
 @font-face {
