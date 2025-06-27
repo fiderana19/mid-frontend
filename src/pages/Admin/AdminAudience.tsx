@@ -43,8 +43,8 @@ const AdminAudience: React.FC = () => {
           type: 'divider',
         },
         {
-          label: <button onClick={() => navigate(`/admin/audience/report/${selectedAudience?._id}`)} disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
-                    <div className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+          label: <button onClick={() => navigate(`/admin/audience/report/${selectedAudience?._id}`)} disabled={!(selectedAudience?.status_audience[0] === "Fixé")}>
+                    <div className={`flex gap-2 ${!(selectedAudience?.status_audience[0] === "Fixé") && "cursor-not-allowed text-gray-400"}`}>
                         <div className="flex gap-2">
                             <EditFilled  />
                             <div>Reporter</div>
@@ -55,8 +55,8 @@ const AdminAudience: React.FC = () => {
           key: '3',
         },
         {
-            label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
-                        <div onClick={() => setIsMissingModalVisible(true)} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+            label: <button disabled={!(selectedAudience?.status_audience[0] === "Fixé" || selectedAudience?.status_audience[0] === "Reporté")} onClick={() => setIsMissingModalVisible(true)}>
+                        <div className={`flex gap-2 ${!(selectedAudience?.status_audience[0] === "Fixé" || selectedAudience?.status_audience[0] === "Reporté") && "cursor-not-allowed text-gray-400"}`}>
                             <div className="flex gap-2">
                                 <StopOutlined  />
                                 <div>Absenter</div>
@@ -67,8 +67,8 @@ const AdminAudience: React.FC = () => {
             key: '4',
           },
         {
-            label: <button disabled={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? true : false}>
-                        <div onClick={() => setIsCancelModalVisible(true)} className={(selectedAudience?.status_audience[0] === "Absent" || selectedAudience?.status_audience[0] === "Classé") ? "flex gap-2 cursor-not-allowed text-gray-400" : "flex gap-2" }>
+            label: <button disabled={!(selectedAudience?.status_audience[0] === "Fixé" || selectedAudience?.status_audience[0] === "Reporté")} onClick={() => setIsCancelModalVisible(true)}>
+                        <div className={`flex gap-2 ${!(selectedAudience?.status_audience[0] === "Fixé" || selectedAudience?.status_audience[0] === "Reporté") && "cursor-not-allowed text-gray-400"}`}>
                             <div className="flex gap-2">
                             <CloseCircleOutlined  />
                                 <div>Annuler</div>
@@ -77,8 +77,7 @@ const AdminAudience: React.FC = () => {
                     </button>
             ,
             key: '5',
-          },
-  
+        },  
     ];
 
     const filter: MenuProps['items'] = [
