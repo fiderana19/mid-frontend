@@ -6,7 +6,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 const SignupForm = lazy(() => import('./Signup/SignupForm'));
 
 function Signup() {
-
     return(
         <div className='min-h-screen flex flex-col justify-center'>
             <div className='sm:flex block justify-between '>
