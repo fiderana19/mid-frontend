@@ -342,8 +342,8 @@ const AdminAudience: React.FC = () => {
                                     <Button
                                         variant={'destructive'}
                                         onClick={handleCancelAudienceConfirm}
-                                        disabled={ cancelLoading ? true : false }
-                                        className={`${cancelLoading ? 'cursor-not-allowed' : ''}`}
+                                        disabled={cancelLoading}
+                                        className={`${cancelLoading && 'cursor-not-allowed'}`}
                                     >   
                                         { cancelLoading && <LoadingOutlined className='text-xs' /> }
                                         <div>Confirmer</div>
@@ -371,8 +371,8 @@ const AdminAudience: React.FC = () => {
                                     <Button
                                         variant={'destructive'}
                                         onClick={handleMissingAudienceConfirm}
-                                        disabled={ missedLoading ? true : false }
-                                        className={`${missedLoading ? 'cursor-not-allowed' : ''}`}
+                                        disabled={missedLoading}
+                                        className={`${missedLoading && 'cursor-not-allowed'}`}
                                     >   
                                         { missedLoading && <LoadingOutlined className="text-xs" /> }
                                         <div>Confirmer</div>

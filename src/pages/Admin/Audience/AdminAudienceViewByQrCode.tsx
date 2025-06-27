@@ -1,49 +1,33 @@
-import { useState, useEffect, Suspense, lazy } from "react";
+import { useState, Suspense, lazy } from "react";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
-import { audienceClose, getAudienceByRef } from "../../../api/audience";
-import { message, Modal } from "antd";
+import { Modal } from "antd";
 import { HttpStatus } from "../../../constants/Http_status";
+import { useGetAudienceByRef } from "@/hooks/useGetAudienceByRef";
+import { useCloseAudience } from "@/hooks/useCloseAudience";
+import { useGetAllAudience } from "@/hooks/useGetAllAudience";
+import Status from "@/components/status/Status";
+import { Button } from "@/components/ui/button";
 
-function AdminAudienceViewByQrCode() {
-    const [audience, setAudience] = useState<any>();
-    const [apiLoading, setApiLoading] = useState<boolean>(false);
+const AdminAudienceViewByQrCode: React.FC = () => {
+    const req = useParams();
+    const audienceRef = req.id;
+    const { data: audience, isLoading } = useGetAudienceByRef(audienceRef ? audienceRef : '');
+    const { refetch } = useGetAllAudience();
+    const { mutateAsync: closeAudience, isPending: closeLoading } = useCloseAudience({action() {
+        refetch();
+    },})
     const [isClosedModalVisible, setIsClosedModalVisible] = useState(false);
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-    let req = useParams();
-    let audienceId = req.id;
-
-    useEffect(() => { 
-        const token = localStorage.getItem('token');
-        if(token) {
-            setAccessToken(token);
-        }
-        fetchAudience()
-    }, [])
-
-    const fetchAudience = async () => {
-        const token = localStorage.getItem('token');
-        if(audienceId && token) {
-            const response = await getAudienceByRef(token,audienceId);
-            if(response) {
-                setAudience(response.data);
-            }
-        }
-    }
+    const navigate = useNavigate();
 
     const handleClosedAudienceConfirm = async () => {
-        setApiLoading(true);
         if(audience) {
-            const response = await audienceClose(access_token,audience._id);
+            const response = await closeAudience(audience._id);
             if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
-                fetchAudience();
-                setApiLoading(false);
-                message.success("Audience classée !")
-                setIsClosedModalVisible(false);    
+                setIsClosedModalVisible(false);  
+                navigate('/admin/audience');  
             }
         }
     }
@@ -65,53 +49,30 @@ function AdminAudienceViewByQrCode() {
                     <div className="">
                         <div className="pl-10 px-5 pt-16 pb-5 w-full">
                             {
+                                isLoading && <div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>
+                            }
+                            {
                                 audience && 
                                     <div>
                                    <div className="font-bold text-lg mb-6">Audience du { audience.availability_date } </div>
                                     <div className="gap-2 flex justify-between">
-                                        
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4 bg-white shadow-md">
                                                 <div className="flex justify-end">
                                                     { audience.status_audience[0] === "Fixé" ? 
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
-                                                                { audience.status_audience }
-                                                            </div>       
-                                                        </div>                                 
+                                                        <Status type="primary" data={`${audience.status_audience}`} />
                                                         : (
                                                             audience.status_audience[0] === "Reporté" ?
-                                                            <div className="max-w-max">
-                                                                <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                    <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                                    { audience.status_audience }
-                                                                </div>       
-                                                            </div>                                 
+                                                            <Status type="alert" data={`${audience.status_audience}`} />
                                                             : (
                                                                 audience.status_audience[0] === "Classé" ?
-                                                                <div className="max-w-max">
-                                                                    <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                        <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                                        { audience.status_audience }
-                                                                    </div>       
-                                                                </div>                                 
+                                                                <Status type="success" data={`${audience.status_audience}`} />
                                                                 :
                                                                 (
                                                                     audience.status_audience[0] === "Absent" ?
-                                                                    <div className="max-w-max">
-                                                                        <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                            <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                            { audience.status_audience }
-                                                                        </div>       
-                                                                    </div>                                 
+                                                                    <Status type="gray" data={`${audience.status_audience}`} />
                                                                     :
-                                                                    <div className="max-w-max">
-                                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                            { audience.status_audience }
-                                                                        </div>       
-                                                                    </div>                                 
+                                                                    <Status type="danger" data={`${audience.status_audience}`} />
                                                                 )
                                                             )
                                                         )
@@ -121,13 +82,11 @@ function AdminAudienceViewByQrCode() {
                                                     <div className="text-md font-bold">
                                                         { audience.request_type }
                                                     </div>
-                                                    
                                                     <div>soumise le <span className="font-semibold"> {audience.request_creation}</span></div>
                                                 </div>
                                                     <div className="text-sm text-gray-500">Motif: </div>
                                                     <div className=""> { audience.request_object } </div>
                                             </div>
-                                            
                                         </div>
                                         <div className="w-1/4">
                                             <div className="border rounded p-5 bg-white shadow-md">
@@ -150,14 +109,14 @@ function AdminAudienceViewByQrCode() {
                                                         <div className="font-latobold text-md mb-3">Actions</div>
                                                         <div className="flex justify-between items-center">
                                                             <div className="text-sm text-gray-500">Classer</div>
-                                                            <button 
-                                                                className='bg-green-500 hover:bg-green-600 text-white py-1 my-1 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500'
+                                                            <Button
                                                                 onClick={() => setIsClosedModalVisible(true)}
-                                                            >Classer</button>
+                                                            >
+                                                                Classer
+                                                            </Button>
                                                         </div>
                                                     </div>
                                                 }
-
                                         </div>
                                         <div className="w-1/4">
                                             <div className=" border pt-6 rounded text-center bg-white shadow-md">
@@ -200,21 +159,22 @@ function AdminAudienceViewByQrCode() {
                             <div>
                                 <WarningFilled className='mr-2 text-green-500 text-xl' />  
                                 Êtes-vous sûr de classer cette audience ?
-                                <div className='flex justify-end gap-2'>
-                                    <button 
+                                <div className='flex justify-end gap-2 mt-2'>
+                                    <Button
+                                        variant={'secondary'} 
                                         onClick={() => {setIsClosedModalVisible(false)}}
-                                        className="border mt-2 hover:bg-gray-100 py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
                                     >   
                                         Annuler
-                                    </button>
-                                    <button 
+                                    </Button>
+                                    <Button
+                                        variant={'success'}
                                         onClick={handleClosedAudienceConfirm}
-                                        disabled={ apiLoading ? true : false }
-                                        className= { apiLoading ? "bg-green-400 cursor-not-allowed flex gap-2 items-center border mt-2 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" : "flex gap-2 items-center border mt-2 bg-green-500 hover:border-green-600 hover:bg-green-600 text-white py-2 px-4 text-sm  rounded focus:outline-none focus:ring-2 focus:ring-green-500" } 
+                                        disabled={ closeLoading }
+                                        className={`${ closeLoading && 'cursor-not-allowed' }`}
                                     >   
-                                        { apiLoading && <LoadingOutlined /> }
+                                        { closeLoading && <LoadingOutlined className="text-xs" /> }
                                         <div>Confirmer</div>
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </Modal>

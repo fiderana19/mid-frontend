@@ -1,11 +1,11 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 import {QrReader} from "react-qr-reader";
 import { useNavigate } from "react-router-dom";
 
-function AdminAudienceQRCode() {
+const AdminAudienceQRCode: React.FC = () => {
     const [data, setData] = useState<any>('Aucun QR Code scanné !');
     const navigate = useNavigate();
 

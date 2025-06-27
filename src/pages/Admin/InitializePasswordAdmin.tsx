@@ -1,57 +1,40 @@
-import { EyeInvisibleOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined, LockOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
 import { InitializeUserPassword } from '../../interfaces/User';
-import { getUserById, initializePassword } from '../../api/users';
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useNavigate } from 'react-router-dom';
 import { HttpStatus } from '../../constants/Http_status';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { UserFirstPasswordValidation } from '@/validation/user.validation';
+import { useAuth } from '../../context/AuthContext';
+import { useGetUserById } from '@/hooks/useGetUserById';
+import Status from '@/components/status/Status';
+import { useInitializePassword } from '@/hooks/useInitializePassword';
 
-function InitializePasswordAdmin() {
-    const [updatePasswordCredentials, setUpdatePasswordCredentials] = useState<InitializeUserPassword>({ password: '' });
-    const [user, setUser] = useState<any>();
-    const [newPasswordError, setNewPasswordError] = useState<string>('');
+const InitializePasswordAdmin: React.FC = () => {
+    const { token } = useAuth();
+    const { handleSubmit: submit, formState: { errors }, control } = useForm<InitializeUserPassword>({
+        resolver: yupResolver(UserFirstPasswordValidation)
+    });
+    const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null);
+    const { mutateAsync: initializePassword, isPending: initializeLoading } = useInitializePassword();
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [access_token, setAccessToken] = useState<string | null>(
-        localStorage.getItem('token')
-    )
 
-    useEffect(() => { 
-        async function fetchUser() {
-          const token = localStorage.getItem("token");
-  
-          if(token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));
-            const response = await getUserById(token,decodedToken.id);
-            if(response) {
-                setUser(response)
-            }
-            setAccessToken(token);
-          }
+    const handleChangePasswordSubmit = async (data: any) => {
+        const updatePasswordCredentials = {
+            _id: user._id,
+            password: data?.password,
         }
-        fetchUser()
-    }, [])
-
-    const handleChangePasswordSubmit = async () => {
-        setNewPasswordError('');
-
-        if(updatePasswordCredentials.password.length < 6) {
-            setNewPasswordError('Le mot doit comporter au moins 6 caractères !')
+        
+        const response = await initializePassword(updatePasswordCredentials);
+        if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
+            navigate("/admin/home");
         }
-
-        if(updatePasswordCredentials.password.length >= 6) {
-            const response = await initializePassword(access_token, user._id, updatePasswordCredentials);
-            if(response?.status === HttpStatus.OK) {
-                navigate("/admin/home");
-            }
-        }
-    }
-
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPasswordError('');
-
-        const {name, value} = e.target;
-        setUpdatePasswordCredentials((prev) => ({...prev, [name]: value}));
     }
 
     const handlePasswordVisible = async () => {
@@ -59,36 +42,49 @@ function InitializePasswordAdmin() {
     }
 
     return (
-        <div className='min-h-screen flex flex-col justify-center'>
-                <div className='w-80 mx-auto'>
-                    <div className='text-center'>
-                        <img src={MidLogo} className='h-36 w-36 object-cover mx-auto' alt="Logo du ministere" />
-                        <div className='text-lg font-bold'>MINITER: Audience</div>
+        <div className='bg-four h-screen flex flex-col justify-center'>
+                <div className='mx-auto'>
+                    <div className='text-center mb-10'>
+                        <img src={MidLogo} className='h-28 w-28 object-cover mx-auto' alt="Logo du ministere" />
+                        <div className='text-lg font-latobold'>MININTER: Audience</div>
                     </div>
-                    <div className='text-xl font-bold my-4 text-center'>Veuillez initialiser votre mot de passe</div>
-                    <div className='border border-gray-300 p-2 rounded'>
+                    <div className='text-xl font-latobold my-4 text-center'>Veuillez initialiser votre mot de passe</div>
+                    <div className='border border-gray-300 p-6 rounded bg-white'>
                         {
                             user &&
-                            <div className='w-64 p-2 mx-auto flex items-center gap-2'>
-                                <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-10 h-10 rounded-full  object-cover border" />
-                                <div className='font-bold'>{ user.nom }  {user.prenom} </div>
+                            <div className='p-2 mx-auto flex items-center gap-4 mb-4'>
+                                <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-16 h-16 rounded-full  object-cover border" />
+                                <div>
+                                    <div className='font-latobold mb-2'>{ user.nom }  {user.prenom} </div>
+                                    <Status type='success' data='Compte validé' />
+                                </div>
                             </div>
                         }
-                        <div className='w-64 my-2 mx-auto'>
-                            <div className="text-left text-xs font-bold">
-                                Mot de passe
-                            </div>
+                        {
+                            isLoading && <div className='text-center my-10'><LoadingOutlined className='text-5xl' /></div>
+                        }
+                        <form onSubmit={submit(handleChangePasswordSubmit)} className='my-2'>
+                            <Label htmlFor='' className='mb-1' >Mot de passe</Label>
                             <div className="relative">
-                                <input 
-                                    onChange={handleChange}
-                                    type={!!(isPasswordVisible) ? 'text' : 'password'}
-                                    placeholder='Saisir le mot de passe initial...' 
+                                <Controller 
                                     name='password'
-                                    className={ newPasswordError ?  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-red-500 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" :  "w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-10 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" }
+                                    control={control}
+                                    render={({
+                                        field: { value, onChange, onBlur }
+                                    }) => (
+                                        <Input
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            type={!!(isPasswordVisible) ? 'text' : 'password'}
+                                            name='password'
+                                            className={`pl-10 ${errors?.password ? 'border border-red-500 rounded text-red-500' : ''}`}
+                                        />
+                                    )}
                                 />
                                 <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                 {
-                                isPasswordVisible ?
+                                    isPasswordVisible ?
                                     <EyeInvisibleOutlined 
                                     onClick={handlePasswordVisible}
                                     className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
@@ -98,11 +94,14 @@ function InitializePasswordAdmin() {
                                     className='absolute top-1.5 right-1.5 cursor-pointer p-1.5' />
                                 }
                             </div>
-                            { newPasswordError && <div className="text-xs text-red-500">{ newPasswordError }</div> }
-                        </div>
-                        <div className='flex justify-center'>
-                            <button className=' bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-4 px-4 rounded w-64' onClick={handleChangePasswordSubmit}>CONFIRMER</button>
-                        </div>
+                            { errors?.password && <div className="text-xs text-red-500">{ errors?.password.message }</div> }
+                            <div className='flex justify-center mt-4'>
+                                <Button variant={'default'} size={'lg'} type='submit'>
+                                    { initializeLoading && <LoadingOutlined /> }
+                                    CONFIRMER
+                                </Button>
+                            </div>
+                        </form>
                     </div>
                 </div>
         </div>
