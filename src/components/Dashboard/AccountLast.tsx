@@ -16,7 +16,7 @@ const AccountLast: React.FunctionComponent = () => {
                 <div className="h-0.5 bg-red-500 my-2">
 
                 </div>
-                <div className="">
+                <div>
                     {isLoading && <div className="my-4 max-w-max mx-auto"> <LoadingOutlined className="text-5xl" /></div>}
                     {
                         users && users.map((user: any, index: any) => {

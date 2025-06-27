@@ -6,10 +6,10 @@ const Header = lazy(() => import("../../../components/Header"));
 import { Modal } from "antd";
 import { HttpStatus } from "../../../constants/Http_status";
 import { useGetAudienceById } from "@/hooks/useGetAudienceById";
-import Status from "@/components/status/Status";
 import { Button } from "@/components/ui/button";
 import { useCancelAudience } from "@/hooks/useCancelAudience";
 import { useGetAllAudience } from "@/hooks/useGetAllAudience";
+import AudienceStatus from "@/components/status/AudienceStatus";
 
 const AdminAudienceView: React.FC = () => {
     const req = useParams();
@@ -57,24 +57,7 @@ const AdminAudienceView: React.FC = () => {
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4 bg-white shadow-md">
                                                 <div className="flex justify-end">
-                                                    { audience.status_audience[0] === "Fixé" ? 
-                                                        <Status type="primary" data={`${audience.status_audience}`} />
-                                                        : (
-                                                            audience.status_audience[0] === "Reporté" ?
-                                                            <Status type="alert" data={`${audience.status_audience}`} />
-                                                            : (
-                                                                audience.status_audience[0] === "Classé" ?
-                                                                <Status type="success" data={`${audience.status_audience}`} />
-                                                                :
-                                                                (
-                                                                    audience.status_audience[0] === "Absent" ?
-                                                                    <Status type="gray" data={`${audience.status_audience}`} />
-                                                                    :
-                                                                    <Status type="danger" data={`${audience.status_audience}`} />
-                                                                )
-                                                            )
-                                                        )
-                                                    }     
+                                                    <AudienceStatus value={audience.status_audience[0]} />
                                                 </div>
                                                 <div className="mb-3 flex items-center gap-2">
                                                     <div className="text-md font-latobold">

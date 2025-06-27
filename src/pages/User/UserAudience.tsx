@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useGetAudienceByUser } from "@/hooks/useGetAudienceByUser";
 import { useAuth } from "@/context/AuthContext";
+import AudienceStatus from "@/components/status/AudienceStatus";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserAudience() {
@@ -39,48 +40,7 @@ function UserAudience() {
                                 
                                 <div className="p-2">
                                     <div className="flex justify-end">
-                                        { audience.status_audience[0] === "Fixé" ? 
-                                            <div className="max-w-max">
-                                                <div className="flex items-center bg-blue-200 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                    <span className="w-2 h-2 me-1 bg-blue-500 rounded-full"></span>
-                                                    { audience.status_audience }
-                                                </div>       
-                                            </div>                                 
-                                            : (
-                                                audience.status_audience[0] === "Reporté" ?
-                                                <div className="max-w-max">
-                                                    <div className="flex items-center bg-yellow-200 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                        <span className="w-2 h-2 me-1 bg-yellow-500 rounded-full"></span>
-                                                        { audience.status_audience }
-                                                    </div>       
-                                                </div>                                 
-                                                : (
-                                                    audience.status_audience[0] === "Classé" ?
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                            { audience.status_audience }
-                                                        </div>       
-                                                    </div>                                 
-                                                    : (
-                                                        audience.status_audience[0] === "Absent" ?
-                                                        <div className="max-w-max">
-                                                           <div className="flex items-center bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
-                                                                { audience.status_audience }
-                                                            </div>       
-                                                        </div>                                 
-                                                        :
-                                                        <div className="max-w-max">
-                                                            <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                                <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                                { audience.status_audience }
-                                                            </div>       
-                                                        </div>                                 
-                                                    )
-                                                )
-                                            )
-                                        }     
+                                        <AudienceStatus value={audience.status_audience[0]} />     
                                     </div>
                                     <div className="text-md font-latobold"> { audience.request_type } </div>
                                     <div>

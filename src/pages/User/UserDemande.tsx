@@ -7,8 +7,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useDeleteRequest } from "@/hooks/useDeleteRequest";
 import { Button } from "@/components/ui/button";
-import Status from "@/components/status/Status";
 import { StatusType } from "@/constants/Status_type";
+import RequestStatus from "@/components/status/RequestStatus";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 function UserDemande() {
@@ -42,7 +42,7 @@ function UserDemande() {
                 <div className="sm:flex block justify-between items-center">
                     <div className="text-lg font-latobold my-4">Les demandes d'audience</div>
                     <Link to="/user/add/demande" className="flex justify-end">
-                        <Button variant={'default'}>
+                        <Button>
                             <PlusOutlined />
                             <div>Faire une demande</div>
                         </Button>
@@ -56,25 +56,16 @@ function UserDemande() {
                                     <img src={`data:image/png;base64,${request.profile_photo}`} className="w-9 h-9 rounded-full object-cover border" />
                                     <div className="">
                                         <div className="font-latobold">
-                                                { request.type_request }
-                                            </div>
-                                            <div className="text-xs">
-                                                soumise le { request.request_creation }
-                                            </div>
+                                            { request.type_request }
                                         </div>
+                                        <div className="text-xs">
+                                            soumise le { request.request_creation }
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="p-2">
                                     <div className="flex justify-end">
-                                        {
-                                            request.status_request[0] === "En attente" ?
-                                            <Status type={`${StatusType.alert}`} data={`${request.status_request}`}/>
-                                            : (
-                                                request.status_request[0] === "Accepté" ?
-                                                <Status type={`${StatusType.success}`} data={`${request.status_request}`}/>
-                                                :
-                                                <Status type={`danger`} data={`${request.status_request}`}/>
-                                            )
-                                        } 
+                                        <RequestStatus value={request.status_request[0]} /> 
                                     </div>
                                     <div className="mt-4">
                                         <span>Motif :</span>

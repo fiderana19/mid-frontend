@@ -16,7 +16,7 @@ import { RequestEditValidation } from "@/validation/request_edit.validation";
 import { usePatchRequest } from "@/hooks/usePatchRequest";
 import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useAuth } from "@/context/AuthContext";
-import Status from "@/components/status/Status";
+import RequestStatus from "@/components/status/RequestStatus";
 
 const UserEditDemande: FunctionComponent = () => {
     const { token } = useAuth();
@@ -87,7 +87,7 @@ const UserEditDemande: FunctionComponent = () => {
                                 <span className="font-latobold">
                                     { request.request_creation }
                                 </span>
-                                <Status type="alert" data="En attente" />
+                                <RequestStatus value={request?.status_request} />
                             </div>
                         </div>
                         <Label htmlFor="type_demande" className="mt-4 mb-1">Type de la demande</Label>

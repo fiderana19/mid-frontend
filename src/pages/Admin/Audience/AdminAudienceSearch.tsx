@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AudienceSearchValidation } from "@/validation/audience.validation";
 import { Label } from "@/components/ui/label";
 import { useSearchAudience } from "@/hooks/useSearchAudience";
-import Status from "@/components/status/Status";
+import AudienceStatus from "@/components/status/AudienceStatus";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 
@@ -174,24 +174,7 @@ const AdminAudienceSearch: React.FC = () => {
                                                         <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.request_type }  </td>
                                                         <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { audience.availability_date } de { audience.availability_hour_debut } à { audience.availability_hour_end }  </td>
                                                         <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>   
-                                                            { audience.status_audience[0] === "Fixé" ?
-                                                                <Status type="primary" data={`${audience.status_audience}`} />
-                                                                : (
-                                                                    audience.status_audience[0] === "Reporté" ?
-                                                                    <Status type="alert" data={`${audience.status_audience}`} />
-                                                                    : (
-                                                                        audience.status_audience[0] === "Classé" ?
-                                                                        <Status type="success" data={`${audience.status_audience}`} />
-                                                                        :
-                                                                        (
-                                                                            audience.status_audience[0] === "Absent" ?
-                                                                            <Status type="gray" data={`${audience.status_audience}`} />
-                                                                            :
-                                                                            <Status type="danger" data={`${audience.status_audience}`} />
-                                                                        )
-                                                                    )
-                                                                )
-                                                            }     
+                                                            <AudienceStatus value={audience.status_audience[0]} />
                                                         </td>
                                                     </tr>
                                                     )

@@ -11,6 +11,7 @@ import { useValidateUser } from "@/hooks/useValidateUser";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
 import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { Button } from "@/components/ui/button";
+import AccountStatus from "@/components/status/AccountStatus";
 
 const AdminAccount: React.FC = () => {
     const { data: accounts, isLoading, refetch } = useGetAllUser();
@@ -234,21 +235,7 @@ const AdminAccount: React.FC = () => {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.email }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { account.user_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                    { account.validation ? 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                                            Validé
-                                                        </div>        
-                                                    </div>                                                                        
-                                                    : 
-                                                    <div className="max-w-max">
-                                                        <div className="flex items-center bg-red-200 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                                            <span className="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-                                                            Non Validé
-                                                        </div>        
-                                                    </div>
-                                                    }  
+                                                    <AccountStatus value={account?.validation} />
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <Dropdown className="p-2 rounded hover:bg-gray-200 cursor-pointer" menu={{ items }} trigger={['click']}>
@@ -261,7 +248,6 @@ const AdminAccount: React.FC = () => {
                                         )
                                     })
                                 }
-
                             </tbody>
                         </table>
                         {/* Handling the accounts and filters length */}

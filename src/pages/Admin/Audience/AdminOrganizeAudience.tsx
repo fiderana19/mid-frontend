@@ -9,7 +9,6 @@ import { HttpStatus } from "../../../constants/Http_status";
 import { CreateAudienceInterface } from "../../../interfaces/Audience";
 import { useGetRequestById } from "@/hooks/useGetRequestById";
 import { useGetAllFreeAvailability } from "@/hooks/useGetAllFreeAvailability";
-import Status from "@/components/status/Status";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useCreateAudience } from "@/hooks/useCreateAudience";
@@ -18,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AudienceOrganizeValidation } from "@/validation/audience.validation";
 import { useGetAllAvailability } from "@/hooks/useGetAllAvailability";
+import RequestStatus from "@/components/status/RequestStatus";
 
 const { Option } = Select;
 
@@ -125,16 +125,7 @@ const AdminOrganizeAudience: React.FC = () => {
                                                         { request.type_request }
                                                     </div>
                                                     <div >
-                                                        {
-                                                            request.status_request[0] === "En attente" ?
-                                                            <Status type="alert" data={`${request.status_request}`} />
-                                                            : (
-                                                                request.status_request[0] === "Accepté" ?
-                                                                <Status type="success" data={`${request.status_request}`} />
-                                                                :
-                                                                <Status type="danger" data={`${request.status_request}`} />
-                                                            )
-                                                        } 
+                                                        <RequestStatus value={request.status_request[0]} />
                                                     </div>
                                                     <div>soumise le <span className="font-latobold"> {request.request_creation}</span></div>
                                                 </div>

@@ -6,8 +6,8 @@ import { HttpStatus } from "../../../constants/Http_status";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
 import { useValidateUser } from "@/hooks/useValidateUser";
 import { useGetUserById } from "@/hooks/useGetUserById";
-import Status from "@/components/status/Status";
 import { Button } from "@/components/ui/button";
+import AccountStatus from "@/components/status/AccountStatus";
 const Header = lazy(() => import("../../../components/Header"));
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 
@@ -103,11 +103,7 @@ const AdminAccountView: React.FC = () => {
                                             <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-3/4 h-48 object-cover mx-auto border" />
                                             <div className="font-latobold text-lg">{ user.nom } { user.prenom }</div>
                                             <div className="flex justify-end px-8 py-2">
-                                                { user.validation ?
-                                                    <Status type="success" data="Validé" /> 
-                                                    : 
-                                                    <Status type="danger" data="Non validé" /> 
-                                                }  
+                                                <AccountStatus value={user?.validation} />
                                             </div>
                                             <div className="mx-auto w-full bg-gray-200 px-8 py-1">
                                                 <div className="flex gap-4 my-2">

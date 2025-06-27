@@ -1,10 +1,11 @@
 import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, LoadingOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
+import { Button } from "../ui/button";
 const MidProfile = lazy(() => import("../MidProfile"));
 const MidCopyright = lazy(() => import("../Midopyright"));
 
-function AdminNavigation() {
+const AdminNavigation: React.FC = () => {
     const location = useLocation();
     const [isFailRequest, setIsFailRequest] = useState<boolean>(false);
     const [isAudienceSearch, setIsAudienceSearch] = useState<boolean>(false);
@@ -32,14 +33,14 @@ function AdminNavigation() {
             </Suspense>
             <div className="text-left w-full">
                 <Link to="/admin/home">
-                    <div className={location.pathname === "/admin/home" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/home" ? <HomeFilled className="" /> : <HomeOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/home" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/home" ? <HomeFilled /> : <HomeOutlined />}
                         <div className="md:block hidden">Accueil</div>
                     </div>
                 </Link>
                 <Link to="/admin/demande">
-                    <div className={location.pathname === "/admin/demande" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/demande" ? <SnippetsFilled className="" /> : <SnippetsOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/demande" ? <SnippetsFilled /> : <SnippetsOutlined />}
                         <div className="md:block hidden">Demande</div>
                         <button onClick={setRequestDropdown} className="md:block hidden">
                             {
@@ -52,8 +53,8 @@ function AdminNavigation() {
                     </div>
                 </Link>
                 <Link to="/admin/demande/notorganized" className="md:hidden block">
-                    <div className={location.pathname === "/admin/demande/notorganized" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined className="" /> : <ExceptionOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande/notorganized" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined  /> : <ExceptionOutlined />}
                         <div className="md:block hidden">Anomalie</div>
                     </div>
                 </Link>
@@ -61,16 +62,16 @@ function AdminNavigation() {
                     {
                         (isFailRequest || (location.pathname === "/admin/demande/notorganized")) &&
                             <Link to="/admin/demande/notorganized">
-                                <div className={location.pathname === "/admin/demande/notorganized" ? "flex gap-2 font-latobold py-2 pl-8 pr-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 pl-8 pr-4 hover:bg-four rounded transition-colors" } >
-                                    {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined className="" /> : <ExceptionOutlined className="" />}
+                                <div className={`my-0.5 items-center flex gap-2 py-2 px-4 ml-6 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande/notorganized" && "bg-four-custom rounded"}`} >
+                                    {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined /> : <ExceptionOutlined />}
                                     <div className="md:block hidden">Anomalie</div>
                                 </div>
                             </Link>
                     }
                 </div>
                 <Link to="/admin/audience">
-                    <div className={location.pathname === "/admin/audience" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/audience" ? <ContactsFilled className="" /> : <ContactsOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/audience" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/audience" ? <ContactsFilled /> : <ContactsOutlined />}
                         <div className="md:block hidden">Audience</div>
                         <button onClick={setAudienceDropdown} className="md:block hidden">
                             {
@@ -86,22 +87,22 @@ function AdminNavigation() {
                     {
                         (isAudienceSearch || (location.pathname === "/admin/audience/search")) &&
                             <Link to="/admin/audience/search">
-                                <div className={location.pathname === "/admin/audience/search" ? "flex gap-2 font-latobold py-2 pl-8 pr-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 pl-8 pr-4 hover:bg-four rounded transition-colors" } >
-                                    {location.pathname === "/admin/audience/search" ? <ContainerFilled className="" /> : <ContainerOutlined className="" />}
+                                <div className={`my-0.5 items-center flex gap-2 py-2 px-4 ml-6 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/audience/search" && "bg-four-custom rounded"}`} >
+                                    {location.pathname === "/admin/audience/search" ? <ContainerFilled /> : <ContainerOutlined />}
                                     <div className="md:block hidden">Rapport</div>
                                 </div>
                             </Link>
                     }
                 </div>
                 <Link to="/admin/availability">
-                    <div className={location.pathname === "/admin/availability" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/availability" ? <CalendarFilled className="" /> : <CalendarOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/availability" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/availability" ? <CalendarFilled /> : <CalendarOutlined />}
                         <div className="md:block hidden">Disponibilité</div>
                     </div>
                 </Link>
                 <Link to="/admin/account">
-                    <div className={location.pathname === "/admin/account" ? "flex gap-2 font-latobold py-2 px-4 bg-four rounded items-center" : "items-center flex gap-2 py-2 px-4 hover:bg-four rounded transition-colors" } >
-                        {location.pathname === "/admin/account" ? <UserOutlined className="" /> : <UserOutlined className="" />}
+                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/account" && "bg-four-custom rounded"}`} >
+                        {location.pathname === "/admin/account" ? <UserOutlined /> : <UserOutlined />}
                         <div className="md:block hidden">Citoyen</div>
                     </div>
                 </Link>

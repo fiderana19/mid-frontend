@@ -26,20 +26,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const response = await userLogin(loginCredentials);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             const data = response?.data.token;
-            const isNotFirstLogin = response?.data.is_not_first_login;
+            const isNotFirstLogin: boolean = response?.data.is_not_first_login;
 
             setToken(data);
             localStorage.setItem("token", data);
 
             const decodedToken = JSON.parse(atob(data.split('.')[1]));
             if(decodedToken.role[0] === "admin") {
-                if(isNotFirstLogin === false) {
+                if(!isNotFirstLogin) {
                     navigate("/admin/password");
                 } else {
                     navigate("/admin/home");
                 }
             } else {
-                if(isNotFirstLogin === true) {
+                if(!isNotFirstLogin) {
                     navigate("/user/password");
                 } else {
                     navigate("/user/home");

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ContactsOutlined, LoadingOutlined, MoreOutlined } from "@ant-design/icons";
 import { Dropdown, MenuProps } from "antd";
 import useGetLastAudience from "@/hooks/useGetLastAudience";
-import Status from "../status/Status";
+import AudienceStatus from "../status/AudienceStatus";
 
 const AudienceLast: React.FunctionComponent = () => {
     const { data: audience, isLoading } = useGetLastAudience();
@@ -41,24 +41,7 @@ const AudienceLast: React.FunctionComponent = () => {
                         </div>
                         <div className="flex gap-2 items-center mt-2">
                             <div className="font-latobold"> { audience?.request_type } </div>
-                            { audience.status_audience[0] === "Fixé" ? 
-                                <Status type="primary" data={`${audience.status_audience}`} />
-                                : (
-                                    audience.status_audience[0] === "Reporté" ?
-                                    <Status type="alert" data={`${audience.status_audience}`} />
-                                    : (
-                                        audience.status_audience[0] === "Classé" ?
-                                        <Status type="success" data={`${audience.status_audience}`} />
-                                        :
-                                        (
-                                            audience.status_audience[0] === "Absent" ?
-                                            <Status type="gray" data={`${audience.status_audience}`} />
-                                            :
-                                            <Status type="danger" data={`${audience.status_audience}`} />
-                                        )
-                                    )
-                                )
-                            }     
+                            <AudienceStatus value={audience?.status_audience[0]} />
                         </div>
                         <div className="whitespace-normal">Organisé pour la date de <span className="font-latobold"> { audience?.availability_date } </span>  de <span className="font-latobold"> { audience?.availability_hour_debut } </span> à <span className="font-latobold"> { audience?.availability_hour_end } </span></div>
                     </div>

@@ -11,9 +11,9 @@ import { useCancelAvailability } from "@/hooks/useCancelAvailability";
 import { useCreateAvailability } from "@/hooks/useCreateAvailability";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import Status from "@/components/status/Status";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateAvailabilityValidation } from "@/validation/availability.validation";
+import AvailabilityStatus from "@/components/status/AvailabilityStatus";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 
@@ -246,16 +246,7 @@ const AdminAvailability: React.FC = () => {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                    {
-                                                        availability.status_availability[0] === "Occupé" ? 
-                                                        <Status type="gray" data={`${availability.status_availability}`} />
-                                                        : (
-                                                            availability.status_availability[0] === "Libre" ?
-                                                            <Status type="success" data={`${availability.status_availability}`} />
-                                                            :
-                                                            <Status type="danger" data={`${availability.status_availability}`} />
-                                                        )
-                                                    }    
+                                                    <AvailabilityStatus value={availability.status_availability[0]} />    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {
@@ -288,16 +279,7 @@ const AdminAvailability: React.FC = () => {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_debut }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { availability.hour_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                    {
-                                                        availability.status_availability[0] === "Occupé" ? 
-                                                        <Status type="gray" data={`${availability.status_availability}`} />
-                                                        : (
-                                                            availability.status_availability[0] === "Libre" ?
-                                                            <Status type="success" data={`${availability.status_availability}`} />
-                                                            :
-                                                            <Status type="danger" data={`${availability.status_availability}`} />
-                                                        )
-                                                    }    
+                                                    <AvailabilityStatus value={availability.status_availability[0]} />    
                                                 </td>
                                                 <td className='text-center px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
                                                     {

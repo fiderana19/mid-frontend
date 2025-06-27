@@ -4,8 +4,10 @@ import { MenuProps, Dropdown } from "antd";
 import { useAuth } from "../context/AuthContext";
 import MidLogo from '../assets/image/mid-logo.jpg';
 import { useGetUserById } from "@/hooks/useGetUserById";
+import React from "react";
+import { Button } from "./ui/button";
 
-function Header() {
+const Header: React.FC = () => {
   const { logout, token } = useAuth();
   const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)
     
@@ -19,7 +21,7 @@ function Header() {
     },
     {
       label: <div onClick={logout}><LogoutOutlined /> Se deconnecter</div>,
-      key: '3',
+      key: '1',
     },
   ];
 
@@ -112,18 +114,18 @@ function Header() {
               <a onClick={(e) => e.preventDefault()}>
                 {
                   user &&
-                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
-                      <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover mr-2 rounded-full border" />
-                      <div className="sm:block hidden font-latobold">{ user.email }</div>
-                      <DownOutlined className="text-xs ml-2" />
+                    <Button variant={'secondary'}>
+                      <img src={`data:image/png;base64,${user.profile_photo}`} className="w-6 h-6 object-cover  rounded-full border" />
+                      <div className="sm:block hidden font-latobold mx-1">{ user.email }</div>
+                      <DownOutlined className="text-xs" />
                       {isLoading && <LoadingOutlined />}
-                    </button>
+                    </Button>
                 }
                 {
                   isLoading &&
-                    <button className='bg-gray-500 hover:bg-gray-700 text-white flex py-1 px-3 rounded items-center'>
+                    <Button variant={'secondary'}>
                         <LoadingOutlined />
-                    </button>
+                    </Button>
                 }
               </a>
             </Dropdown>

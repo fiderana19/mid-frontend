@@ -12,8 +12,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { UserFirstPasswordValidation } from '@/validation/user.validation';
 import { useAuth } from '../../context/AuthContext';
 import { useGetUserById } from '@/hooks/useGetUserById';
-import Status from '@/components/status/Status';
 import { useInitializePassword } from '@/hooks/useInitializePassword';
+import AccountStatus from '@/components/status/AccountStatus';
 
 const InitializePasswordAdmin: React.FC = () => {
     const { token } = useAuth();
@@ -56,7 +56,7 @@ const InitializePasswordAdmin: React.FC = () => {
                                 <img src={`data:image/png;base64,${user.profile_photo}`} alt="" className="w-16 h-16 rounded-full  object-cover border" />
                                 <div>
                                     <div className='font-latobold mb-2'>{ user.nom }  {user.prenom} </div>
-                                    <Status type='success' data='Compte validé' />
+                                    <AccountStatus value={user?.validation} />
                                 </div>
                             </div>
                         }

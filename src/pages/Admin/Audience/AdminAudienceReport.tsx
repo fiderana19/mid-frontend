@@ -9,7 +9,6 @@ import { HttpStatus } from "../../../constants/Http_status";
 import { ReportAudienceInterface } from "../../../interfaces/Audience";
 import { useGetAudienceById } from "@/hooks/useGetAudienceById";
 import { useGetAllFreeAvailability } from "@/hooks/useGetAllFreeAvailability";
-import Status from "@/components/status/Status";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Controller, useForm } from "react-hook-form";
@@ -17,6 +16,7 @@ import { useReportAudience } from "@/hooks/useReportAudience";
 import { useGetAllAudience } from "@/hooks/useGetAllAudience";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AudienceReportValidation } from "@/validation/audience.validation";
+import AudienceStatus from "@/components/status/AudienceStatus";
 const { Option } = Select;
 
 const AdminAudienceReport: React.FC = () => {
@@ -113,24 +113,7 @@ const AdminAudienceReport: React.FC = () => {
                                         <div className="w-2/4" >
                                             <div className="border rounded p-4">
                                                 <div className="flex justify-end">
-                                                    { audience.status_audience[0] === "Fixé" ? 
-                                                        <Status type="primary" data={`${audience.status_audience}`} />
-                                                        : (
-                                                            audience.status_audience[0] === "Reporté" ?
-                                                            <Status type="alert" data={`${audience.status_audience}`} />
-                                                            : (
-                                                                audience.status_audience[0] === "Classé" ?
-                                                                <Status type="success" data={`${audience.status_audience}`} />
-                                                                :
-                                                                (
-                                                                    audience.status_audience[0] === "Absent" ?
-                                                                    <Status type="gray" data={`${audience.status_audience}`} />
-                                                                    :
-                                                                    <Status type="danger" data={`${audience.status_audience}`} />
-                                                                )
-                                                            )
-                                                        )
-                                                    }     
+                                                    <AudienceStatus value={audience.status_audience[0]} />
                                                 </div>
                                                 <div className="mb-3 flex items-center gap-2">
                                                     <div className="text-md font-bold">
