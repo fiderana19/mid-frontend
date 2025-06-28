@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { LoadingOutlined, LockOutlined } from "@ant-design/icons";
 const UserNavigation = lazy(() => import("../../../components/Navigation/UserNavigation"));
 import { UpdateUserPassword } from "../../../interfaces/User";
@@ -14,40 +14,29 @@ import { Button } from "@/components/ui/button";
 import { usePatchPassword } from "@/hooks/usePatchPassword";
 
 const UserChangePassword: React.FC = () => {
-    const { token } = useAuth()
+    const { token } = useAuth();
+    const id = token ? JSON.parse(atob(token.split('.')[1])).id : null;
     const { mutateAsync: updatePassword, isPending: isLoading } = usePatchPassword();
-    const { control, formState, handleSubmit } = useForm<UpdateUserPassword>({
+    const { control, formState: { errors }, handleSubmit, setValue, setError } = useForm<UpdateUserPassword>({
         resolver: yupResolver(UserChangePasswordValidation)
     });
-    const { errors } = formState;
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setValue('_id', id);
+    }, [])
+
     async function updatePasswordSubmit(data: any) {
-        if(data.new_password !== confirmPassword) {
-            setConfirmPasswordError('Confirmation mot de passe incorrecte !')
+        if(data.new_password !== data.confirm_password) {
+            setError('confirm_password', { type: "required", message: "Confirmation mot de passe incorrect !" });
         }
 
-        if(data.new_password === confirmPassword) {
-            const id = token ? JSON.parse(atob(token.split('.')[1])).id : null;
-            const updatePasswordCredentials = {
-                _id: id,
-                old_password: data.old_password,
-                new_password: data.new_password,
-            }
-            const response = await updatePassword(updatePasswordCredentials);
+        if(data.new_password === data.confirm_password) {
+            const response = await updatePassword(data);
             if(response.status === HttpStatus.OK) {
                 navigate("/user/info");
             }
         }
-    }
-
-    const handleConfirmChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setConfirmPasswordError('');
-
-        const {value} = e.target;
-        setConfirmPassword(value);
     }
 
     return (
@@ -115,15 +104,25 @@ const UserChangePassword: React.FC = () => {
                                         Confirmation nouveau mot de passe
                                     </Label>
                                     <div className="relative">
-                                        <Input
-                                            onChange={handleConfirmChange}
-                                            type="password"
-                                            name='password'
-                                            className={`w-full text-left pl-10 ${confirmPasswordError ? "border border-red-500 text-red-500" : ""}`}
-                                            />
+                                        <Controller 
+                                            control={control}
+                                            name="confirm_password"
+                                            render={({
+                                                field: { onBlur, onChange, value }
+                                            }) => (
+                                                <Input
+                                                    type="password"
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    className={`w-full text-left pl-10 ${errors.confirm_password ? "border border-red-500 text-red-500" : ""}`}
+                                                    name='old_password'
+                                                />
+                                            )}
+                                        />
                                         <LockOutlined className='absolute top-1.5 left-1.5 bg-gray-700 text-white p-1.5 rounded text-sm' />
                                     </div>
-                                    { confirmPasswordError && <div className="text-xs text-red-500 text-left">{confirmPasswordError }</div> }
+                                    { errors.confirm_password && <div className="text-xs text-red-500 text-left">{ errors.confirm_password?.message }</div> }
                                 </div>
                                 <div className="flex justify-center w-64 my-2 mx-auto">
                                     <Button variant={'primary'} size={'lg'} disabled={isLoading ? true : false } className={`${isLoading ? 'cursor-not-allowed' : ''} w-full mt-4`} type='submit'>

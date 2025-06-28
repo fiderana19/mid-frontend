@@ -6,7 +6,7 @@ import { useGetUserById } from "@/hooks/useGetUserById";
 import { Button } from "@/components/ui/button";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
-function UserInfo() {
+const UserInfo: React.FC = () => {
     const { token } = useAuth();
     const {isLoading, data: user} = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null);
     const navigate = useNavigate();

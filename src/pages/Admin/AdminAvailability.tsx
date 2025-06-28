@@ -1,4 +1,4 @@
-import { DatePicker, Dropdown, MenuProps, Modal, TimePicker } from "antd";
+import { DatePicker, Dropdown, MenuProps, Modal, TimePicker, message } from 'antd';
 import { CloseCircleFilled, CloseOutlined, DownOutlined, FilterOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import React, { lazy, Suspense, useState } from "react";
 import dayjs from "dayjs";
@@ -25,7 +25,7 @@ const AdminAvailability: React.FC = () => {
     const { mutateAsync: createAvailability, isPending: createLoading } = useCreateAvailability({action() {
         refetch()
     },})
-    const { handleSubmit: submit, formState: { errors }, setValue } = useForm<CreateAvailabilityInterface>({
+    const { handleSubmit: submit, formState: { errors }, setValue, setError } = useForm<CreateAvailabilityInterface>({
         resolver: yupResolver(CreateAvailabilityValidation)
     });
     const [filteredAvailabilities, setFilteredAvailabilities] = useState<any[]>([]);
@@ -34,7 +34,6 @@ const AdminAvailability: React.FC = () => {
     const [selectedAvailability, setSelectedAvailability] = useState<string>();
     const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
     const [day, setDay] = useState<any>();
-    const [weekendError, setWeekendError] = useState<string>('');
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
 
@@ -43,8 +42,6 @@ const AdminAvailability: React.FC = () => {
     }
 
     const handleDateChange = (date: dayjs.Dayjs | null) => {
-        setWeekendError('');
-
         if (date) {
             const isoDate = ToLocalISOString(date);
             setDay(isoDate)
@@ -78,8 +75,6 @@ const AdminAvailability: React.FC = () => {
     };
 
     const handleDebutTimeChange = (date: dayjs.Dayjs | null) => {
-        setWeekendError('');
-
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
@@ -93,8 +88,6 @@ const AdminAvailability: React.FC = () => {
     };
     
     const handleEndTimeChange = (date: dayjs.Dayjs | null) => {
-        setWeekendError('');
-
         if (date) {
             const time = AssignDateToTime(day,date);
             const date_time = ToLocalISOString(time)
@@ -142,11 +135,10 @@ const AdminAvailability: React.FC = () => {
     }
 
     const handleAddAvailabilitySubmit = async (data: CreateAvailabilityInterface) => {
-        setWeekendError('');
         const dayToVerify = new Date(data.date_availability);
 
         if(dayToVerify.getDay() === 0 || dayToVerify.getDay() === 6) {
-            setWeekendError("Impossible d'ajouter un jour de weekend !");
+            setError('date_availability' , {type: "required", message : "Impossible d'ajouter un jour de weekend !"});
         }
 
         if(dayToVerify.getDay() !== 0 && dayToVerify.getDay() !== 6) {
@@ -348,11 +340,10 @@ const AdminAvailability: React.FC = () => {
                             <DatePicker 
                                 name="date_availability" 
                                 onChange={handleDateChange} 
-                                className={`w-full py-1.5 bg-transparent placeholder:text-slate-400 ${(errors?.hour_debut || weekendError) ? ' border border-red-500 rounded' : ''} `}
+                                className={`w-full py-1.5 bg-transparent placeholder:text-slate-400 ${errors?.date_availability ? 'text-red-500 border border-red-500 rounded' : ''} `}
                                 placeholder="Date de la disponibilité..."  
                             />
                             {errors?.date_availability && <div className="text-left text-red-500 text-xs">{ errors?.date_availability.message }</div>}                        
-                            {weekendError && <div className="text-left text-red-500 text-xs">{weekendError}</div>}
                             <Label className="mb-1 mt-4">Heure debut de la disponibilité :</Label>
                             <TimePicker 
                                 name="hour_debut" 

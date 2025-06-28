@@ -1,11 +1,11 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { CloseOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useGetAudienceByUser } from "@/hooks/useGetAudienceByUser";
 import { useAuth } from "@/context/AuthContext";
 import AudienceStatus from "@/components/status/AudienceStatus";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
-function UserAudience() {
+const UserAudience: React.FC = () => {
     const { token } = useAuth();
     const { isLoading, data: audiences } = useGetAudienceByUser(token ? JSON.parse(atob(token.split('.')[1])).id : null);
     

@@ -1,5 +1,5 @@
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined, LockOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InitializeUserPassword } from '../../interfaces/User';
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ import AccountStatus from '@/components/status/AccountStatus';
 
 const InitializePasswordUser: React.FC = () => {
     const { token } = useAuth();
-    const { handleSubmit: submit, formState: { errors }, control } = useForm<InitializeUserPassword>({
+    const { handleSubmit: submit, formState: { errors }, control, setValue } = useForm<InitializeUserPassword>({
         resolver: yupResolver(UserFirstPasswordValidation)
     });
     const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null);
@@ -25,13 +25,12 @@ const InitializePasswordUser: React.FC = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setValue('_id', user?._id)
+    } ,[])
+
     const handleChangePasswordSubmit = async (data: any) => {
-        const updatePasswordCredentials = {
-            _id: user._id,
-            password: data?.password,
-        }
-        
-        const response = await initializePassword(updatePasswordCredentials);
+        const response = await initializePassword(data);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             navigate("/user/home");
         }

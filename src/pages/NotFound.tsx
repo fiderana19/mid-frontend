@@ -1,6 +1,7 @@
+import React from 'react';
 import MidLogo from '../assets/image/mid-logo.jpg'
 
-function NotFound() {
+const NotFound: React.FC = () => {
     return(
         <>
             <div className='min-h-screen flex flex-col justify-center bg-four'>

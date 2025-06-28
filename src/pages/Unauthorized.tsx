@@ -1,6 +1,7 @@
+import React from 'react';
 import MidLogo from '../assets/image/mid-logo.jpg'
 
-function Unauthoriezd() {
+const Unauthoriezd: React.FC = () => {
     return(
         <>
             <div className=' h-screen flex flex-col justify-center'>

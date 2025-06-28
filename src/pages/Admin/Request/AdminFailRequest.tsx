@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useGetNotOrganizedRequest } from "@/hooks/useGetNotOrganizedRequest";
 import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { Input } from "@/components/ui/input";
-import Status from "@/components/status/Status";
+import RequestStatus from "@/components/status/RequestStatus";
 
 const AdminFailRequest: React.FC = () => {
     const { data: requests, isLoading } = useGetNotOrganizedRequest();
@@ -77,16 +77,7 @@ const AdminFailRequest: React.FC = () => {
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.request_creation }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  { request.date_wanted_debut } à { request.date_wanted_end }  </td>
                                                 <td className='md:px-6 px-2 py-4 lg:whitespace-nowrap whitespace-normal text-sm leading-5 text-gray-900'>  
-                                                    {
-                                                        request.status_request[0] === "En attente" ?
-                                                        <Status type="alert" data={`${request.status_request}`} />
-                                                        : (
-                                                            request.status_request[0] === "Accepté" ?
-                                                            <Status type="success" data={`${request.status_request}`} />
-                                                            :
-                                                            <Status type="danger" data={`${request.status_request}`} />
-                                                        )
-                                                    } 
+                                                    <RequestStatus value={request.status_request[0]} />
                                                 </td>
                                                 <td className='px-1 py-4 whitespace-nowrap text-sm leading-5 text-gray-900'>
                                                     <div className='flex justify-center'>

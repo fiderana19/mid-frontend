@@ -7,8 +7,8 @@ import { useGetRequestById } from "@/hooks/useGetRequestById";
 import { useValidateRequest } from "@/hooks/useValidateRequest";
 import { useGetAllRequest } from "@/hooks/useGetAllRequest";
 import { useDenyRequest } from "@/hooks/useDenyRequest";
-import Status from "@/components/status/Status";
 import { Button } from "@/components/ui/button";
+import RequestStatus from "@/components/status/RequestStatus";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 
@@ -117,16 +117,7 @@ const AdminRequestView: React.FC = () => {
                                                     { request.type_request }
                                                 </div>
                                                 <div >
-                                                    {
-                                                        request.status_request[0] === "En attente" ?
-                                                        <Status type="alert" data={`${request.status_request}`} />
-                                                        : (
-                                                            request.status_request[0] === "Accepté" ?
-                                                            <Status type="success" data={`${request.status_request}`} />
-                                                            :
-                                                            <Status type="danger" data={`${request.status_request}`} />
-                                                        )
-                                                    } 
+                                                    <RequestStatus value={request.status_request[0]} />
                                                 </div>
                                             </div>
                                                 <div className="text-sm text-gray-500">Motif: </div>

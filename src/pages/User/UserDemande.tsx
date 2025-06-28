@@ -1,17 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined, DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
 import { useAuth } from "@/context/AuthContext";
 import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useDeleteRequest } from "@/hooks/useDeleteRequest";
 import { Button } from "@/components/ui/button";
-import { StatusType } from "@/constants/Status_type";
 import RequestStatus from "@/components/status/RequestStatus";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
-function UserDemande() {
+const UserDemande: React.FC = () => {
     const { token } = useAuth();
     const { data: requests, refetch, isLoading } = useGetAllRequestByUser(token ? JSON.parse(atob(token.split('.')[1])).id : null);
     const { mutateAsync: requestDelete } = useDeleteRequest({
@@ -22,7 +21,6 @@ function UserDemande() {
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const navigate = useNavigate();
-
 
     const handleDeleteConfirm = async () => {
         if(selectedRequest) {

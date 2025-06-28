@@ -19,10 +19,13 @@ export interface SignupInterface {
 }
 
 export interface InitializeUserPassword {
+    _id: string,
     password: string;
 }
 
 export interface UpdateUserPassword {
+    _id: string,
     old_password: string;
     new_password: string;
+    confirm_password: string;
 }
