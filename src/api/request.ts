@@ -1,3 +1,4 @@
+import { RequestAddInterface } from "@/interfaces/Request";
 import axiosAuthInstance from "./Config";
 
 const RequestAPUrl = `${import.meta.env.VITE_BASE_URL}/request`;
@@ -18,7 +19,7 @@ export const getAllRequestByUser = async (id: string) => {
   return await axiosAuthInstance.get(`${RequestAPUrl}/user/${id}`);
 }
 
-export const requestCreate = async (requestData: any) => {
+export const requestCreate = async (requestData: RequestAddInterface) => {
   return await axiosAuthInstance.post(`${RequestAPUrl}/create`, requestData);
 }
 

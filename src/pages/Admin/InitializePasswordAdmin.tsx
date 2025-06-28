@@ -1,6 +1,5 @@
 import { EyeInvisibleOutlined, EyeOutlined, LoadingOutlined, LockOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { InitializeUserPassword } from '../../interfaces/User';
 import MidLogo from '../../assets/image/mid-logo.jpg';
 import { useNavigate } from 'react-router-dom';
 import { HttpStatus } from '../../constants/Http_status';
@@ -14,10 +13,11 @@ import { useAuth } from '../../context/AuthContext';
 import { useGetUserById } from '@/hooks/useGetUserById';
 import { useInitializePassword } from '@/hooks/useInitializePassword';
 import AccountStatus from '@/components/status/AccountStatus';
+import { InitializeUserPasswordInterface } from '@/interfaces/User';
 
 const InitializePasswordAdmin: React.FC = () => {
     const { token } = useAuth();
-    const { handleSubmit: submit, formState: { errors }, control, setValue } = useForm<InitializeUserPassword>({
+    const { handleSubmit: submit, formState: { errors }, control, setValue } = useForm<InitializeUserPasswordInterface>({
         resolver: yupResolver(UserFirstPasswordValidation)
     });
     const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null);
@@ -29,7 +29,7 @@ const InitializePasswordAdmin: React.FC = () => {
         setValue('_id', user?._id);
     }, [])
     
-    const handleChangePasswordSubmit = async (data: any) => {
+    const handleChangePasswordSubmit = async (data: InitializeUserPasswordInterface) => {
         const response = await initializePassword(data);
         if(response?.status === HttpStatus.OK || response?.status === HttpStatus.CREATED) {
             navigate("/admin/home");

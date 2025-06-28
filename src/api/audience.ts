@@ -1,3 +1,4 @@
+import { CreateAudienceInterface, ReportAudienceInterface, SerachAudienceInterface } from "@/interfaces/Audience";
 import axiosAuthInstance from "./Config";
 
 const AudienceAPIUrl = `${import.meta.env.VITE_BASE_URL}/audience`;
@@ -18,11 +19,11 @@ export const getAudienceByUser = async (id:string) => {
   return await axiosAuthInstance.get(`${AudienceAPIUrl}/user/${id}`);
 }
 
-export const audienceCreate = async (audienceData: any) => {
+export const audienceCreate = async (audienceData: CreateAudienceInterface) => {
   return await axiosAuthInstance.post(`${AudienceAPIUrl}/create`, audienceData);
   }
 
-export const audienceReport = async (audienceData: any) => {
+export const audienceReport = async (audienceData: ReportAudienceInterface) => {
   return await axiosAuthInstance.patch(`${AudienceAPIUrl}/report/${audienceData?._id}`, audienceData);
 }
 
@@ -30,7 +31,7 @@ export const audienceCancel = async (id: string) => {
   return await axiosAuthInstance.patch(`${AudienceAPIUrl}/cancel/${id}`);
 }
 
-export const audienceSearch = async (searchData: any) => {
+export const audienceSearch = async (searchData: SerachAudienceInterface) => {
   return await axiosAuthInstance.post(`${AudienceAPIUrl}/search`, searchData);
 }
 

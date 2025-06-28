@@ -1,12 +1,13 @@
 import { audienceReport } from "@/api/audience"
 import { TOAST_TYPE } from "@/constants/ToastType";
+import { ReportAudienceInterface } from "@/interfaces/Audience";
 import { showToast } from "@/utils/Toast";
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios";
 
 export const useReportAudience = ({action} : {action?: () => void}) => {
     const mutation = useMutation({
-        mutationFn: (data: any) => audienceReport(data),
+        mutationFn: (data: ReportAudienceInterface) => audienceReport(data),
         onSuccess: () => {
             if(action) {
                 action();

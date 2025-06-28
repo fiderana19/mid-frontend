@@ -1,6 +1,5 @@
 import { LoadingOutlined, LockOutlined } from "@ant-design/icons";
 import React, { lazy, Suspense, useEffect } from "react";
-import { UpdateUserPassword } from "../../../interfaces/User";
 import { useNavigate } from "react-router-dom";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
@@ -13,10 +12,11 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { UserChangePasswordValidation } from "@/validation/user.validation";
 import { usePatchPassword } from "@/hooks/usePatchPassword";
+import { UpdateUserPasswordInterface } from "@/interfaces/User";
 
 const AdminChangePassword: React.FC = () => {
     const { token } = useAuth();
-    const { control, handleSubmit: submit, formState: { errors }, setValue, setError } = useForm<UpdateUserPassword>({
+    const { control, handleSubmit: submit, formState: { errors }, setValue, setError } = useForm<UpdateUserPasswordInterface>({
         resolver: yupResolver(UserChangePasswordValidation)
     });
     const { mutateAsync: updatePassword, isPending: updateLoading } = usePatchPassword();
@@ -27,7 +27,7 @@ const AdminChangePassword: React.FC = () => {
         setValue('_id', id);
     }, [])
 
-    async function handleChangePasswordSubmit(data: UpdateUserPassword) {
+    async function handleChangePasswordSubmit(data: UpdateUserPasswordInterface) {
         if(data.new_password !== data.confirm_password) {
             setError('confirm_password', { type: "required", message: "Confirmation mot de passe incorrect !" });
         }

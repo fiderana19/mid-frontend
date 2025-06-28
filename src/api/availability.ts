@@ -1,3 +1,4 @@
+import { CreateAvailabilityInterface } from "@/interfaces/Availability";
 import axiosAuthInstance from "./Config";
 
 const AvailabilityAPIUrl = `${import.meta.env.VITE_BASE_URL}/availability`;
@@ -14,7 +15,7 @@ export const getAvailabilityById = async (id: string) => {
   return await axiosAuthInstance.get(`${AvailabilityAPIUrl}/get/${id}`);
 }
 
-export const createAvailability = async (data: any) => {
+export const createAvailability = async (data: CreateAvailabilityInterface) => {
   return await axiosAuthInstance.post(`${AvailabilityAPIUrl}/create`, data);
 }
 
