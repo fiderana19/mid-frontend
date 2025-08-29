@@ -8,6 +8,7 @@ import { useValidateUser } from "@/hooks/useValidateUser";
 import { useGetUserById } from "@/hooks/useGetUserById";
 import { Button } from "@/components/ui/button";
 import AccountStatus from "@/components/status/AccountStatus";
+import { useGetAllUser } from "@/hooks/useGetAllUser";
 const Header = lazy(() => import("../../../components/Header"));
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 
@@ -16,13 +17,16 @@ const AdminAccountView: React.FC = () => {
     let userId = req.id;
 
     console.log(req)
-    const { data: user, isLoading: userLoading  } = useGetUserById(userId ? userId : '');
+    const { refetch: refetchAllUser } = useGetAllUser();
+    const { data: user, isLoading: userLoading, refetch: refetchUser  } = useGetUserById(userId ? userId : '');
     const { mutateAsync: deleteUser, isPending: deleteLoading } = useDeleteUser({
         action() {
         },
     })
     const { mutateAsync: validateUser, isPending: validateLoading } = useValidateUser({
         action() {
+            refetchUser();
+            refetchAllUser();
         },
     })
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
