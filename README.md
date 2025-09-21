@@ -97,6 +97,6 @@ The admin space is designed for managing the application's data and operations.
 
 A well-designed email notification system is implemented to provide real-time updates for every state change.
 
-\<p align="center"\>
-\<img src="https://www.google.com/search?q=https://example.com/email-notification.png" alt="An example of an email notification." width="800"/\>
-\</p\>
+<p align="center">
+<img src="https://www.google.com/search?q=https://example.com/email-notification.png" alt="An example of an email notification." width="800"/>
+</p>
