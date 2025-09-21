@@ -97,7 +97,7 @@ The user space provides a personalized experience for citizens.
 * **Profile Page**: A dedicated page where users can view their registered information and change their password.
 
 <p align="center">
-<img src="https://github.com/fiderana19/mid-frontend/blob/feat/readme/readme/profile.png?raw=true" alt="User profile." width="800"/>
+<img src="https://github.com/fiderana19/mid-frontend/blob/feat/readme/readme/user_profile.png?raw=true" alt="User profile." width="800"/>
 </p>
 
 * **Request and Audience Management**: Users can manage their requests and audiences, though some operations are restricted to maintain data integrity.
@@ -143,3 +143,9 @@ A well-designed email notification system is implemented to provide real-time up
 <p align="center">
 <img src="https://github.com/fiderana19/mid-frontend/blob/feat/readme/readme/email.png?raw=true" alt="Email notification." width="800"/>
 </p>
+
+-----
+
+## ⭐️ Star
+
+Don't hesitate to give a star, it will gives me a motivation for my projects and my progress.
