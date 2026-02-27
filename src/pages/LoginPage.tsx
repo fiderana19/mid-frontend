@@ -3,7 +3,7 @@ import MidLogo from '../assets/image/mid-logo.jpg';
 import Bg from '../assets/image/bg-login.jpeg'
 import { Link } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoginInterface } from '../interfaces/User';
 import { useAuth } from '../context/AuthContext';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoginValidation } from '@/validation/login.validation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { io } from 'socket.io-client';
+
 
 const LoginPage: React.FC = () => {
     const { handleSubmit: loginSubmit, control , formState: { errors, isSubmitting, },  } = useForm<LoginInterface>({
@@ -19,11 +21,29 @@ const LoginPage: React.FC = () => {
     const { login } = useAuth();
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
+    const socket = io("http://localhost:3002");
+
+    useEffect(() => {
+        socket.emit("msgToServer", "hello")
+        function receiveMessage(message: any) {
+            console.log(message)
+        }
+        
+        socket.on("msgToClient", (message: any) => {
+            receiveMessage(message)
+        })
+    }, [isPasswordVisible])
+
+    const sendMessage = (message: any) => {
+        socket.emit("msgToServer", "hello")
+    }
+
     const handleLoginUser = async (data: LoginInterface) => {
         await login(data);
     }
 
     const handlePasswordVisible = async () => {
+        socket.emit("msgToServer", "hello")
         setIsPasswordVisible(!isPasswordVisible);
     }
 
@@ -35,7 +55,7 @@ const LoginPage: React.FC = () => {
                     <div className='z-50 flex flex-col justify-center h-screen low-bg-opacity'>
                         <div className='text-white lg:px-20 sm:px-10 px-4'>
                             <img src={MidLogo} alt='Logo du ministere' className='w-28 h-28 object-cover' />
-                            <div className='text-4xl font-latobold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
+                            <div onClick={() => sendMessage} className='text-4xl font-latobold mt-5 mb-4'>MINISTERE DE L'INTERIEUR</div>
                             <div>Demander une audience avec le ministre en ligne </div>
                             <a href="#login" className='transition-transform'>
                             <button className='sm:hidden block bg-gray-500 hover:bg-gray-700 text-white mx-auto font-latobold py-2 my-4 px-4 rounded w-64'>SE CONNECTER</button>

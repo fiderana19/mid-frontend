@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy, useEffect } from "react";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
 import { CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, DownOutlined, EyeOutlined, FilterOutlined, LoadingOutlined, MenuOutlined, WarningFilled } from "@ant-design/icons";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useDenyRequest } from "@/hooks/useDenyRequest";
 import { useValidateRequest } from "@/hooks/useValidateRequest";
 import RequestStatus from "@/components/status/RequestStatus";
+import { io } from "socket.io-client";
 
 const AdminDemande: React.FC = () => {
     const { data: requests, isLoading: requestsLoading, refetch }  = useGetAllRequest();
@@ -29,6 +30,21 @@ const AdminDemande: React.FC = () => {
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
+
+    const socket = io("http://localhost:3002", {
+        transports: ['websocket'],
+    });
+
+    useEffect(() => {
+        socket.on("new_request_created", (data) => {
+            refetch();
+        })
+
+        return () => {
+            socket.off('new_request_created');
+        };
+    }, [])
+
 
     const items: MenuProps['items'] = [
         {
