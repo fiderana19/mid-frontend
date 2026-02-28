@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 import { CarryOutOutlined, CloseOutlined, LoadingOutlined, MenuOutlined } from "@ant-design/icons";
@@ -8,11 +8,16 @@ import { useGetNotOrganizedRequest } from "@/hooks/useGetNotOrganizedRequest";
 import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { Input } from "@/components/ui/input";
 import RequestStatus from "@/components/status/RequestStatus";
+import { useRequestSocket } from "@/socket/request.socket";
 
 const AdminFailRequest: React.FC = () => {
-    const { data: requests, isLoading } = useGetNotOrganizedRequest();
+    const { data: requests, isLoading, refetch } = useGetNotOrganizedRequest();
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const [searchRef, setSearchRef] = useState<string>('');
+
+    useEffect(() => {
+        useRequestSocket(refetch);
+    }, [])
 
     const items: MenuProps['items'] = [
         {

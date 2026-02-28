@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal } from "antd";
 import { EnvironmentOutlined, LoadingOutlined, MailOutlined, PhoneOutlined, WarningFilled } from "@ant-design/icons";
@@ -9,6 +9,7 @@ import { useGetAllRequest } from "@/hooks/useGetAllRequest";
 import { useDenyRequest } from "@/hooks/useDenyRequest";
 import { Button } from "@/components/ui/button";
 import RequestStatus from "@/components/status/RequestStatus";
+import { useRequestSocket } from "@/socket/request.socket";
 const AdminNavigation = lazy(() => import("../../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../../components/Header"));
 
@@ -26,6 +27,10 @@ const AdminRequestView: React.FC = () => {
     const [isDenyModalVisible, setIsDenyModalVisible] = useState(false);
     const [isValidateModalVisible, setIsValidateModalVisible] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        useRequestSocket(refetch);
+    }, [])
 
     const handleDenyConfirm = async () => {
         const response = await denyRequest(request._id);

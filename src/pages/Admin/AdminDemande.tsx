@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useDenyRequest } from "@/hooks/useDenyRequest";
 import { useValidateRequest } from "@/hooks/useValidateRequest";
 import RequestStatus from "@/components/status/RequestStatus";
-import { io } from "socket.io-client";
+import { useRequestSocket } from "@/socket/request.socket";
 
 const AdminDemande: React.FC = () => {
     const { data: requests, isLoading: requestsLoading, refetch }  = useGetAllRequest();
@@ -31,18 +31,8 @@ const AdminDemande: React.FC = () => {
     const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
 
-    const socket = io("http://localhost:3002", {
-        transports: ['websocket'],
-    });
-
     useEffect(() => {
-        socket.on("new_request_created", (data) => {
-            refetch();
-        })
-
-        return () => {
-            socket.off('new_request_created');
-        };
+        useRequestSocket(refetch);
     }, [])
 
 
