@@ -1,7 +1,8 @@
-import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, LoadingOutlined, PieChartFilled, PieChartOutlined, SearchOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
+import { CalendarFilled, CalendarOutlined, ContactsFilled, ContactsOutlined, ContainerFilled, ContainerOutlined, DownOutlined, ExceptionOutlined, HomeFilled, HomeOutlined, LoadingOutlined, SnippetsFilled, SnippetsOutlined, UpOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import React, { lazy, Suspense, useState } from "react";
-import { Button } from "../ui/button";
+import React, { lazy, Suspense, useEffect, useState } from "react";
+import { SOCKET } from "@/socket/sockets";
+import { useGetNotOrganizedRequest } from "@/hooks/useGetNotOrganizedRequest";
 const MidProfile = lazy(() => import("../MidProfile"));
 const MidCopyright = lazy(() => import("../Midopyright"));
 
@@ -9,6 +10,24 @@ const AdminNavigation: React.FC = () => {
     const location = useLocation();
     const [isFailRequest, setIsFailRequest] = useState<boolean>(false);
     const [isAudienceSearch, setIsAudienceSearch] = useState<boolean>(false);
+    const [newRequest, setNewRequest] = useState<number>(localStorage.getItem("new_request_count") ? Number(localStorage.getItem("new_request_count")) : 0);
+    const { data: requests, refetch } = useGetNotOrganizedRequest();
+    const [notOrganizedRequest, setNotOrganizedRequest] = useState<number>(0);
+
+    useEffect(() => {
+        if(location.pathname === "/admin/demande") {
+            setNewRequest(0);
+            localStorage.setItem("new_request_count", String("0"))
+        }
+        refetch();
+        if(requests) {setNotOrganizedRequest(requests.length)}
+
+        SOCKET.on("new_request_created", (data) => {
+            setNewRequest(newRequest + 1);
+            localStorage.setItem('new_request_count', String(newRequest + 1))
+        })
+
+    }, [])
 
     async function setRequestDropdown() {
         if(isFailRequest) {
@@ -39,10 +58,12 @@ const AdminNavigation: React.FC = () => {
                     </div>
                 </Link>
                 <Link to="/admin/demande">
-                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande" && "bg-four-custom rounded"}`} >
+                    <div className={`relative my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande" && "bg-four-custom rounded"}`} >
                         {location.pathname === "/admin/demande" ? <SnippetsFilled /> : <SnippetsOutlined />}
+                        { (newRequest > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute left-1 top-2 border border-gray-300 text-gray-300 text-xs rounded-full">{ newRequest }</div> }
                         <div className="md:block hidden">Demande</div>
-                        <button onClick={setRequestDropdown} className="md:block hidden">
+                        { (notOrganizedRequest > 0) && <div className="bg-gray-500 text-center w-5 h-5 absolute right-1 z-0 top-1 border border-gray-300 text-gray-300 text-xs rounded-full">{ notOrganizedRequest }</div> }
+                        <button onClick={setRequestDropdown} className="md:block hidden z-10">
                             {
                                 isFailRequest ?
                                 <UpOutlined className="text-xs p-1 hover:bg-gray-400 transition-opacity rounded-full" />
@@ -52,9 +73,10 @@ const AdminNavigation: React.FC = () => {
                         </button>
                     </div>
                 </Link>
-                <Link to="/admin/demande/notorganized" className="md:hidden block">
+                <Link to="/admin/demande/notorganized" className="md:hidden block relative">
                     <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande/notorganized" && "bg-four-custom rounded"}`} >
                         {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined  /> : <ExceptionOutlined />}
+                        { (notOrganizedRequest > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute right-1 z-0 top-1 border border-gray-300 text-gray-300 text-xs rounded-full">{ notOrganizedRequest }</div> }
                         <div className="md:block hidden">Anomalie</div>
                     </div>
                 </Link>
@@ -62,8 +84,9 @@ const AdminNavigation: React.FC = () => {
                     {
                         (isFailRequest || (location.pathname === "/admin/demande/notorganized")) &&
                             <Link to="/admin/demande/notorganized">
-                                <div className={`my-0.5 items-center flex gap-2 py-2 px-4 ml-6 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande/notorganized" && "bg-four-custom rounded"}`} >
+                                <div className={`my-0.5 relative items-center flex gap-2 py-2 px-4 ml-6 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/demande/notorganized" && "bg-four-custom rounded"}`} >
                                     {location.pathname === "/admin/demande/notorganized" ? <ExceptionOutlined /> : <ExceptionOutlined />}
+                                    { (notOrganizedRequest > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute right-1 z-0 top-1 border border-gray-300 text-gray-300 text-xs rounded-full">{ notOrganizedRequest }</div> }
                                     <div className="md:block hidden">Anomalie</div>
                                 </div>
                             </Link>
