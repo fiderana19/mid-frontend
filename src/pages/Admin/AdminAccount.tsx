@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Dropdown, MenuProps, Modal } from "antd";
 const AdminNavigation = lazy(() => import("../../components/Navigation/AdminNavigation"));
 const Header = lazy(() => import("../../components/Header"));
@@ -12,6 +12,7 @@ import { useDeleteUser } from "@/hooks/useDeleteUser";
 import { handleNumberKeyPress } from "@/utils/handleKeyPress";
 import { Button } from "@/components/ui/button";
 import AccountStatus from "@/components/status/AccountStatus";
+import { useUserAccountSocket } from "@/socket/user.socket";
 
 const AdminAccount: React.FC = () => {
     const { data: accounts, isLoading, refetch } = useGetAllUser();
@@ -28,6 +29,10 @@ const AdminAccount: React.FC = () => {
     const [filterRef, setFilterRef] = useState<boolean>(false);
     const [filterText, setFilterText] = useState<string>('');
     const [searchRef, setSearchRef] = useState<string>('');
+
+    useEffect(() => {
+        useUserAccountSocket(refetch);
+    }, [])
 
     async function filterAccounts (filter: boolean, text: string) {
         setFilterRef(true);

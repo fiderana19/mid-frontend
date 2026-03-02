@@ -11,6 +11,7 @@ const AdminNavigation: React.FC = () => {
     const [isFailRequest, setIsFailRequest] = useState<boolean>(false);
     const [isAudienceSearch, setIsAudienceSearch] = useState<boolean>(false);
     const [newRequest, setNewRequest] = useState<number>(localStorage.getItem("new_request_count") ? Number(localStorage.getItem("new_request_count")) : 0);
+    const [newUser, setNewUser] = useState<number>(localStorage.getItem("new_user_count") ? Number(localStorage.getItem("new_user_count")) : 0);
     const { data: requests, refetch } = useGetNotOrganizedRequest();
     const [notOrganizedRequest, setNotOrganizedRequest] = useState<number>(0);
 
@@ -19,12 +20,21 @@ const AdminNavigation: React.FC = () => {
             setNewRequest(0);
             localStorage.setItem("new_request_count", String("0"))
         }
+        if(location.pathname === "/admin/account") {
+            setNewUser(0);
+            localStorage.setItem("new_user_count", String("0"))
+        }
         refetch();
         if(requests) {setNotOrganizedRequest(requests.length)}
 
         SOCKET.on("new_request_created", (data) => {
             setNewRequest(newRequest + 1);
             localStorage.setItem('new_request_count', String(newRequest + 1))
+        })        
+        
+        SOCKET.on("new_user_created", (data) => {
+            setNewUser(newRequest + 1);
+            localStorage.setItem('new_user_count', String(newUser + 1))
         })
 
     }, [])
@@ -124,8 +134,9 @@ const AdminNavigation: React.FC = () => {
                     </div>
                 </Link>
                 <Link to="/admin/account">
-                    <div className={`my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/account" && "bg-four-custom rounded"}`} >
+                    <div className={`relative my-0.5 items-center flex gap-2 py-2 px-4 hover:bg-four-custom rounded transition-colors ${location.pathname === "/admin/account" && "bg-four-custom rounded"}`} >
                         {location.pathname === "/admin/account" ? <UserOutlined /> : <UserOutlined />}
+                        { (newUser > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute left-1 top-2 border border-gray-300 text-gray-300 text-xs rounded-full">{ newUser }</div> }
                         <div className="md:block hidden">Citoyen</div>
                     </div>
                 </Link>

@@ -5,11 +5,26 @@ import { UserOutlined, LogoutOutlined, DownOutlined, MenuOutlined, LoadingOutlin
 import { useAuth } from "../../context/AuthContext";
 import { useGetUserById } from "@/hooks/useGetUserById";
 import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
+import { SOCKET } from "@/socket/sockets";
 
 function UserNavigation() {
     const location = useLocation();
     const { logout, token } = useAuth();
     const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)    
+    const [notifRequest, setNotifRequest] = useState<number>(localStorage.getItem("user_request_notif") ? Number(localStorage.getItem("user_request_notif")) : 2)
+
+    useEffect(() => {
+        SOCKET.on("new_request_denied", (data) => {
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    console.log("yat")
+                    setNotifRequest(notifRequest + 1);
+                    localStorage.setItem("user_request_notif", String(notifRequest + 1))
+                }
+            }
+        })
+    }, [])
 
     const items: MenuProps['items'] = [
         {
@@ -80,10 +95,11 @@ function UserNavigation() {
                             Accueil
                         </div>
                     </Link>
-                    <Link to="/user/demande">
+                    <Link to="/user/demande" className="relative">
                         <div className={`transition-colors px-2 py-4 border-b-4 hover:border-b-4 hover:border-third-custom ${location.pathname === '/user/demande' ? "border-b-third-custom" : "border-b-transparent" }`}>
                             Demande
                         </div>
+                        { (notifRequest > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute right-0 top-2 border border-gray-300 text-gray-300 text-xs rounded-full">{ notifRequest }</div> }
                     </Link>
                     <Link to="/user/audience">
                         <div className={`transition-colors px-2 py-4 border-b-4 hover:border-b-4 hover:border-third-custom ${location.pathname === '/user/audience' ? "border-b-third-custom" : "border-b-transparent" }`}>
