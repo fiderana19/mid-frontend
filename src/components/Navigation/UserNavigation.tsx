@@ -13,17 +13,78 @@ function UserNavigation() {
     const { logout, token } = useAuth();
     const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)    
     const [notifRequest, setNotifRequest] = useState<number>(localStorage.getItem("user_request_notif") ? Number(localStorage.getItem("user_request_notif")) : 2)
+    const [notifAudience, setNotifAudience] = useState<number>(localStorage.getItem("user_audience_notif") ? Number(localStorage.getItem("user_audience_notif")) : 2)
 
     useEffect(() => {
         SOCKET.on("new_request_denied", (data) => {
             if(token) {
                 if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
-                    console.log("yat")
                     setNotifRequest(notifRequest + 1);
                     localStorage.setItem("user_request_notif", String(notifRequest + 1))
                 }
             }
         })
+
+        SOCKET.on("new_request_accepted", (data) => {
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifRequest(notifRequest + 1);
+                    localStorage.setItem("user_request_notif", String(notifRequest + 1))
+                }
+            }
+        })
+
+        SOCKET.on("new_audience_organized", (data) => {
+            console.log(data)
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifAudience(notifAudience + 1);
+                    localStorage.setItem("user_audience_notif", String(notifAudience + 1))
+                }
+            }
+        })
+        SOCKET.on("new_audience_treated", (data) => {
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifAudience(notifAudience + 1);
+                    localStorage.setItem("user_audience_notif", String(notifAudience + 1))
+                }
+            }
+        })
+        SOCKET.on("new_audience_closed", (data) => {
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifAudience(notifAudience + 1);
+                    localStorage.setItem("user_audience_notif", String(notifAudience + 1))
+                }
+            }
+        })
+        SOCKET.on("new_audience_missed", (data) => {
+            console.log(data)
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifAudience(notifAudience + 1);
+                    localStorage.setItem("user_audience_notif", String(notifAudience + 1))
+                }
+            }
+        })
+        SOCKET.on("new_audience_reported", (data) => {
+            if(token) {
+                if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
+                    setNotifAudience(notifAudience + 1);
+                    localStorage.setItem("user_audience_notif", String(notifAudience + 1))
+                }
+            }
+        })
+
+        if(location.pathname === "/user/demande") {
+            setNotifRequest(0);
+            localStorage.setItem("user_request_notif", String(0))
+        }
+        if(location.pathname === "/user/audience") {
+            setNotifAudience(0);
+            localStorage.setItem("user_audience_notif", String(0))
+        }
     }, [])
 
     const items: MenuProps['items'] = [

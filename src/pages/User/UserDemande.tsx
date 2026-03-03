@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { CloseOutlined, DeleteOutlined, EditOutlined, LoadingOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Modal } from "antd";
 import { HttpStatus } from "../../constants/Http_status";
 import { useAuth } from "@/context/AuthContext";
@@ -8,6 +8,7 @@ import { useGetAllRequestByUser } from "@/hooks/useGetAllRequestByUser";
 import { useDeleteRequest } from "@/hooks/useDeleteRequest";
 import { Button } from "@/components/ui/button";
 import RequestStatus from "@/components/status/RequestStatus";
+import { useRequestSocket } from "@/socket/request.socket";
 const UserNavigation = lazy(() => import("../../components/Navigation/UserNavigation"));
 
 const UserDemande: React.FC = () => {
@@ -21,6 +22,10 @@ const UserDemande: React.FC = () => {
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState<any>();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        useRequestSocket(refetch);
+    }, [])
 
     const handleDeleteConfirm = async () => {
         if(selectedRequest) {
