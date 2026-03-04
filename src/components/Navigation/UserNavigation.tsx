@@ -12,8 +12,8 @@ function UserNavigation() {
     const location = useLocation();
     const { logout, token } = useAuth();
     const { data: user, isLoading } = useGetUserById(token ? JSON.parse(atob(token.split('.')[1])).id : null)    
-    const [notifRequest, setNotifRequest] = useState<number>(localStorage.getItem("user_request_notif") ? Number(localStorage.getItem("user_request_notif")) : 2)
-    const [notifAudience, setNotifAudience] = useState<number>(localStorage.getItem("user_audience_notif") ? Number(localStorage.getItem("user_audience_notif")) : 2)
+    const [notifRequest, setNotifRequest] = useState<number>(localStorage.getItem("user_request_notif") ? Number(localStorage.getItem("user_request_notif")) : 0)
+    const [notifAudience, setNotifAudience] = useState<number>(localStorage.getItem("user_audience_notif") ? Number(localStorage.getItem("user_audience_notif")) : 0)
 
     useEffect(() => {
         SOCKET.on("new_request_denied", (data) => {
@@ -37,6 +37,8 @@ function UserNavigation() {
         SOCKET.on("new_audience_organized", (data) => {
             console.log(data)
             if(token) {
+                console.log("ito le avy am data" , data.user)
+                console.log(JSON.parse(atob(token.split('.')[1])).id)
                 if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
                     setNotifAudience(notifAudience + 1);
                     localStorage.setItem("user_audience_notif", String(notifAudience + 1))
@@ -60,8 +62,9 @@ function UserNavigation() {
             }
         })
         SOCKET.on("new_audience_missed", (data) => {
-            console.log(data)
             if(token) {
+                console.log("ito le avy am data" , data.user)
+                console.log(JSON.parse(atob(token.split('.')[1])).id)
                 if(data.user === JSON.parse(atob(token.split('.')[1])).id) {
                     setNotifAudience(notifAudience + 1);
                     localStorage.setItem("user_audience_notif", String(notifAudience + 1))
@@ -85,6 +88,16 @@ function UserNavigation() {
             setNotifAudience(0);
             localStorage.setItem("user_audience_notif", String(0))
         }
+
+        return (() => {
+            SOCKET.off("new_request_denied")
+            SOCKET.off("new_request_accepted")
+            SOCKET.off("new_audience_organized")
+            SOCKET.off("new_audience_treated")
+            SOCKET.off("new_audience_closed")
+            SOCKET.off("new_audience_missed")
+            SOCKET.off("new_audience_reported")
+        })
     }, [])
 
     const items: MenuProps['items'] = [
@@ -162,10 +175,11 @@ function UserNavigation() {
                         </div>
                         { (notifRequest > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute right-0 top-2 border border-gray-300 text-gray-300 text-xs rounded-full">{ notifRequest }</div> }
                     </Link>
-                    <Link to="/user/audience">
+                    <Link to="/user/audience" className="relative">
                         <div className={`transition-colors px-2 py-4 border-b-4 hover:border-b-4 hover:border-third-custom ${location.pathname === '/user/audience' ? "border-b-third-custom" : "border-b-transparent" }`}>
                             Audience
                         </div>
+                        { (notifAudience > 0) && <div className="bg-red-500 text-center w-5 h-5 absolute right-0 top-2 border border-gray-300 text-gray-300 text-xs rounded-full">{ notifAudience }</div> }
                     </Link>
                 </div>
                     <Dropdown menu={{ items }} trigger={['click']} className="md:block hidden">

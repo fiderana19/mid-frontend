@@ -37,6 +37,11 @@ const AdminNavigation: React.FC = () => {
             localStorage.setItem('new_user_count', String(newUser + 1))
         })
 
+        return (() => {
+            SOCKET.off("new_request_created")
+            SOCKET.off("new_user_created")
+        })
+
     }, [])
 
     async function setRequestDropdown() {
